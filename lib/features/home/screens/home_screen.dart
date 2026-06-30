@@ -1,0 +1,403 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../core/navigation/app_router.dart';
+import '../../../core/persistence/player_profile.dart';
+import '../../../core/persistence/player_provider.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
+import '../../../features/rewards/providers/rewards_provider.dart';
+import '../../../features/rewards/widgets/reward_progress_bar.dart';
+import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/character_display.dart';
+import '../../../shared/widgets/stat_badge.dart';
+
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(playerProfileProvider);
+    final rewards = ref.watch(rewardsProvider);
+
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 12),
+                _Header(profile: profile),
+                const SizedBox(height: 20),
+
+                // Reward area: badge when rewards are ready, progress bar otherwise
+                _RewardArea(rewards: rewards, totalStars: profile.stars),
+
+                _CharacterCarousel(
+                  selectedIndex: profile.selectedCharacter,
+                  onChanged: (i) =>
+                      ref.read(playerProfileProvider.notifier).setCharacter(i),
+                  onLabelTap: () => context.push(Routes.companions),
+                ),
+                const SizedBox(height: 16),
+
+                // Focus mode chip
+                if (profile.focusTopic != null)
+                  _FocusChip(topic: profile.focusTopic!),
+
+                const SizedBox(height: 16),
+                _StatsRow(profile: profile),
+                const SizedBox(height: 28),
+                AppButton.play(
+                  label: '▶   PLAY NOW',
+                  onTap: () => context.go('/game/${profile.ageBand}'),
+                ),
+                const SizedBox(height: 14),
+                AppButton.secondary(
+                  label: '🎯   PRACTICE',
+                  onTap: () => context.go('/practice/${profile.ageBand}'),
+                ),
+                const Spacer(),
+                _BottomNav(
+                  onProgressTap: () => context.push(Routes.progress),
+                  onParentTap: () => context.push(Routes.parent),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Header ─────────────────────────────────────────────────────────────────
+
+class _Header extends StatelessWidget {
+  final PlayerProfile profile;
+  const _Header({required this.profile});
+
+  String get _tier {
+    final s = profile.stars;
+    if (s >= AppConstants.starsForDiamond) return '💎 Diamond';
+    if (s >= AppConstants.starsForGold) return '🥇 Gold';
+    if (s >= AppConstants.starsForSilver) return '🥈 Silver';
+    if (s >= AppConstants.starsForBronze) return '🥉 Bronze';
+    return '⭐ Starter';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final name = profile.name.isNotEmpty ? profile.name : 'Champion';
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Hey, $name! 👋', style: AppTextStyles.body),
+            const SizedBox(height: 2),
+            Text('${AppConstants.appName} ⚡',
+                style: AppTextStyles.headline2
+                    .copyWith(color: AppColors.accentYellow)),
+          ],
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.bgCard,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+                color: AppColors.primaryLight.withOpacity(0.4)),
+          ),
+          child: Text(_tier,
+              style: AppTextStyles.label
+                  .copyWith(color: AppColors.accentYellow)),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Focus chip ─────────────────────────────────────────────────────────────
+
+class _FocusChip extends StatelessWidget {
+  final String topic;
+  const _FocusChip({required this.topic});
+
+  static const _labels = {
+    'add': '+ Addition',
+    'sub': '− Subtraction',
+    'mul': '× Multiplication',
+    'div': '÷ Division',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: AppColors.accentCoral.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(20),
+          border:
+              Border.all(color: AppColors.accentCoral.withOpacity(0.4)),
+        ),
+        child: Text(
+          '🎯 Focus today: ${_labels[topic] ?? topic}',
+          style: AppTextStyles.label
+              .copyWith(color: AppColors.accentCoral),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Character carousel ─────────────────────────────────────────────────────
+
+class _CharacterCarousel extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onChanged;
+  final VoidCallback onLabelTap;
+
+  const _CharacterCarousel({
+    required this.selectedIndex,
+    required this.onChanged,
+    required this.onLabelTap,
+  });
+
+  void _prev() {
+    HapticFeedback.selectionClick();
+    onChanged((selectedIndex - 1 + AppConstants.characterImages.length) %
+        AppConstants.characterImages.length);
+  }
+
+  void _next() {
+    HapticFeedback.selectionClick();
+    onChanged(
+        (selectedIndex + 1) % AppConstants.characterImages.length);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _ArrowButton(icon: Icons.chevron_left_rounded, onTap: _prev),
+        Expanded(
+          child: GestureDetector(
+            onTap: onLabelTap,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 280),
+              switchInCurve: Curves.easeOutBack,
+              switchOutCurve: Curves.easeIn,
+              transitionBuilder: (child, anim) => ScaleTransition(
+                scale: anim,
+                child: FadeTransition(opacity: anim, child: child),
+              ),
+              child: CharacterDisplay(
+                key: ValueKey(selectedIndex),
+                imagePath: AppConstants.characterImages[selectedIndex],
+                name: AppConstants.characterNames[selectedIndex],
+                quote: AppConstants.characterQuotes[selectedIndex],
+              ),
+            ),
+          ),
+        ),
+        _ArrowButton(icon: Icons.chevron_right_rounded, onTap: _next),
+      ],
+    );
+  }
+}
+
+class _ArrowButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const _ArrowButton({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: AppColors.bgCard,
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.bgCardLight),
+        ),
+        child: Icon(icon, color: AppColors.primaryLight, size: 24),
+      ),
+    );
+  }
+}
+
+// ── Stats row ──────────────────────────────────────────────────────────────
+
+class _StatsRow extends StatelessWidget {
+  final PlayerProfile profile;
+  const _StatsRow({required this.profile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: StatBadge(
+            icon: AppConstants.iconStar,
+            label: 'Stars',
+            value: profile.stars.toString(),
+            valueColor: AppColors.gold,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: StatBadge(
+            icon: AppConstants.iconStreak,
+            label: 'Streak',
+            value: '${profile.streakDays} d',
+            valueColor: AppColors.accentCoral,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: StatBadge(
+            icon: AppConstants.iconTrophy,
+            label: 'Best',
+            value: profile.bestScore.toString(),
+            valueColor: AppColors.accentYellow,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Reward area ────────────────────────────────────────────────────────────
+
+class _RewardArea extends StatelessWidget {
+  final RewardsState rewards;
+  final int totalStars;
+  const _RewardArea({required this.rewards, required this.totalStars});
+
+  @override
+  Widget build(BuildContext context) {
+    final ready = rewards.readyRewards(totalStars);
+    final next = rewards.nextPendingReward(totalStars);
+    final avail = rewards.availableStars(totalStars);
+
+    if (ready.isEmpty && next == null) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        children: [
+          if (ready.isNotEmpty) ...[
+            _RewardReadyBadge(count: ready.length),
+            if (next != null) const SizedBox(height: 10),
+          ],
+          if (next != null)
+            RewardProgressBar(reward: next, currentStars: avail),
+        ],
+      ),
+    );
+  }
+}
+
+class _RewardReadyBadge extends StatelessWidget {
+  final int count;
+  const _RewardReadyBadge({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    final label = count == 1 ? '1 reward ready to claim!' : '$count rewards ready to claim!';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.accentYellow.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+            color: AppColors.accentYellow.withOpacity(0.5), width: 1.5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('🎁', style: TextStyle(fontSize: 22)),
+          const SizedBox(width: 10),
+          Text(label,
+              style: AppTextStyles.body
+                  .copyWith(color: AppColors.accentYellow)),
+          const SizedBox(width: 8),
+          Text('· Tell a parent!',
+              style: AppTextStyles.label
+                  .copyWith(color: AppColors.textMuted)),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Bottom nav ─────────────────────────────────────────────────────────────
+
+class _BottomNav extends StatelessWidget {
+  final VoidCallback onProgressTap;
+  final VoidCallback onParentTap;
+  const _BottomNav({required this.onProgressTap, required this.onParentTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _NavItem(icon: '🏅', label: 'Rewards', onTap: () {}),
+        _NavItem(icon: '📊', label: 'Progress', onTap: onProgressTap),
+        _NavItem(icon: '⚙️', label: 'Settings', onTap: () {}),
+        _NavItem(icon: '👨‍👩‍👧', label: 'Parent', onTap: onParentTap),
+      ],
+    );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  final String icon;
+  final String label;
+  final VoidCallback onTap;
+  const _NavItem(
+      {required this.icon, required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              color: AppColors.bgCard,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.bgCardLight, width: 1.5),
+            ),
+            child: Center(
+              child: Text(icon,
+                  style: const TextStyle(fontSize: 26)),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(label, style: AppTextStyles.label),
+        ],
+      ),
+    );
+  }
+}
