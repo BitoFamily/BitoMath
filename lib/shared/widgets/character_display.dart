@@ -6,14 +6,16 @@ class CharacterDisplay extends StatelessWidget {
   final String imagePath;
   final String name;
   final String quote;
-  final double size;
+  final double height;
+  final Color accentColor;
 
   const CharacterDisplay({
     super.key,
     required this.imagePath,
     required this.name,
     required this.quote,
-    this.size = 130,
+    this.height = 160,
+    this.accentColor = AppColors.primaryLight,
   });
 
   @override
@@ -21,38 +23,17 @@ class CharacterDisplay extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Glowing circle avatar with character image
-        Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: AppColors.primaryGradient,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withOpacity(0.55),
-                blurRadius: 36,
-                spreadRadius: 6,
-              ),
-            ],
-          ),
-          child: ClipOval(
-            child: Image.asset(
-              imagePath,
-              width: size,
-              height: size,
-              fit: BoxFit.cover,
-            ),
-          ),
+        Image.asset(
+          imagePath,
+          height: height,
+          fit: BoxFit.contain,
         ),
         const SizedBox(height: 14),
 
         // Name
         Text(
           name,
-          style: AppTextStyles.headline3.copyWith(
-            color: AppColors.primaryLight,
-          ),
+          style: AppTextStyles.headline3.copyWith(color: accentColor),
         ),
         const SizedBox(height: 4),
 
