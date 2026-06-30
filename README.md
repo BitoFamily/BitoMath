@@ -130,4 +130,4 @@ BitoMath is one app within the broader Bito platform under [BitoFamily](https://
 
 ## License
 
-Private — © BitoFamily. All rights reserved.
+TBC
