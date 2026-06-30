@@ -206,6 +206,10 @@ class _CharacterCarousel extends StatelessWidget {
                 imagePath: AppConstants.characterImages[selectedIndex],
                 name: AppConstants.characterNames[selectedIndex],
                 quote: AppConstants.characterQuotes[selectedIndex],
+                // Coco (index 0) is a small puppy-bot — displayed at half the
+                // height of the human-scale Kato/Sona bots.
+                height: selectedIndex == 0 ? 80 : 160,
+                accentColor: AppColors.characterPrimary[selectedIndex],
               ),
             ),
           ),

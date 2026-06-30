@@ -94,11 +94,13 @@ class _CompanionCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary.withOpacity(0.2) : AppColors.bgCard,
+          color: selected
+              ? AppColors.characterPrimary[companion.index].withOpacity(0.2)
+              : AppColors.bgCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: selected
-                ? AppColors.primaryLight
+                ? AppColors.characterPrimary[companion.index]
                 : unlocked
                     ? AppColors.bgCardLight
                     : AppColors.bgCardLight.withOpacity(0.5),
@@ -128,7 +130,14 @@ class _CompanionCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: unlocked
-                            ? AppColors.primaryGradient
+                            ? LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  AppColors.characterPrimary[companion.index],
+                                  AppColors.characterSecondary[companion.index],
+                                ],
+                              )
                             : const LinearGradient(
                                 colors: [AppColors.bgCardLight, AppColors.bgMid]),
                       ),
@@ -163,13 +172,14 @@ class _CompanionCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
-                        color: AppColors.primaryLight.withOpacity(0.2),
+                        color: AppColors.characterPrimary[companion.index]
+                            .withOpacity(0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         'Active',
-                        style: AppTextStyles.label
-                            .copyWith(color: AppColors.primaryLight),
+                        style: AppTextStyles.label.copyWith(
+                            color: AppColors.characterPrimary[companion.index]),
                       ),
                     ),
                 ],

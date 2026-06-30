@@ -18,11 +18,8 @@ class TimerRing extends StatelessWidget {
   double get _progress =>
       totalSeconds == 0 ? 0.0 : (secondsRemaining / totalSeconds).clamp(0.0, 1.0);
 
-  Color get _color {
-    if (_progress > 0.5) return AppColors.accentGreen;
-    if (_progress > 0.25) return AppColors.warning;
-    return AppColors.accentCoral;
-  }
+  Color get _color =>
+      secondsRemaining < 5 ? AppColors.warning : AppColors.timerCool;
 
   @override
   Widget build(BuildContext context) {

@@ -36,3 +36,9 @@ ios/Pods/
 # Misc
 .DS_Store
 *.env
+
+# Claude Code local project settings
+.claude/
+
+# Flutter IDE metadata
+.metadata
