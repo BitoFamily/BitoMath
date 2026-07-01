@@ -178,7 +178,7 @@ class _TierCard extends StatelessWidget {
                         fontSize: isCurrent ? 30 : 18,
                         color: achieved
                             ? null
-                            : AppColors.textMuted.withOpacity(0.4),
+                            : AppColors.textMuted.withValues(alpha: 0.4),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -283,7 +283,7 @@ class _TopicMastery extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isFocus
-                    ? AppColors.accentCoral.withOpacity(0.5)
+                    ? AppColors.accentCoral.withValues(alpha: 0.5)
                     : AppColors.bgCardLight,
               ),
             ),
@@ -352,9 +352,9 @@ class _Chip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.4)),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(label,
           style: AppTextStyles.label.copyWith(color: color)),

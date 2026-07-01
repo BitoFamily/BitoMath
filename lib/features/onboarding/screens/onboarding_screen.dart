@@ -132,7 +132,7 @@ class _NamePage extends StatelessWidget {
               counterText: '',
               hintText: 'Your name here...',
               hintStyle: AppTextStyles.headline2.copyWith(
-                color: AppColors.textMuted.withOpacity(0.5),
+                color: AppColors.textMuted.withValues(alpha: 0.5),
               ),
               filled: true,
               fillColor: AppColors.bgCard,

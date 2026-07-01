@@ -91,7 +91,7 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
                   height: 44,
                   decoration: BoxDecoration(
                     color: selected
-                        ? AppColors.primary.withOpacity(0.25)
+                        ? AppColors.primary.withValues(alpha: 0.25)
                         : AppColors.bgCard,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
@@ -120,7 +120,7 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
             decoration: InputDecoration(
               hintText: 'e.g. Movie night, Extra screen time…',
               hintStyle: AppTextStyles.body.copyWith(
-                color: AppColors.textMuted.withOpacity(0.5),
+                color: AppColors.textMuted.withValues(alpha: 0.5),
               ),
               filled: true,
               fillColor: AppColors.bgCard,

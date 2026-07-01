@@ -21,8 +21,8 @@ class AnswerButton extends StatelessWidget {
   });
 
   Color get _bgColor => switch (result) {
-        true => AppColors.accentGreen.withOpacity(0.22),
-        false => AppColors.accentCoral.withOpacity(0.22),
+        true => AppColors.accentGreen.withValues(alpha: 0.22),
+        false => AppColors.accentCoral.withValues(alpha: 0.22),
         _ => AppColors.bgCard,
       };
 
@@ -55,7 +55,7 @@ class AnswerButton extends StatelessWidget {
           boxShadow: result == true
               ? [
                   BoxShadow(
-                    color: AppColors.accentGreen.withOpacity(0.3),
+                    color: AppColors.accentGreen.withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   )

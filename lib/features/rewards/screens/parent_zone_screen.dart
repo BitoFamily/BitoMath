@@ -152,9 +152,9 @@ class _RewardsSection extends ConsumerWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
+                    color: AppColors.primary.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.primaryLight.withOpacity(0.5)),
+                    border: Border.all(color: AppColors.primaryLight.withValues(alpha: 0.5)),
                   ),
                   child: Text('+ Add',
                       style:
@@ -208,12 +208,12 @@ class _RewardRow extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
       decoration: BoxDecoration(
         color: reward.isRedeemed
-            ? AppColors.bgCard.withOpacity(0.5)
+            ? AppColors.bgCard.withValues(alpha: 0.5)
             : AppColors.bgCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: _achieved && !reward.isRedeemed
-              ? AppColors.accentYellow.withOpacity(0.5)
+              ? AppColors.accentYellow.withValues(alpha: 0.5)
               : AppColors.bgCardLight,
         ),
       ),

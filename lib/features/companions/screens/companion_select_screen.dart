@@ -95,7 +95,7 @@ class _CompanionCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: selected
-              ? AppColors.characterPrimary[companion.index].withOpacity(0.2)
+              ? AppColors.characterPrimary[companion.index].withValues(alpha: 0.2)
               : AppColors.bgCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -103,7 +103,7 @@ class _CompanionCard extends StatelessWidget {
                 ? AppColors.characterPrimary[companion.index]
                 : unlocked
                     ? AppColors.bgCardLight
-                    : AppColors.bgCardLight.withOpacity(0.5),
+                    : AppColors.bgCardLight.withValues(alpha: 0.5),
             width: selected ? 2 : 1.5,
           ),
         ),
@@ -173,7 +173,7 @@ class _CompanionCard extends StatelessWidget {
                           horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
                         color: AppColors.characterPrimary[companion.index]
-                            .withOpacity(0.2),
+                            .withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(

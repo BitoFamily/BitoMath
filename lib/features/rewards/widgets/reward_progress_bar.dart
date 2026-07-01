@@ -27,7 +27,7 @@ class RewardProgressBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: _achieved
-              ? AppColors.accentYellow.withOpacity(0.6)
+              ? AppColors.accentYellow.withValues(alpha: 0.6)
               : AppColors.bgCardLight,
           width: 1.5,
         ),
@@ -51,10 +51,10 @@ class RewardProgressBar extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: AppColors.accentYellow.withOpacity(0.15),
+                    color: AppColors.accentYellow.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                        color: AppColors.accentYellow.withOpacity(0.5)),
+                        color: AppColors.accentYellow.withValues(alpha: 0.5)),
                   ),
                   child: Text(
                     'Ready! 🎉',

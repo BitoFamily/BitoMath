@@ -79,7 +79,7 @@ class _AppButtonState extends State<AppButton>
             color: (widget._variant == _ButtonVariant.play
                     ? const Color(0xFFFF6B35)
                     : AppColors.primary)
-                .withOpacity(0.45),
+                .withValues(alpha: 0.45),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

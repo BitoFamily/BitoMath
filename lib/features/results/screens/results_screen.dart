@@ -269,7 +269,7 @@ class _StarRow extends StatelessWidget {
                 fontSize: 44,
                 color: i < stars
                     ? AppColors.gold
-                    : AppColors.textMuted.withOpacity(0.3),
+                    : AppColors.textMuted.withValues(alpha: 0.3),
               )),
         );
       }),

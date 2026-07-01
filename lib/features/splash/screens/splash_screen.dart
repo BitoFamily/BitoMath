@@ -75,7 +75,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       gradient: AppColors.primaryGradient,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.6),
+                          color: AppColors.primary.withValues(alpha: 0.6),
                           blurRadius: 40,
                           spreadRadius: 8,
                         ),
@@ -92,7 +92,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       color: AppColors.accentYellow,
                       shadows: [
                         Shadow(
-                          color: AppColors.primaryLight.withOpacity(0.7),
+                          color: AppColors.primaryLight.withValues(alpha: 0.7),
                           blurRadius: 24,
                           offset: const Offset(0, 4),
                         ),

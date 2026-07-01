@@ -272,10 +272,10 @@ class _QuestionDisplay extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.accentYellow.withOpacity(0.15),
+              color: AppColors.accentYellow.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                  color: AppColors.accentYellow.withOpacity(0.5)),
+                  color: AppColors.accentYellow.withValues(alpha: 0.5)),
             ),
             child: Text(
               '🔥 ${state.streak} in a row! +5 bonus!',

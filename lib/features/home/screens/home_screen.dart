@@ -114,7 +114,7 @@ class _Header extends StatelessWidget {
             color: AppColors.bgCard,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-                color: AppColors.primaryLight.withOpacity(0.4)),
+                color: AppColors.primaryLight.withValues(alpha: 0.4)),
           ),
           child: Text(_tier,
               style: AppTextStyles.label
@@ -145,10 +145,10 @@ class _FocusChip extends StatelessWidget {
         padding:
             const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.accentCoral.withOpacity(0.1),
+          color: AppColors.accentCoral.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
           border:
-              Border.all(color: AppColors.accentCoral.withOpacity(0.4)),
+              Border.all(color: AppColors.accentCoral.withValues(alpha: 0.4)),
         ),
         child: Text(
           '🎯 Focus today: ${_labels[topic] ?? topic}',
@@ -326,10 +326,10 @@ class _RewardReadyBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.accentYellow.withOpacity(0.1),
+        color: AppColors.accentYellow.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-            color: AppColors.accentYellow.withOpacity(0.5), width: 1.5),
+            color: AppColors.accentYellow.withValues(alpha: 0.5), width: 1.5),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
