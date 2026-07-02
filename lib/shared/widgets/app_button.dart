@@ -7,11 +7,13 @@ enum _ButtonVariant { play, primary, secondary }
 
 class AppButton extends StatefulWidget {
   final String label;
+  final String? subtitle;
   final VoidCallback? onTap;
   final _ButtonVariant _variant;
 
   const AppButton._({
     required this.label,
+    this.subtitle,
     required this.onTap,
     required _ButtonVariant variant,
   }) : _variant = variant;
@@ -24,15 +26,22 @@ class AppButton extends StatefulWidget {
 
   factory AppButton.primary({
     required String label,
+    String? subtitle,
     required VoidCallback? onTap,
   }) =>
-      AppButton._(label: label, onTap: onTap, variant: _ButtonVariant.primary);
+      AppButton._(
+        label: label,
+        subtitle: subtitle,
+        onTap: onTap,
+        variant: _ButtonVariant.primary,
+      );
 
   factory AppButton.secondary({
     required String label,
     required VoidCallback? onTap,
   }) =>
-      AppButton._(label: label, onTap: onTap, variant: _ButtonVariant.secondary);
+      AppButton._(
+          label: label, onTap: onTap, variant: _ButtonVariant.secondary);
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -106,7 +115,10 @@ class _AppButtonState extends State<AppButton>
         scale: _scaleAnim,
         child: Container(
           width: double.infinity,
-          height: 64,
+          height: widget.subtitle == null ? 64 : 72,
+          padding: widget.subtitle == null
+              ? null
+              : const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             gradient: _gradient,
             color: _isOutlined ? Colors.transparent : null,
@@ -117,14 +129,40 @@ class _AppButtonState extends State<AppButton>
             boxShadow: _shadow,
           ),
           child: Center(
-            child: Text(
-              widget.label,
-              style: AppTextStyles.buttonText.copyWith(
-                color: _isOutlined
-                    ? AppColors.primaryLight
-                    : AppColors.textPrimary,
-              ),
-            ),
+            child: widget.subtitle == null
+                ? Text(
+                    widget.label,
+                    style: AppTextStyles.buttonText.copyWith(
+                      color: _isOutlined
+                          ? AppColors.primaryLight
+                          : AppColors.textPrimary,
+                    ),
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.label,
+                        style: AppTextStyles.buttonText.copyWith(
+                          color: _isOutlined
+                              ? AppColors.primaryLight
+                              : AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        widget.subtitle!,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.label.copyWith(
+                          color: _isOutlined
+                              ? AppColors.primaryLight.withValues(alpha: 0.85)
+                              : AppColors.textPrimary.withValues(alpha: 0.85),
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),

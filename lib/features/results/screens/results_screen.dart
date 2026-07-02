@@ -12,6 +12,7 @@ import '../../../features/game/models/game_state.dart';
 import '../../../features/rewards/models/session_log.dart';
 import '../../../features/rewards/providers/rewards_provider.dart';
 import '../../../core/services/sound_service.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
 
 class ResultsScreen extends ConsumerStatefulWidget {
@@ -92,6 +93,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
   }
 
   void _showRewardDialog(List<String> names) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -102,9 +104,8 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
           children: [
             const Text('🎉', style: TextStyle(fontSize: 52)),
             const SizedBox(height: 12),
-            Text('Reward unlocked!',
-                style: AppTextStyles.headline2,
-                textAlign: TextAlign.center),
+            Text(l10n.rewardUnlockedTitle,
+                style: AppTextStyles.headline2, textAlign: TextAlign.center),
             const SizedBox(height: 8),
             ...names.map((n) => Padding(
                   padding: const EdgeInsets.only(top: 4),
@@ -114,18 +115,17 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                       textAlign: TextAlign.center),
                 )),
             const SizedBox(height: 16),
-            Text('Show a parent to claim it!',
-                style:
-                    AppTextStyles.label.copyWith(color: AppColors.textMuted),
+            Text(l10n.showParentToClaim,
+                style: AppTextStyles.label.copyWith(color: AppColors.textMuted),
                 textAlign: TextAlign.center),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Awesome!',
-                style: AppTextStyles.body
-                    .copyWith(color: AppColors.primaryLight)),
+            child: Text(l10n.awesomeButton,
+                style:
+                    AppTextStyles.body.copyWith(color: AppColors.primaryLight)),
           ),
         ],
       ),
@@ -137,22 +137,22 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
     final result = widget.result;
     final stars = result.starsEarned;
     final accuracyPct = (result.accuracy * 100).round();
+    final l10n = AppLocalizations.of(context)!;
 
     // Companion quote based on performance
     final profile = ref.read(playerProfileProvider);
-    final companion =
-        CompanionData.all[profile.selectedCharacter.clamp(0, CompanionData.all.length - 1)];
+    final companion = CompanionData
+        .all[profile.selectedCharacter.clamp(0, CompanionData.all.length - 1)];
     final mood = stars >= 3
         ? CompanionMood.celebrate
         : stars == 0
             ? CompanionMood.encourage
             : CompanionMood.neutral;
-    final companionQuote = companion.quote(mood);
+    final companionQuote = companion.quote(context, mood);
 
     return Scaffold(
       body: Container(
-        decoration:
-            const BoxDecoration(gradient: AppColors.backgroundGradient),
+        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -164,12 +164,12 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                 const SizedBox(height: 16),
                 Text(
                   stars == 3
-                      ? 'Perfect! 🎉'
+                      ? l10n.resultPerfect
                       : stars == 2
-                          ? 'Great job! 🙌'
+                          ? l10n.resultGreat
                           : stars == 1
-                              ? 'Keep going! 💪'
-                              : 'Try again! 🔄',
+                              ? l10n.resultKeepGoing
+                              : l10n.resultTryAgain,
                   style: AppTextStyles.headline1,
                   textAlign: TextAlign.center,
                 ),
@@ -177,22 +177,22 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                 // Companion reaction
                 Text(
                   '${companion.emoji}  $companionQuote',
-                  style: AppTextStyles.body
-                      .copyWith(color: AppColors.textSecondary,
-                          fontStyle: FontStyle.italic),
+                  style: AppTextStyles.body.copyWith(
+                      color: AppColors.textSecondary,
+                      fontStyle: FontStyle.italic),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
                 _StatCard(
                   icon: AppConstants.iconStar,
-                  label: 'Stars Earned',
+                  label: l10n.statStarsEarned,
                   value: '+${result.correctCount}',
                   color: AppColors.accentYellow,
                 ),
                 const SizedBox(height: 10),
                 _StatCard(
                   icon: '🎯',
-                  label: 'Final Score',
+                  label: l10n.statFinalScore,
                   value: '${result.score}',
                   color: AppColors.primaryLight,
                 ),
@@ -202,9 +202,8 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                     Expanded(
                       child: _StatCard(
                         icon: AppConstants.iconCorrect,
-                        label: 'Correct',
-                        value:
-                            '${result.correctCount}/${result.totalAnswered}',
+                        label: l10n.statCorrect,
+                        value: '${result.correctCount}/${result.totalAnswered}',
                         color: AppColors.accentGreen,
                       ),
                     ),
@@ -212,7 +211,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                     Expanded(
                       child: _StatCard(
                         icon: '📈',
-                        label: 'Accuracy',
+                        label: l10n.statAccuracy,
                         value: '$accuracyPct%',
                         color: AppColors.accentBlue,
                       ),
@@ -222,13 +221,13 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                 const SizedBox(height: 10),
                 _StatCard(
                   icon: AppConstants.iconStreak,
-                  label: 'Best Streak',
-                  value: '${result.bestStreak} in a row',
+                  label: l10n.statBestStreak,
+                  value: l10n.inARow(result.bestStreak),
                   color: AppColors.accentCoral,
                 ),
                 const Spacer(),
                 AppButton.play(
-                  label: '▶   PLAY AGAIN',
+                  label: l10n.playAgainButton,
                   onTap: () {
                     final route = result.isPractice
                         ? '/practice/${result.ageBand}'
@@ -238,7 +237,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                 ),
                 const SizedBox(height: 14),
                 AppButton.secondary(
-                  label: '🏠   HOME',
+                  label: l10n.homeButton,
                   onTap: () => context.go(Routes.home),
                 ),
                 const SizedBox(height: 24),

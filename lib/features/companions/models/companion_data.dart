@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:flutter/widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 class CompanionData {
   final int index;
@@ -6,86 +8,47 @@ class CompanionData {
   final String name;
   final int unlockStars; // 0 = always available
 
-  final List<String> neutralQuotes;
-  final List<String> celebrateQuotes;
-  final List<String> encourageQuotes;
-
   const CompanionData({
     required this.index,
     required this.emoji,
     required this.name,
     required this.unlockStars,
-    required this.neutralQuotes,
-    required this.celebrateQuotes,
-    required this.encourageQuotes,
   });
 
   bool isUnlocked(int stars) => stars >= unlockStars;
 
-  String quote(CompanionMood mood) {
-    final list = switch (mood) {
-      CompanionMood.celebrate => celebrateQuotes,
-      CompanionMood.encourage => encourageQuotes,
-      CompanionMood.neutral => neutralQuotes,
+  /// Coco (index 0) has real quotes per mood; Kato/Sona (teased, not yet
+  /// playable) share the "Coming soon!" placeholder.
+  String quote(BuildContext context, CompanionMood mood) {
+    final l10n = AppLocalizations.of(context)!;
+    if (index != 0) return l10n.companionComingSoonQuote;
+    final quotes = switch (mood) {
+      CompanionMood.neutral => [
+          l10n.cocoNeutral1,
+          l10n.cocoNeutral2,
+          l10n.cocoNeutral3
+        ],
+      CompanionMood.celebrate => [
+          l10n.cocoCelebrate1,
+          l10n.cocoCelebrate2,
+          l10n.cocoCelebrate3,
+        ],
+      CompanionMood.encourage => [
+          l10n.cocoEncourage1,
+          l10n.cocoEncourage2,
+          l10n.cocoEncourage3,
+        ],
     };
-    return list[Random().nextInt(list.length)];
+    return quotes[Random().nextInt(quotes.length)];
   }
 
   static const List<CompanionData> all = [
     // Coco — puppy-bot, MVP launch hero
-    CompanionData(
-      index: 0,
-      emoji: '🐾',
-      name: 'Coco',
-      unlockStars: 0,
-      neutralQuotes: [
-        '"Ready for a challenge?"',
-        '"Let\'s go — numbers are fun!"',
-        '"Every question is a new adventure!"',
-      ],
-      celebrateQuotes: [
-        '"Woof woof! You\'re amazing!"',
-        '"That was PAWSOME! Keep it up!"',
-        '"You\'re on fire — Coco believes in you!"',
-      ],
-      encourageQuotes: [
-        '"Even puppies keep trying!"',
-        '"A stumble is just a step forward!"',
-        '"You\'ve got this — Coco is cheering for you!"',
-      ],
-    ),
+    CompanionData(index: 0, emoji: '🐾', name: 'Coco', unlockStars: 0),
     // Kato — boy-bot, teased for future release
-    CompanionData(
-      index: 1,
-      emoji: '⚡',
-      name: 'Kato',
-      unlockStars: 9999,
-      neutralQuotes: [
-        '"Coming soon!"',
-      ],
-      celebrateQuotes: [
-        '"Coming soon!"',
-      ],
-      encourageQuotes: [
-        '"Coming soon!"',
-      ],
-    ),
+    CompanionData(index: 1, emoji: '⚡', name: 'Kato', unlockStars: 9999),
     // Sona — girl-bot, teased for future release
-    CompanionData(
-      index: 2,
-      emoji: '✨',
-      name: 'Sona',
-      unlockStars: 9999,
-      neutralQuotes: [
-        '"Coming soon!"',
-      ],
-      celebrateQuotes: [
-        '"Coming soon!"',
-      ],
-      encourageQuotes: [
-        '"Coming soon!"',
-      ],
-    ),
+    CompanionData(index: 2, emoji: '✨', name: 'Sona', unlockStars: 9999),
   ];
 }
 

@@ -1,13 +1,16 @@
 class AppConstants {
   static const String appName = 'Bito Math';
-  static const String appTagline = 'Learn, earn, reward!';
 
-  // Age bands — Grades 1–3 (Ages 5–8)
-  static const int ageBandGrade1 = 0;
-  static const int ageBandGrade2 = 1;
-  static const int ageBandGrade3 = 2;
+  // Age bands — Levels 1–3 (Ages 5–8)
+  // "Level" instead of "Grade" is school-system-agnostic, which matters once
+  // the app is localized into markets with different grade conventions.
+  static const int ageBandLevel1 = 0;
+  static const int ageBandLevel2 = 1;
+  static const int ageBandLevel3 = 2;
+  static const int ageBandCount = 3;
 
-  static const List<String> ageBandLabels = ['Grade 1 (Age 5–6)', 'Grade 2 (Age 6–7)', 'Grade 3 (Age 7–8)'];
+  // Localized display strings for age bands live in AgeBandStrings
+  // (lib/core/constants/age_band_strings.dart) since they depend on BuildContext.
 
   // Game defaults
   static const int defaultGameDurationSeconds = 60;
@@ -28,11 +31,8 @@ class AppConstants {
     'assets/images/sona.png',
   ];
   static const List<String> characterNames = ['Coco', 'Kato', 'Sona'];
-  static const List<String> characterQuotes = [
-    '"Ready for a challenge?"',
-    '"Coming soon!"',
-    '"Coming soon!"',
-  ];
+  // Localized teaser quote for the carousel lives in AgeBandStrings.characterQuote
+  // (Coco's real quote, or the "Coming soon!" placeholder for Kato/Sona).
 
   // Reward emoji icons used across the UI
   static const String iconStar = '⭐';

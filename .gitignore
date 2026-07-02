@@ -40,3 +40,7 @@ ios/Pods/
 
 # Flutter IDE metadata
 .metadata
+
+# Generated localization code (regenerated from lib/l10n/*.arb via `flutter gen-l10n`)
+lib/l10n/app_localizations.dart
+lib/l10n/app_localizations_*.dart

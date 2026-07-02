@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/constants/age_band_strings.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -100,22 +102,24 @@ class _NamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Spacer(),
-          const Text('⚡', style: TextStyle(fontSize: 72), textAlign: TextAlign.center),
+          const Text('⚡',
+              style: TextStyle(fontSize: 72), textAlign: TextAlign.center),
           const SizedBox(height: 20),
           Text(
-            'Welcome to\nBito Math!',
+            l10n.onboardingWelcomeTitle,
             style: AppTextStyles.headline1,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
           Text(
-            "What's your name?",
+            l10n.onboardingNamePrompt,
             style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textMuted),
             textAlign: TextAlign.center,
           ),
@@ -127,10 +131,11 @@ class _NamePage extends StatelessWidget {
             textCapitalization: TextCapitalization.words,
             textAlign: TextAlign.center,
             maxLength: 20,
-            style: AppTextStyles.headline2.copyWith(color: AppColors.textPrimary),
+            style:
+                AppTextStyles.headline2.copyWith(color: AppColors.textPrimary),
             decoration: InputDecoration(
               counterText: '',
-              hintText: 'Your name here...',
+              hintText: l10n.onboardingNameHint,
               hintStyle: AppTextStyles.headline2.copyWith(
                 color: AppColors.textMuted.withValues(alpha: 0.5),
               ),
@@ -155,7 +160,7 @@ class _NamePage extends StatelessWidget {
             onSubmitted: (_) => onNext(),
           ),
           const SizedBox(height: 32),
-          AppButton.play(label: "Let's Go! →", onTap: onNext),
+          AppButton.play(label: l10n.onboardingLetsGo, onTap: onNext),
           const Spacer(),
         ],
       ),
@@ -177,8 +182,9 @@ class _AgePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final displayName =
-        playerName.isNotEmpty ? playerName : 'Champion';
+        playerName.isNotEmpty ? playerName : l10n.defaultPlayerName;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -187,18 +193,18 @@ class _AgePage extends StatelessWidget {
         children: [
           const Spacer(),
           Text(
-            'Hi, $displayName! 👋',
+            l10n.onboardingGreeting(displayName),
             style: AppTextStyles.headline2,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
-            'Pick your level',
+            l10n.pickYourLevel,
             style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textMuted),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 40),
-          ...List.generate(AppConstants.ageBandLabels.length, (i) {
+          ...List.generate(AppConstants.ageBandCount, (i) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 14),
               child: _AgeBandCard(
@@ -217,12 +223,6 @@ class _AgePage extends StatelessWidget {
 class _AgeBandCard extends StatelessWidget {
   final int index;
   final VoidCallback onTap;
-
-  static const _descriptions = [
-    'Counting, addition & subtraction up to 10',
-    'Addition & subtraction up to 20',
-    'Bigger numbers, intro to multiplication',
-  ];
 
   static const _icons = ['🌱', '🌟', '🚀'];
 
@@ -248,12 +248,12 @@ class _AgeBandCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    AppConstants.ageBandLabels[index],
+                    AgeBandStrings.name(context, index),
                     style: AppTextStyles.headline3,
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    _descriptions[index],
+                    '${AgeBandStrings.description(context, index)} (${AgeBandStrings.ageRange(context, index)})',
                     style: AppTextStyles.label.copyWith(
                       color: AppColors.textMuted,
                     ),

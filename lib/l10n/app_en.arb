@@ -1,0 +1,214 @@
+{
+  "@@locale": "en",
+
+  "appTagline": "Learn, earn, reward!",
+  "defaultPlayerName": "Champion",
+
+  "onboardingWelcomeTitle": "Welcome to\nBito Math!",
+  "onboardingNamePrompt": "What's your name?",
+  "onboardingNameHint": "Your name here...",
+  "onboardingLetsGo": "Let's Go! →",
+  "onboardingGreeting": "Hi, {name}! 👋",
+  "@onboardingGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "pickYourLevel": "Pick your level",
+
+  "level1Name": "Level 1",
+  "level2Name": "Level 2",
+  "level3Name": "Level 3",
+  "level1AgeRange": "age 5–6",
+  "level2AgeRange": "age 6–7",
+  "level3AgeRange": "age 7–8",
+  "level1Description": "Counting, addition & subtraction up to 10",
+  "level2Description": "Addition & subtraction up to 20",
+  "level3Description": "Bigger numbers, intro to multiplication",
+  "practiceSuffix": " · Practice",
+
+  "quickPlayTitle": "⚡ Quick Play",
+  "practiceModeTitle": "🎯 Practice Mode",
+
+  "homeGreeting": "Hey, {name}! 👋",
+  "@homeGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "tierBadgeDiamond": "💎 Diamond",
+  "tierBadgeGold": "🥇 Gold",
+  "tierBadgeSilver": "🥈 Silver",
+  "tierBadgeBronze": "🥉 Bronze",
+  "tierBadgeStarter": "⭐ Starter",
+  "focusTodayLabel": "🎯 Focus today: {topic}",
+  "@focusTodayLabel": {
+    "placeholders": { "topic": { "type": "String" } }
+  },
+  "topicAddition": "+ Addition",
+  "topicSubtraction": "− Subtraction",
+  "topicMultiplication": "× Multiplication",
+  "topicDivision": "÷ Division",
+  "playNowButton": "▶   PLAY NOW",
+  "practiceButton": "🎯   PRACTICE",
+  "statStars": "Stars",
+  "statStreak": "Streak",
+  "statBest": "Best",
+  "daysValue": "{days} d",
+  "@daysValue": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "rewardsReadyBadge": "{count, plural, one{1 reward ready to claim!} other{{count} rewards ready to claim!}}",
+  "@rewardsReadyBadge": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "tellAParent": "· Tell a parent!",
+  "navRewards": "Rewards",
+  "navProgress": "Progress",
+  "navSettings": "Settings",
+  "navParent": "Parent",
+
+  "companionsTitle": "Companions",
+  "companionComingSoonToast": "Coming soon in a future update!",
+  "companionUnlockAt": "Unlock at {stars} ⭐",
+  "@companionUnlockAt": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+  "companionComingSoonBadge": "Coming Soon",
+  "companionActiveBadge": "Active",
+  "starsCount": "{count} ⭐",
+  "@starsCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "leaveGameTitle": "Leave game?",
+  "leaveGameBody": "Your progress this round will be lost.",
+  "keepPlayingButton": "Keep playing",
+  "exitButton": "Exit",
+  "scoreLabel": "Score",
+  "questionCounter": "Q {number}",
+  "@questionCounter": {
+    "placeholders": { "number": { "type": "int" } }
+  },
+  "streakBonus": "🔥 {streak} in a row! +5 bonus!",
+  "@streakBonus": {
+    "placeholders": { "streak": { "type": "int" } }
+  },
+  "secondsLabel": "sec",
+
+  "resultPerfect": "Perfect! 🎉",
+  "resultGreat": "Great job! 🙌",
+  "resultKeepGoing": "Keep going! 💪",
+  "resultTryAgain": "Try again! 🔄",
+  "rewardUnlockedTitle": "Reward unlocked!",
+  "showParentToClaim": "Show a parent to claim it!",
+  "awesomeButton": "Awesome!",
+  "statStarsEarned": "Stars Earned",
+  "statFinalScore": "Final Score",
+  "statCorrect": "Correct",
+  "statAccuracy": "Accuracy",
+  "statBestStreak": "Best Streak",
+  "inARow": "{count} in a row",
+  "@inARow": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "playAgainButton": "▶   PLAY AGAIN",
+  "homeButton": "🏠   HOME",
+
+  "progressTitle": "Progress",
+  "statDayStreak": "Day Streak",
+  "statBestScore": "Best Score",
+  "tierProgressTitle": "Tier Progress",
+  "tierNameStarter": "Starter",
+  "tierNameBronze": "Bronze",
+  "tierNameSilver": "Silver",
+  "tierNameGold": "Gold",
+  "tierNameDiamond": "Diamond",
+  "maxTierReached": "🏆 Maximum tier reached!",
+  "starsToGo": "{stars} / {ceiling} ⭐  ·  {remaining} to go",
+  "@starsToGo": {
+    "placeholders": {
+      "stars": { "type": "int" },
+      "ceiling": { "type": "int" },
+      "remaining": { "type": "int" }
+    }
+  },
+  "topicMasteryTitle": "Topic Mastery",
+  "focusChipLabel": "Focus",
+  "topicOff": "Off",
+  "topicNotPlayedYet": "Not played yet",
+  "topicPercent": "{percent}%",
+  "@topicPercent": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+  "statusMastered": "✅ Mastered",
+  "statusGettingThere": "📈 Getting there",
+  "statusNeedsPractice": "⚠️ Needs practice",
+  "recentSessionsTitle": "Recent Sessions",
+  "noSessionsProgress": "No sessions yet.\nPlay a game to see your history here!",
+  "sessionCorrectCount": "{correct}/{total} correct",
+  "@sessionCorrectCount": {
+    "placeholders": {
+      "correct": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "starsEarnedPrefix": "+{stars} ⭐",
+  "@starsEarnedPrefix": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+
+  "parentZoneTitle": "Parent Zone",
+  "totalEarnedLabel": "Total earned",
+  "availableStarsLabel": "{count} ⭐ available",
+  "@availableStarsLabel": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "addButton": "+ Add",
+  "noRewardsYet": "No rewards yet.\nTap \"+ Add\" to create the first one!",
+  "redeemedCheck": "Redeemed ✓",
+  "starsProgress": "{current}/{cost} ⭐",
+  "@starsProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "cost": { "type": "int" }
+    }
+  },
+  "redeemButton": "Redeem",
+  "practiceTopicsTitle": "Practice Topics",
+  "practiceTopicsSubtitle": "Choose which operations to include in games",
+  "noSessionsParent": "No sessions recorded yet.\nPlay a game to see results here!",
+  "sessionCorrectAndAccuracy": "{correct}/{total} correct · {percent}% accuracy",
+  "@sessionCorrectAndAccuracy": {
+    "placeholders": {
+      "correct": { "type": "int" },
+      "total": { "type": "int" },
+      "percent": { "type": "int" }
+    }
+  },
+
+  "pinWrong": "Wrong PIN — try again",
+  "pinMismatch": "PINs didn't match — start again",
+  "pinTitleVerify": "Parent PIN",
+  "pinTitleConfirm": "Confirm PIN",
+  "pinTitleCreate": "Create Parent PIN",
+  "pinSubtitleVerify": "Enter your 4-digit PIN",
+  "pinSubtitleConfirm": "Enter the same PIN again",
+  "pinSubtitleCreate": "Choose a 4-digit PIN for the Parent Zone",
+
+  "newRewardTitle": "New Reward",
+  "pickAnIconLabel": "Pick an icon",
+  "rewardNameLabel": "Reward name",
+  "rewardNameHint": "e.g. Movie night, Extra screen time…",
+  "starCostLabel": "Star cost",
+  "saveRewardButton": "✅  Save Reward",
+
+  "rewardReadyBadge": "Ready! 🎉",
+
+  "companionComingSoonQuote": "\"Coming soon!\"",
+  "cocoNeutral1": "\"Ready for a challenge?\"",
+  "cocoNeutral2": "\"Let's go — numbers are fun!\"",
+  "cocoNeutral3": "\"Every question is a new adventure!\"",
+  "cocoCelebrate1": "\"Woof woof! You're amazing!\"",
+  "cocoCelebrate2": "\"That was PAWSOME! Keep it up!\"",
+  "cocoCelebrate3": "\"You're on fire — Coco believes in you!\"",
+  "cocoEncourage1": "\"Even puppies keep trying!\"",
+  "cocoEncourage2": "\"A stumble is just a step forward!\"",
+  "cocoEncourage3": "\"You've got this — Coco is cheering for you!\""
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../models/reward.dart';
 import '../providers/rewards_provider.dart';
@@ -31,7 +32,16 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
   int _starCost = 100;
 
   static const _emojiOptions = [
-    '🎁', '🎮', '🍕', '🍦', '🎬', '🏖️', '🎡', '⚽', '📚', '🛴',
+    '🎁',
+    '🎮',
+    '🍕',
+    '🍦',
+    '🎬',
+    '🏖️',
+    '🎡',
+    '⚽',
+    '📚',
+    '🛴',
   ];
 
   @override
@@ -56,6 +66,7 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.fromLTRB(24, 20, 24, 24 + bottomInset),
       child: Column(
@@ -65,7 +76,8 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
           // Handle
           Center(
             child: Container(
-              width: 40, height: 4,
+              width: 40,
+              height: 4,
               decoration: BoxDecoration(
                 color: AppColors.textMuted,
                 borderRadius: BorderRadius.circular(2),
@@ -73,12 +85,12 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
             ),
           ),
           const SizedBox(height: 20),
-          Text('New Reward', style: AppTextStyles.headline2,
-              textAlign: TextAlign.center),
+          Text(l10n.newRewardTitle,
+              style: AppTextStyles.headline2, textAlign: TextAlign.center),
           const SizedBox(height: 20),
 
           // Emoji picker
-          Text('Pick an icon', style: AppTextStyles.label),
+          Text(l10n.pickAnIconLabel, style: AppTextStyles.label),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -111,14 +123,14 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
           const SizedBox(height: 20),
 
           // Reward name
-          Text('Reward name', style: AppTextStyles.label),
+          Text(l10n.rewardNameLabel, style: AppTextStyles.label),
           const SizedBox(height: 8),
           TextField(
             controller: _nameCtrl,
             textCapitalization: TextCapitalization.sentences,
             style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
             decoration: InputDecoration(
-              hintText: 'e.g. Movie night, Extra screen time…',
+              hintText: l10n.rewardNameHint,
               hintStyle: AppTextStyles.body.copyWith(
                 color: AppColors.textMuted.withValues(alpha: 0.5),
               ),
@@ -141,8 +153,8 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Star cost', style: AppTextStyles.label),
-              Text('$_starCost ⭐',
+              Text(l10n.starCostLabel, style: AppTextStyles.label),
+              Text(l10n.starsCount(_starCost),
                   style: AppTextStyles.headline3
                       .copyWith(color: AppColors.accentYellow)),
             ],
@@ -165,7 +177,7 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
             ],
           ),
           const SizedBox(height: 24),
-          AppButton.play(label: '✅  Save Reward', onTap: _save),
+          AppButton.play(label: l10n.saveRewardButton, onTap: _save),
         ],
       ),
     );

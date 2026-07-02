@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../providers/rewards_provider.dart';
 
 enum PinMode { create, verify }
@@ -66,6 +67,7 @@ class _PinScreenState extends ConsumerState<PinScreen>
   }
 
   Future<void> _onComplete() async {
+    final l10n = AppLocalizations.of(context)!;
     if (widget.mode == PinMode.verify) {
       final ok = ref.read(rewardsProvider.notifier).verifyPin(_input);
       if (ok) {
@@ -74,7 +76,7 @@ class _PinScreenState extends ConsumerState<PinScreen>
         _shake();
         setState(() {
           _input = '';
-          _error = 'Wrong PIN — try again';
+          _error = l10n.pinWrong;
         });
       }
       return;
@@ -97,26 +99,25 @@ class _PinScreenState extends ConsumerState<PinScreen>
           _input = '';
           _firstPin = null;
           _isConfirming = false;
-          _error = "PINs didn't match — start again";
+          _error = l10n.pinMismatch;
         });
       }
     }
   }
 
-  String get _title {
-    if (widget.mode == PinMode.verify) return 'Parent PIN';
-    return _isConfirming ? 'Confirm PIN' : 'Create Parent PIN';
+  String _title(AppLocalizations l10n) {
+    if (widget.mode == PinMode.verify) return l10n.pinTitleVerify;
+    return _isConfirming ? l10n.pinTitleConfirm : l10n.pinTitleCreate;
   }
 
-  String get _subtitle {
-    if (widget.mode == PinMode.verify) return 'Enter your 4-digit PIN';
-    return _isConfirming
-        ? 'Enter the same PIN again'
-        : 'Choose a 4-digit PIN for the Parent Zone';
+  String _subtitle(AppLocalizations l10n) {
+    if (widget.mode == PinMode.verify) return l10n.pinSubtitleVerify;
+    return _isConfirming ? l10n.pinSubtitleConfirm : l10n.pinSubtitleCreate;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.bgDeep,
       appBar: AppBar(
@@ -128,13 +129,13 @@ class _PinScreenState extends ConsumerState<PinScreen>
         child: Column(
           children: [
             const Spacer(),
-            const Text('👨‍👩‍👧', style: TextStyle(fontSize: 52),
-                textAlign: TextAlign.center),
+            const Text('👨‍👩‍👧',
+                style: TextStyle(fontSize: 52), textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            Text(_title, style: AppTextStyles.headline2,
-                textAlign: TextAlign.center),
+            Text(_title(l10n),
+                style: AppTextStyles.headline2, textAlign: TextAlign.center),
             const SizedBox(height: 8),
-            Text(_subtitle,
+            Text(_subtitle(l10n),
                 style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
                 textAlign: TextAlign.center),
             const SizedBox(height: 40),
@@ -142,8 +143,9 @@ class _PinScreenState extends ConsumerState<PinScreen>
             AnimatedBuilder(
               animation: _shakeAnim,
               builder: (context, child) {
-                final offset =
-                    Offset(8 * _shakeAnim.value * (_shakeCtrl.value < 0.5 ? 1 : -1), 0);
+                final offset = Offset(
+                    8 * _shakeAnim.value * (_shakeCtrl.value < 0.5 ? 1 : -1),
+                    0);
                 return Transform.translate(offset: offset, child: child);
               },
               child: Row(
@@ -156,7 +158,9 @@ class _PinScreenState extends ConsumerState<PinScreen>
                     height: 18,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: filled ? AppColors.primaryLight : AppColors.bgCardLight,
+                      color: filled
+                          ? AppColors.primaryLight
+                          : AppColors.bgCardLight,
                       border: Border.all(color: AppColors.bgCardLight),
                     ),
                   );

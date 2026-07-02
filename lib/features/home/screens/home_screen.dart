@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/constants/age_band_strings.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/constants/topic_strings.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_profile.dart';
 import '../../../core/persistence/player_provider.dart';
@@ -10,6 +12,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../features/rewards/providers/rewards_provider.dart';
 import '../../../features/rewards/widgets/reward_progress_bar.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/character_display.dart';
 import '../../../shared/widgets/stat_badge.dart';
@@ -21,6 +24,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(playerProfileProvider);
     final rewards = ref.watch(rewardsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: Container(
@@ -54,12 +58,12 @@ class HomeScreen extends ConsumerWidget {
                 _StatsRow(profile: profile),
                 const SizedBox(height: 28),
                 AppButton.play(
-                  label: '▶   PLAY NOW',
+                  label: l10n.playNowButton,
                   onTap: () => context.go('/game/${profile.ageBand}'),
                 ),
                 const SizedBox(height: 14),
                 AppButton.secondary(
-                  label: '🎯   PRACTICE',
+                  label: l10n.practiceButton,
                   onTap: () => context.go('/practice/${profile.ageBand}'),
                 ),
                 const Spacer(),
@@ -83,25 +87,27 @@ class _Header extends StatelessWidget {
   final PlayerProfile profile;
   const _Header({required this.profile});
 
-  String get _tier {
+  String _tier(AppLocalizations l10n) {
     final s = profile.stars;
-    if (s >= AppConstants.starsForDiamond) return '💎 Diamond';
-    if (s >= AppConstants.starsForGold) return '🥇 Gold';
-    if (s >= AppConstants.starsForSilver) return '🥈 Silver';
-    if (s >= AppConstants.starsForBronze) return '🥉 Bronze';
-    return '⭐ Starter';
+    if (s >= AppConstants.starsForDiamond) return l10n.tierBadgeDiamond;
+    if (s >= AppConstants.starsForGold) return l10n.tierBadgeGold;
+    if (s >= AppConstants.starsForSilver) return l10n.tierBadgeSilver;
+    if (s >= AppConstants.starsForBronze) return l10n.tierBadgeBronze;
+    return l10n.tierBadgeStarter;
   }
 
   @override
   Widget build(BuildContext context) {
-    final name = profile.name.isNotEmpty ? profile.name : 'Champion';
+    final l10n = AppLocalizations.of(context)!;
+    final name =
+        profile.name.isNotEmpty ? profile.name : l10n.defaultPlayerName;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hey, $name! 👋', style: AppTextStyles.body),
+            Text(l10n.homeGreeting(name), style: AppTextStyles.body),
             const SizedBox(height: 2),
             Text('${AppConstants.appName} ⚡',
                 style: AppTextStyles.headline2
@@ -116,9 +122,9 @@ class _Header extends StatelessWidget {
             border: Border.all(
                 color: AppColors.primaryLight.withValues(alpha: 0.4)),
           ),
-          child: Text(_tier,
-              style: AppTextStyles.label
-                  .copyWith(color: AppColors.accentYellow)),
+          child: Text(_tier(l10n),
+              style:
+                  AppTextStyles.label.copyWith(color: AppColors.accentYellow)),
         ),
       ],
     );
@@ -131,19 +137,12 @@ class _FocusChip extends StatelessWidget {
   final String topic;
   const _FocusChip({required this.topic});
 
-  static const _labels = {
-    'add': '+ Addition',
-    'sub': '− Subtraction',
-    'mul': '× Multiplication',
-    'div': '÷ Division',
-  };
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: AppColors.accentCoral.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
@@ -151,9 +150,8 @@ class _FocusChip extends StatelessWidget {
               Border.all(color: AppColors.accentCoral.withValues(alpha: 0.4)),
         ),
         child: Text(
-          '🎯 Focus today: ${_labels[topic] ?? topic}',
-          style: AppTextStyles.label
-              .copyWith(color: AppColors.accentCoral),
+          l10n.focusTodayLabel(TopicStrings.label(context, topic)),
+          style: AppTextStyles.label.copyWith(color: AppColors.accentCoral),
         ),
       ),
     );
@@ -181,8 +179,7 @@ class _CharacterCarousel extends StatelessWidget {
 
   void _next() {
     HapticFeedback.selectionClick();
-    onChanged(
-        (selectedIndex + 1) % AppConstants.characterImages.length);
+    onChanged((selectedIndex + 1) % AppConstants.characterImages.length);
   }
 
   @override
@@ -205,7 +202,7 @@ class _CharacterCarousel extends StatelessWidget {
                 key: ValueKey(selectedIndex),
                 imagePath: AppConstants.characterImages[selectedIndex],
                 name: AppConstants.characterNames[selectedIndex],
-                quote: AppConstants.characterQuotes[selectedIndex],
+                quote: AgeBandStrings.characterQuote(context, selectedIndex),
                 // Coco (index 0) is a small puppy-bot — displayed at half the
                 // height of the human-scale Kato/Sona bots.
                 height: selectedIndex == 0 ? 80 : 160,
@@ -252,12 +249,13 @@ class _StatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
           child: StatBadge(
             icon: AppConstants.iconStar,
-            label: 'Stars',
+            label: l10n.statStars,
             value: profile.stars.toString(),
             valueColor: AppColors.gold,
           ),
@@ -266,8 +264,8 @@ class _StatsRow extends StatelessWidget {
         Expanded(
           child: StatBadge(
             icon: AppConstants.iconStreak,
-            label: 'Streak',
-            value: '${profile.streakDays} d',
+            label: l10n.statStreak,
+            value: l10n.daysValue(profile.streakDays),
             valueColor: AppColors.accentCoral,
           ),
         ),
@@ -275,7 +273,7 @@ class _StatsRow extends StatelessWidget {
         Expanded(
           child: StatBadge(
             icon: AppConstants.iconTrophy,
-            label: 'Best',
+            label: l10n.statBest,
             value: profile.bestScore.toString(),
             valueColor: AppColors.accentYellow,
           ),
@@ -322,7 +320,7 @@ class _RewardReadyBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = count == 1 ? '1 reward ready to claim!' : '$count rewards ready to claim!';
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -336,13 +334,12 @@ class _RewardReadyBadge extends StatelessWidget {
         children: [
           const Text('🎁', style: TextStyle(fontSize: 22)),
           const SizedBox(width: 10),
-          Text(label,
-              style: AppTextStyles.body
-                  .copyWith(color: AppColors.accentYellow)),
+          Text(l10n.rewardsReadyBadge(count),
+              style:
+                  AppTextStyles.body.copyWith(color: AppColors.accentYellow)),
           const SizedBox(width: 8),
-          Text('· Tell a parent!',
-              style: AppTextStyles.label
-                  .copyWith(color: AppColors.textMuted)),
+          Text(l10n.tellAParent,
+              style: AppTextStyles.label.copyWith(color: AppColors.textMuted)),
         ],
       ),
     );
@@ -358,13 +355,14 @@ class _BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _NavItem(icon: '🏅', label: 'Rewards', onTap: () {}),
-        _NavItem(icon: '📊', label: 'Progress', onTap: onProgressTap),
-        _NavItem(icon: '⚙️', label: 'Settings', onTap: () {}),
-        _NavItem(icon: '👨‍👩‍👧', label: 'Parent', onTap: onParentTap),
+        _NavItem(icon: '🏅', label: l10n.navRewards, onTap: () {}),
+        _NavItem(icon: '📊', label: l10n.navProgress, onTap: onProgressTap),
+        _NavItem(icon: '⚙️', label: l10n.navSettings, onTap: () {}),
+        _NavItem(icon: '👨‍👩‍👧', label: l10n.navParent, onTap: onParentTap),
       ],
     );
   }
@@ -394,8 +392,7 @@ class _NavItem extends StatelessWidget {
               border: Border.all(color: AppColors.bgCardLight, width: 1.5),
             ),
             child: Center(
-              child: Text(icon,
-                  style: const TextStyle(fontSize: 26)),
+              child: Text(icon, style: const TextStyle(fontSize: 26)),
             ),
           ),
           const SizedBox(height: 6),

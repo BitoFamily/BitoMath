@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/reward.dart';
 
 class RewardProgressBar extends StatelessWidget {
@@ -13,13 +14,13 @@ class RewardProgressBar extends StatelessWidget {
     required this.currentStars,
   });
 
-  double get _progress =>
-      (currentStars / reward.starCost).clamp(0.0, 1.0);
+  double get _progress => (currentStars / reward.starCost).clamp(0.0, 1.0);
 
   bool get _achieved => currentStars >= reward.starCost;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -57,16 +58,16 @@ class RewardProgressBar extends StatelessWidget {
                         color: AppColors.accentYellow.withValues(alpha: 0.5)),
                   ),
                   child: Text(
-                    'Ready! 🎉',
+                    l10n.rewardReadyBadge,
                     style: AppTextStyles.label
                         .copyWith(color: AppColors.accentYellow),
                   ),
                 )
               else
                 Text(
-                  '$currentStars/${reward.starCost} ⭐',
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.textMuted),
+                  l10n.starsProgress(currentStars, reward.starCost),
+                  style:
+                      AppTextStyles.label.copyWith(color: AppColors.textMuted),
                 ),
             ],
           ),

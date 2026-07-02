@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/persistence/player_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/companion_data.dart';
 
 class CompanionSelectScreen extends ConsumerWidget {
@@ -19,7 +20,8 @@ class CompanionSelectScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: const BackButton(color: AppColors.textSecondary),
-        title: Text('Companions', style: AppTextStyles.headline3),
+        title: Text(AppLocalizations.of(context)!.companionsTitle,
+            style: AppTextStyles.headline3),
         centerTitle: true,
       ),
       body: GridView.builder(
@@ -43,9 +45,7 @@ class CompanionSelectScreen extends ConsumerWidget {
             onTap: unlocked
                 ? () {
                     HapticFeedback.lightImpact();
-                    ref
-                        .read(playerProfileProvider.notifier)
-                        .setCharacter(i);
+                    ref.read(playerProfileProvider.notifier).setCharacter(i);
                     Navigator.pop(context);
                   }
                 : () {
@@ -58,7 +58,10 @@ class CompanionSelectScreen extends ConsumerWidget {
   }
 
   void _showLockedToast(BuildContext context, int starsNeeded) {
-    final message = starsNeeded >= 9999 ? 'Coming soon in a future update!' : 'Unlock at $starsNeeded ⭐';
+    final l10n = AppLocalizations.of(context)!;
+    final message = starsNeeded >= 9999
+        ? l10n.companionComingSoonToast
+        : l10n.companionUnlockAt(starsNeeded);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -95,7 +98,8 @@ class _CompanionCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: selected
-              ? AppColors.characterPrimary[companion.index].withValues(alpha: 0.2)
+              ? AppColors.characterPrimary[companion.index]
+                  .withValues(alpha: 0.2)
               : AppColors.bgCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -119,10 +123,26 @@ class _CompanionCard extends StatelessWidget {
                         ? const ColorFilter.mode(
                             Colors.transparent, BlendMode.saturation)
                         : const ColorFilter.matrix([
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0,      0,      0,      1, 0,
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            1,
+                            0,
                           ]),
                     child: Container(
                       width: 80,
@@ -138,8 +158,10 @@ class _CompanionCard extends StatelessWidget {
                                   AppColors.characterSecondary[companion.index],
                                 ],
                               )
-                            : const LinearGradient(
-                                colors: [AppColors.bgCardLight, AppColors.bgMid]),
+                            : const LinearGradient(colors: [
+                                AppColors.bgCardLight,
+                                AppColors.bgMid
+                              ]),
                       ),
                       child: Center(
                         child: Text(
@@ -163,7 +185,11 @@ class _CompanionCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   if (!unlocked)
                     Text(
-                      companion.unlockStars >= 9999 ? 'Coming Soon' : '${companion.unlockStars} ⭐',
+                      companion.unlockStars >= 9999
+                          ? AppLocalizations.of(context)!
+                              .companionComingSoonBadge
+                          : AppLocalizations.of(context)!
+                              .starsCount(companion.unlockStars),
                       style: AppTextStyles.label
                           .copyWith(color: AppColors.textMuted),
                     )
@@ -177,7 +203,7 @@ class _CompanionCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        'Active',
+                        AppLocalizations.of(context)!.companionActiveBadge,
                         style: AppTextStyles.label.copyWith(
                             color: AppColors.characterPrimary[companion.index]),
                       ),

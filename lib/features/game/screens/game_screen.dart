@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/constants/age_band_strings.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_provider.dart';
 import '../../../core/services/sound_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/game_state.dart';
 import '../models/question_config.dart';
 import '../providers/game_provider.dart';
@@ -61,6 +63,7 @@ class GameScreen extends ConsumerWidget {
 
     final state = ref.watch(gameProvider(config));
     final notifier = ref.read(gameProvider(config).notifier);
+    final l10n = AppLocalizations.of(context)!;
 
     void confirmExit() {
       showDialog(
@@ -69,23 +72,23 @@ class GameScreen extends ConsumerWidget {
           backgroundColor: AppColors.bgMid,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          title: Text('Leave game?', style: AppTextStyles.headline3),
+          title: Text(l10n.leaveGameTitle, style: AppTextStyles.headline3),
           content: Text(
-            'Your progress this round will be lost.',
+            l10n.leaveGameBody,
             style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Keep playing',
+              child: Text(l10n.keepPlayingButton,
                   style: AppTextStyles.label
                       .copyWith(color: AppColors.primaryLight)),
             ),
             TextButton(
               onPressed: () => context.go(Routes.home),
-              child: Text('Exit',
-                  style:
-                      AppTextStyles.label.copyWith(color: AppColors.accentCoral)),
+              child: Text(l10n.exitButton,
+                  style: AppTextStyles.label
+                      .copyWith(color: AppColors.accentCoral)),
             ),
           ],
         ),
@@ -160,6 +163,7 @@ class _HUD extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -173,13 +177,13 @@ class _HUD extends StatelessWidget {
         const Spacer(),
         _HUDStat(
             icon: '⚡',
-            label: 'Score',
+            label: l10n.scoreLabel,
             value: '${state.score}',
             color: AppColors.accentYellow),
         const SizedBox(width: 20),
         _HUDStat(
             icon: AppConstants.iconStreak,
-            label: 'Streak',
+            label: l10n.statStreak,
             value: '${state.streak}',
             color: AppColors.accentCoral),
       ],
@@ -205,8 +209,7 @@ class _HUDStat extends StatelessWidget {
       children: [
         Text(icon, style: const TextStyle(fontSize: 20)),
         const SizedBox(height: 2),
-        Text(value,
-            style: AppTextStyles.headline3.copyWith(color: color)),
+        Text(value, style: AppTextStyles.headline3.copyWith(color: color)),
         Text(label, style: AppTextStyles.label),
       ],
     );
@@ -220,12 +223,12 @@ class _AgeBandChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final label =
-        '${AppConstants.ageBandLabels[ageBand]}${isPractice ? ' · Practice' : ''}';
+        '${AgeBandStrings.name(context, ageBand)}${isPractice ? l10n.practiceSuffix : ''}';
     return Center(
       child: Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: AppColors.bgCard,
           borderRadius: BorderRadius.circular(20),
@@ -247,12 +250,14 @@ class _QuestionDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final q = state.currentQuestion;
     if (q == null) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'Q ${state.totalAnswered + (state.phase == GamePhase.answering ? 0 : 1)}',
+          l10n.questionCounter(state.totalAnswered +
+              (state.phase == GamePhase.answering ? 0 : 1)),
           style: AppTextStyles.label.copyWith(color: AppColors.primaryLight),
         ),
         const SizedBox(height: 12),
@@ -269,8 +274,7 @@ class _QuestionDisplay extends StatelessWidget {
         if (state.streak > 0 &&
             state.streak % AppConstants.bonusStreakThreshold == 0)
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: AppColors.accentYellow.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
@@ -278,9 +282,9 @@ class _QuestionDisplay extends StatelessWidget {
                   color: AppColors.accentYellow.withValues(alpha: 0.5)),
             ),
             child: Text(
-              '🔥 ${state.streak} in a row! +5 bonus!',
-              style: AppTextStyles.label
-                  .copyWith(color: AppColors.accentYellow),
+              l10n.streakBonus(state.streak),
+              style:
+                  AppTextStyles.label.copyWith(color: AppColors.accentYellow),
             ),
           ),
       ],

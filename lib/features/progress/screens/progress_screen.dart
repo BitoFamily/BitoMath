@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/constants/topic_strings.dart';
 import '../../../core/persistence/player_profile.dart';
 import '../../../core/persistence/player_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../rewards/models/session_log.dart';
 import '../../rewards/providers/rewards_provider.dart';
 
@@ -22,7 +24,8 @@ class ProgressScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: const BackButton(color: AppColors.textSecondary),
-        title: Text('Progress', style: AppTextStyles.headline3),
+        title: Text(AppLocalizations.of(context)!.progressTitle,
+            style: AppTextStyles.headline3),
         centerTitle: true,
       ),
       body: ListView(
@@ -50,12 +53,13 @@ class _HeroRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
           child: _MiniStat(
             icon: AppConstants.iconStar,
-            label: 'Stars',
+            label: l10n.statStars,
             value: '${profile.stars}',
             color: AppColors.gold,
           ),
@@ -64,7 +68,7 @@ class _HeroRow extends StatelessWidget {
         Expanded(
           child: _MiniStat(
             icon: AppConstants.iconStreak,
-            label: 'Day Streak',
+            label: l10n.statDayStreak,
             value: '${profile.streakDays}',
             color: AppColors.accentCoral,
           ),
@@ -73,7 +77,7 @@ class _HeroRow extends StatelessWidget {
         Expanded(
           child: _MiniStat(
             icon: AppConstants.iconTrophy,
-            label: 'Best Score',
+            label: l10n.statBestScore,
             value: '${profile.bestScore}',
             color: AppColors.accentYellow,
           ),
@@ -107,12 +111,9 @@ class _MiniStat extends StatelessWidget {
         children: [
           Text(icon, style: const TextStyle(fontSize: 24)),
           const SizedBox(height: 6),
-          Text(value,
-              style: AppTextStyles.headline3.copyWith(color: color)),
+          Text(value, style: AppTextStyles.headline3.copyWith(color: color)),
           const SizedBox(height: 2),
-          Text(label,
-              style: AppTextStyles.label,
-              textAlign: TextAlign.center),
+          Text(label, style: AppTextStyles.label, textAlign: TextAlign.center),
         ],
       ),
     );
@@ -126,7 +127,6 @@ class _TierCard extends StatelessWidget {
   const _TierCard({required this.stars});
 
   static const _emojis = ['⭐', '🥉', '🥈', '🥇', '💎'];
-  static const _names = ['Starter', 'Bronze', 'Silver', 'Gold', 'Diamond'];
   static const _thresholds = [
     0,
     AppConstants.starsForBronze,
@@ -135,8 +135,18 @@ class _TierCard extends StatelessWidget {
     AppConstants.starsForDiamond,
   ];
 
+  static List<String> _names(AppLocalizations l10n) => [
+        l10n.tierNameStarter,
+        l10n.tierNameBronze,
+        l10n.tierNameSilver,
+        l10n.tierNameGold,
+        l10n.tierNameDiamond,
+      ];
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final names = _names(l10n);
     int currentIdx = 0;
     for (int i = _thresholds.length - 1; i >= 0; i--) {
       if (stars >= _thresholds[i]) {
@@ -149,9 +159,8 @@ class _TierCard extends StatelessWidget {
     final nextIdx = isMax ? currentIdx : currentIdx + 1;
     final floor = _thresholds[currentIdx];
     final ceiling = _thresholds[nextIdx];
-    final progress = isMax
-        ? 1.0
-        : ((stars - floor) / (ceiling - floor)).clamp(0.0, 1.0);
+    final progress =
+        isMax ? 1.0 : ((stars - floor) / (ceiling - floor)).clamp(0.0, 1.0);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -163,7 +172,7 @@ class _TierCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Tier Progress', style: AppTextStyles.headline3),
+          Text(l10n.tierProgressTitle, style: AppTextStyles.headline3),
           const SizedBox(height: 16),
           Row(
             children: List.generate(_thresholds.length, (i) {
@@ -183,14 +192,13 @@ class _TierCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      _names[i],
+                      names[i],
                       style: AppTextStyles.label.copyWith(
                         color: isCurrent
                             ? AppColors.accentYellow
                             : AppColors.textMuted,
-                        fontWeight: isCurrent
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                        fontWeight:
+                            isCurrent ? FontWeight.bold : FontWeight.normal,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -213,14 +221,13 @@ class _TierCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           if (isMax)
-            Text('🏆 Maximum tier reached!',
-                style:
-                    AppTextStyles.label.copyWith(color: AppColors.gem))
+            Text(l10n.maxTierReached,
+                style: AppTextStyles.label.copyWith(color: AppColors.gem))
           else
             Text(
-              '$stars / $ceiling ⭐  ·  ${ceiling - stars} to go',
-              style: AppTextStyles.label
-                  .copyWith(color: AppColors.textSecondary),
+              l10n.starsToGo(stars, ceiling, ceiling - stars),
+              style:
+                  AppTextStyles.label.copyWith(color: AppColors.textSecondary),
             ),
         ],
       ),
@@ -234,13 +241,6 @@ class _TopicMastery extends StatelessWidget {
   final PlayerProfile profile;
   const _TopicMastery({required this.profile});
 
-  static const _topicLabels = {
-    'add': '+ Addition',
-    'sub': '− Subtraction',
-    'mul': '× Multiplication',
-    'div': '÷ Division',
-  };
-
   static const _topicsByBand = [
     ['add', 'sub'],
     ['add', 'sub', 'mul'],
@@ -253,24 +253,25 @@ class _TopicMastery extends StatelessWidget {
     return AppColors.accentCoral;
   }
 
-  String _statusText(double acc) {
-    if (acc >= 0.85) return '✅ Mastered';
-    if (acc >= 0.60) return '📈 Getting there';
-    return '⚠️ Needs practice';
+  String _statusText(AppLocalizations l10n, double acc) {
+    if (acc >= 0.85) return l10n.statusMastered;
+    if (acc >= 0.60) return l10n.statusGettingThere;
+    return l10n.statusNeedsPractice;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final topics = _topicsByBand[profile.ageBand];
     final focus = profile.focusTopic;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Topic Mastery', style: AppTextStyles.headline3),
+        Text(l10n.topicMasteryTitle, style: AppTextStyles.headline3),
         const SizedBox(height: 12),
         ...topics.map((topic) {
-          final label = _topicLabels[topic]!;
+          final label = TopicStrings.label(context, topic);
           final accuracy = profile.topicAccuracy[topic];
           final isEnabled = profile.enabledTopics.contains(topic);
           final isFocus = topic == focus;
@@ -295,22 +296,22 @@ class _TopicMastery extends StatelessWidget {
                     Text(label, style: AppTextStyles.body),
                     if (isFocus) ...[
                       const SizedBox(width: 8),
-                      const _Chip(
-                          label: 'Focus',
+                      _Chip(
+                          label: l10n.focusChipLabel,
                           color: AppColors.accentCoral),
                     ],
                     const Spacer(),
                     if (!isEnabled)
-                      Text('Off',
+                      Text(l10n.topicOff,
                           style: AppTextStyles.label
                               .copyWith(color: AppColors.textMuted))
                     else if (accuracy == null)
-                      Text('Not played yet',
+                      Text(l10n.topicNotPlayedYet,
                           style: AppTextStyles.label
                               .copyWith(color: AppColors.textMuted))
                     else
                       Text(
-                        '${(accuracy * 100).round()}%',
+                        l10n.topicPercent((accuracy * 100).round()),
                         style: AppTextStyles.headline3
                             .copyWith(color: _barColor(accuracy)),
                       ),
@@ -324,12 +325,12 @@ class _TopicMastery extends StatelessWidget {
                       value: accuracy.clamp(0.0, 1.0),
                       minHeight: 7,
                       backgroundColor: AppColors.bgCardLight,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          _barColor(accuracy)),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(_barColor(accuracy)),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(_statusText(accuracy),
+                  Text(_statusText(l10n, accuracy),
                       style: AppTextStyles.label
                           .copyWith(color: AppColors.textMuted)),
                 ],
@@ -356,8 +357,7 @@ class _Chip extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
-      child: Text(label,
-          style: AppTextStyles.label.copyWith(color: color)),
+      child: Text(label, style: AppTextStyles.label.copyWith(color: color)),
     );
   }
 }
@@ -370,15 +370,16 @@ class _SessionHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Recent Sessions', style: AppTextStyles.headline3),
+        Text(l10n.recentSessionsTitle, style: AppTextStyles.headline3),
         const SizedBox(height: 12),
         if (logs.isEmpty)
-          const _EmptyCard(
+          _EmptyCard(
             icon: '📊',
-            message: 'No sessions yet.\nPlay a game to see your history here!',
+            message: l10n.noSessionsProgress,
           )
         else
           ...logs.take(20).map((log) => _SessionRow(log: log)),
@@ -393,6 +394,7 @@ class _SessionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final pct = (log.accuracy * 100).round();
     final pctColor = pct >= 85
         ? AppColors.accentGreen
@@ -420,7 +422,7 @@ class _SessionRow extends StatelessWidget {
                 Text(log.date, style: AppTextStyles.label),
                 const SizedBox(height: 2),
                 Text(
-                  '${log.correctCount}/${log.totalAnswered} correct',
+                  l10n.sessionCorrectCount(log.correctCount, log.totalAnswered),
                   style: AppTextStyles.body
                       .copyWith(color: AppColors.textSecondary),
                 ),
@@ -430,10 +432,9 @@ class _SessionRow extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('$pct%',
-                  style:
-                      AppTextStyles.headline3.copyWith(color: pctColor)),
-              Text('+${log.starsEarned} ⭐',
+              Text(l10n.topicPercent(pct),
+                  style: AppTextStyles.headline3.copyWith(color: pctColor)),
+              Text(l10n.starsEarnedPrefix(log.starsEarned),
                   style: AppTextStyles.label
                       .copyWith(color: AppColors.accentYellow)),
             ],
@@ -463,8 +464,7 @@ class _EmptyCard extends StatelessWidget {
           Text(icon, style: const TextStyle(fontSize: 36)),
           const SizedBox(height: 12),
           Text(message,
-              style:
-                  AppTextStyles.body.copyWith(color: AppColors.textMuted),
+              style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
               textAlign: TextAlign.center),
         ],
       ),
