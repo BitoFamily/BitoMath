@@ -70,6 +70,7 @@ class HomeScreen extends ConsumerWidget {
                 _BottomNav(
                   onProgressTap: () => context.push(Routes.progress),
                   onParentTap: () => context.push(Routes.parent),
+                  onSettingsTap: () => context.push(Routes.settings),
                 ),
                 const SizedBox(height: 20),
               ],
@@ -351,7 +352,12 @@ class _RewardReadyBadge extends StatelessWidget {
 class _BottomNav extends StatelessWidget {
   final VoidCallback onProgressTap;
   final VoidCallback onParentTap;
-  const _BottomNav({required this.onProgressTap, required this.onParentTap});
+  final VoidCallback onSettingsTap;
+  const _BottomNav({
+    required this.onProgressTap,
+    required this.onParentTap,
+    required this.onSettingsTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -361,7 +367,7 @@ class _BottomNav extends StatelessWidget {
       children: [
         _NavItem(icon: '🏅', label: l10n.navRewards, onTap: () {}),
         _NavItem(icon: '📊', label: l10n.navProgress, onTap: onProgressTap),
-        _NavItem(icon: '⚙️', label: l10n.navSettings, onTap: () {}),
+        _NavItem(icon: '⚙️', label: l10n.navSettings, onTap: onSettingsTap),
         _NavItem(icon: '👨‍👩‍👧', label: l10n.navParent, onTap: onParentTap),
       ],
     );

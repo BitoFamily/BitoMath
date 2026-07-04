@@ -201,6 +201,21 @@
 
   "rewardReadyBadge": "Ready! 🎉",
 
+  "settingsTitle": "Settings",
+  "soundSectionLabel": "Sound",
+  "soundToggleLabel": "Sound effects",
+  "nameSectionLabel": "Name",
+  "nameSaveButton": "Save",
+  "levelSectionLabel": "Level",
+  "languageSectionLabel": "Language",
+  "resetProgressSectionLabel": "Reset Progress",
+  "resetProgressButton": "Reset Progress",
+  "resetProgressDescription": "Clears your stars, streak, and accuracy stats. Your rewards are kept.",
+  "resetConfirmTitle": "Reset progress?",
+  "resetConfirmBody": "This clears your stars, streak, and accuracy stats. Your rewards will be kept. This can't be undone.",
+  "resetConfirmButton": "Reset",
+  "cancelButton": "Cancel",
+
   "companionComingSoonQuote": "\"Coming soon!\"",
   "cocoNeutral1": "\"Ready for a challenge?\"",
   "cocoNeutral2": "\"Let's go — numbers are fun!\"",

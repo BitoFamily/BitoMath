@@ -35,6 +35,12 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    SoundService.instance.stopComplete();
+    super.dispose();
+  }
+
   void _playResultFeedback() {
     final stars = widget.result.starsEarned;
     if (stars >= 3) {

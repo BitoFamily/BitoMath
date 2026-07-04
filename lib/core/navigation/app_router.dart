@@ -8,6 +8,7 @@ import '../../features/home/screens/home_screen.dart';
 import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/results/screens/results_screen.dart';
 import '../../features/rewards/screens/parent_zone_screen.dart';
+import '../../features/settings/screens/settings_screen.dart';
 import '../../features/splash/screens/splash_screen.dart';
 
 class Routes {
@@ -20,6 +21,7 @@ class Routes {
   static const String parent = '/parent';
   static const String companions = '/companions';
   static const String progress = '/progress';
+  static const String settings = '/settings';
 }
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -69,6 +71,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.progress,
         builder: (_, __) => const ProgressScreen(),
+      ),
+      GoRoute(
+        path: Routes.settings,
+        builder: (_, __) => const SettingsScreen(),
       ),
     ],
   );

@@ -14,6 +14,8 @@ class SoundService {
 
   bool enabled = true;
 
+  AudioPlayer? _completePlayer;
+
   void _play(String filename) {
     if (!enabled || kIsWeb) return;
     try {
@@ -26,5 +28,26 @@ class SoundService {
   void correct() => _play('correct.mp3');
   void wrong() => _play('wrong.mp3');
   void streak() => _play('streak.mp3');
-  void complete() => _play('complete.mp3');
+
+  /// Loops complete.mp3 until [stopComplete] is called. Caller (the results
+  /// screen) is responsible for calling [stopComplete] when it's dismissed.
+  void complete() {
+    stopComplete();
+    if (!enabled || kIsWeb) return;
+    try {
+      final player = AudioPlayer();
+      _completePlayer = player;
+      unawaited(player.setReleaseMode(ReleaseMode.loop));
+      unawaited(player.play(AssetSource('audio/complete.mp3')));
+    } catch (_) {}
+  }
+
+  void stopComplete() {
+    final player = _completePlayer;
+    _completePlayer = null;
+    if (player != null) {
+      unawaited(player.stop());
+      unawaited(player.dispose());
+    }
+  }
 }

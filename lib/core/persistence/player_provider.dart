@@ -79,6 +79,30 @@ class PlayerProfileNotifier extends StateNotifier<PlayerProfile> {
     await _save();
   }
 
+  Future<void> setName(String name) async {
+    state = state.copyWith(name: name.trim());
+    await _save();
+  }
+
+  Future<void> setAgeBand(int ageBand) async {
+    final clamped = ageBand.clamp(0, AppConstants.ageBandCount - 1);
+    state = state.copyWith(ageBand: clamped);
+    await _save();
+  }
+
+  /// Clears stars/streak/accuracy. Rewards themselves (in RewardsState) are
+  /// untouched — resetting progress shouldn't wipe a parent's reward setup.
+  Future<void> resetProgress() async {
+    state = state.copyWith(
+      stars: 0,
+      bestScore: 0,
+      streakDays: 0,
+      lastPlayedDate: '',
+      topicAccuracy: {},
+    );
+    await _save();
+  }
+
   Future<void> setEnabledTopics(Set<String> topics) async {
     if (topics.isEmpty) return;
     state = state.copyWith(enabledTopics: topics);

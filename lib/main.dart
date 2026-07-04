@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'core/persistence/player_provider.dart';
+import 'core/services/sound_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,7 @@ void main() async {
   );
 
   final prefs = await SharedPreferences.getInstance();
+  SoundService.instance.enabled = prefs.getBool('sound_enabled') ?? true;
 
   runApp(
     ProviderScope(
