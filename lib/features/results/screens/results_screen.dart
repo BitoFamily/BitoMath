@@ -24,8 +24,6 @@ class ResultsScreen extends ConsumerStatefulWidget {
 }
 
 class _ResultsScreenState extends ConsumerState<ResultsScreen> {
-  List<String> _newlyUnlocked = []; // reward names that just became claimable
-
   @override
   void initState() {
     super.initState();
@@ -93,7 +91,6 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
     ));
 
     if (justUnlocked.isNotEmpty && mounted) {
-      setState(() => _newlyUnlocked = justUnlocked);
       _showRewardDialog(justUnlocked);
     }
   }

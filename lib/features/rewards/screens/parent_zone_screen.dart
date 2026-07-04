@@ -7,8 +7,8 @@ import '../../../core/persistence/player_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../shared/widgets/app_button.dart';
 import '../models/reward.dart';
+import '../models/session_log.dart';
 import '../providers/rewards_provider.dart';
 import '../widgets/create_reward_sheet.dart';
 import 'pin_screen.dart';
@@ -345,7 +345,7 @@ class _TopicSection extends ConsumerWidget {
 // ── Session log ────────────────────────────────────────────────────────────
 
 class _SessionSection extends StatelessWidget {
-  final List logs;
+  final List<SessionLog> logs;
   const _SessionSection({required this.logs});
 
   @override
@@ -369,7 +369,7 @@ class _SessionSection extends StatelessWidget {
 }
 
 class _SessionRow extends StatelessWidget {
-  final log;
+  final SessionLog log;
   const _SessionRow({required this.log});
 
   @override
