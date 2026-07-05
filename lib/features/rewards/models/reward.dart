@@ -4,6 +4,7 @@ class Reward {
   final String emoji;
   final int starCost;
   final bool isRedeemed;
+  final String? redeemedAt; // 'yyyy-MM-dd', null until redeemed
 
   const Reward({
     required this.id,
@@ -11,6 +12,7 @@ class Reward {
     required this.emoji,
     required this.starCost,
     this.isRedeemed = false,
+    this.redeemedAt,
   });
 
   Reward copyWith({
@@ -18,6 +20,7 @@ class Reward {
     String? emoji,
     int? starCost,
     bool? isRedeemed,
+    String? redeemedAt,
   }) =>
       Reward(
         id: id,
@@ -25,6 +28,7 @@ class Reward {
         emoji: emoji ?? this.emoji,
         starCost: starCost ?? this.starCost,
         isRedeemed: isRedeemed ?? this.isRedeemed,
+        redeemedAt: redeemedAt ?? this.redeemedAt,
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,6 +37,7 @@ class Reward {
         'emoji': emoji,
         'starCost': starCost,
         'isRedeemed': isRedeemed,
+        'redeemedAt': redeemedAt,
       };
 
   factory Reward.fromJson(Map<String, dynamic> j) => Reward(
@@ -41,5 +46,6 @@ class Reward {
         emoji: j['emoji'] as String,
         starCost: j['starCost'] as int,
         isRedeemed: j['isRedeemed'] as bool? ?? false,
+        redeemedAt: j['redeemedAt'] as String?,
       );
 }
