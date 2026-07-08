@@ -14,6 +14,7 @@ import '../models/game_state.dart';
 import '../models/question_config.dart';
 import '../providers/game_provider.dart';
 import '../widgets/answer_button.dart';
+import '../widgets/companion_reaction.dart';
 import '../widgets/timer_ring.dart';
 
 class GameScreen extends ConsumerWidget {
@@ -128,7 +129,7 @@ class GameScreen extends ConsumerWidget {
                 _AgeBandChip(ageBand: ageBand, isPractice: isPractice),
                 const Spacer(),
                 _QuestionDisplay(state: state),
-                const Spacer(),
+                Expanded(child: CompanionReaction(state: state)),
                 _AnswerGrid(
                   state: state,
                   onTap: (i) {
