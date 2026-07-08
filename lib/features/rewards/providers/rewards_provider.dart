@@ -47,12 +47,30 @@ class RewardsState {
 
   /// Cheapest reward the child is still working toward (not yet affordable).
   Reward? nextPendingReward(int totalStars) {
-    final avail = availableStars(totalStars);
-    final pending = rewards
-        .where((r) => !r.isRedeemed && r.starCost > avail)
-        .toList()
-      ..sort((a, b) => a.starCost.compareTo(b.starCost));
+    final pending = upcomingRewards(totalStars);
     return pending.isEmpty ? null : pending.first;
+  }
+
+  /// All unredeemed rewards not yet affordable, cheapest first.
+  List<Reward> upcomingRewards(int totalStars) {
+    final avail = availableStars(totalStars);
+    return rewards.where((r) => !r.isRedeemed && r.starCost > avail).toList()
+      ..sort((a, b) => a.starCost.compareTo(b.starCost));
+  }
+
+  /// Redeemed rewards, most recently redeemed first (legacy entries with no
+  /// redemption date sort last).
+  List<Reward> get redeemedRewards {
+    final redeemed = rewards.where((r) => r.isRedeemed).toList();
+    redeemed.sort((a, b) {
+      final ad = a.redeemedAt;
+      final bd = b.redeemedAt;
+      if (ad == null && bd == null) return 0;
+      if (ad == null) return 1;
+      if (bd == null) return -1;
+      return bd.compareTo(ad);
+    });
+    return redeemed;
   }
 }
 
@@ -126,12 +144,20 @@ class RewardsNotifier extends StateNotifier<RewardsState> {
   }
 
   Future<void> redeemReward(String id) async {
+    final today = _todayStr();
     state = state.copyWith(
       rewards: state.rewards
-          .map((r) => r.id == id ? r.copyWith(isRedeemed: true) : r)
+          .map((r) => r.id == id
+              ? r.copyWith(isRedeemed: true, redeemedAt: today)
+              : r)
           .toList(),
     );
     await _save();
+  }
+
+  static String _todayStr() {
+    final n = DateTime.now();
+    return '${n.year}-${n.month.toString().padLeft(2, '0')}-${n.day.toString().padLeft(2, '0')}';
   }
 
   // ── Session log ───────────────────────────────────────────────────────────

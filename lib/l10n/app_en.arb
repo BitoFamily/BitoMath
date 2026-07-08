@@ -216,6 +216,20 @@
   "resetConfirmButton": "Reset",
   "cancelButton": "Cancel",
 
+  "rewardsTitle": "Rewards",
+  "rewardsReadySectionTitle": "🎁 Ready to Claim",
+  "rewardsUpcomingSectionTitle": "⭐ Upcoming",
+  "rewardsHistorySectionTitle": "✅ Redeemed",
+  "rewardsNoneConfigured": "No rewards yet.\nAsk a parent to add some in Parent Zone!",
+  "rewardsNoneReadyMessage": "Keep earning stars — nothing ready to claim yet!",
+  "rewardsNoUpcomingMessage": "You're all caught up!",
+  "rewardsNoHistoryMessage": "No rewards redeemed yet.",
+  "rewardsAskParentToRedeem": "Ask a parent to redeem this!",
+  "rewardsRedeemedOnLabel": "Redeemed on {date}",
+  "@rewardsRedeemedOnLabel": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+
   "companionComingSoonQuote": "\"Coming soon!\"",
   "cocoNeutral1": "\"Ready for a challenge?\"",
   "cocoNeutral2": "\"Let's go — numbers are fun!\"",

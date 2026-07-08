@@ -68,6 +68,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 const Spacer(),
                 _BottomNav(
+                  onRewardsTap: () => context.push(Routes.rewards),
                   onProgressTap: () => context.push(Routes.progress),
                   onParentTap: () => context.push(Routes.parent),
                   onSettingsTap: () => context.push(Routes.settings),
@@ -350,10 +351,12 @@ class _RewardReadyBadge extends StatelessWidget {
 // ── Bottom nav ─────────────────────────────────────────────────────────────
 
 class _BottomNav extends StatelessWidget {
+  final VoidCallback onRewardsTap;
   final VoidCallback onProgressTap;
   final VoidCallback onParentTap;
   final VoidCallback onSettingsTap;
   const _BottomNav({
+    required this.onRewardsTap,
     required this.onProgressTap,
     required this.onParentTap,
     required this.onSettingsTap,
@@ -365,7 +368,7 @@ class _BottomNav extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _NavItem(icon: '🏅', label: l10n.navRewards, onTap: () {}),
+        _NavItem(icon: '🏅', label: l10n.navRewards, onTap: onRewardsTap),
         _NavItem(icon: '📊', label: l10n.navProgress, onTap: onProgressTap),
         _NavItem(icon: '⚙️', label: l10n.navSettings, onTap: onSettingsTap),
         _NavItem(icon: '👨‍👩‍👧', label: l10n.navParent, onTap: onParentTap),
