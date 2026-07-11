@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../shared/widgets/app_card.dart';
 import '../models/reward.dart';
 
-class RewardProgressBar extends StatelessWidget {
+class RewardProgressBar extends ConsumerWidget {
   final Reward reward;
   final int currentStars;
 
@@ -19,20 +21,14 @@ class RewardProgressBar extends StatelessWidget {
   bool get _achieved => currentStars >= reward.starCost;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: _achieved
-              ? AppColors.accentYellow.withValues(alpha: 0.6)
-              : AppColors.bgCardLight,
-          width: 1.5,
-        ),
-      ),
+      accentColor: _achieved
+          ? colors.accentYellow.withValues(alpha: 0.6)
+          : colors.bgCardLight,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,7 +39,7 @@ class RewardProgressBar extends StatelessWidget {
               Expanded(
                 child: Text(
                   reward.name,
-                  style: AppTextStyles.body,
+                  style: AppTextStyles.body(colors),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -52,22 +48,22 @@ class RewardProgressBar extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: AppColors.accentYellow.withValues(alpha: 0.15),
+                    color: colors.accentYellow.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                        color: AppColors.accentYellow.withValues(alpha: 0.5)),
+                        color: colors.accentYellow.withValues(alpha: 0.5)),
                   ),
                   child: Text(
                     l10n.rewardReadyBadge,
-                    style: AppTextStyles.label
-                        .copyWith(color: AppColors.accentYellow),
+                    style: AppTextStyles.label(colors)
+                        .copyWith(color: colors.accentYellow),
                   ),
                 )
               else
                 Text(
                   l10n.starsProgress(currentStars, reward.starCost),
-                  style:
-                      AppTextStyles.label.copyWith(color: AppColors.textMuted),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.textMuted),
                 ),
             ],
           ),
@@ -77,9 +73,9 @@ class RewardProgressBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: _progress,
               minHeight: 7,
-              backgroundColor: AppColors.bgCardLight,
+              backgroundColor: colors.bgCardLight,
               valueColor: AlwaysStoppedAnimation<Color>(
-                _achieved ? AppColors.accentYellow : AppColors.primaryLight,
+                _achieved ? colors.accentYellow : colors.primaryLight,
               ),
             ),
           ),

@@ -4,9 +4,11 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/topic_strings.dart';
 import '../../../core/persistence/player_profile.dart';
 import '../../../core/persistence/player_provider.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../shared/widgets/app_card.dart';
 import '../../rewards/models/session_log.dart';
 import '../../rewards/providers/rewards_provider.dart';
 
@@ -15,17 +17,18 @@ class ProgressScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final profile = ref.watch(playerProfileProvider);
     final logs = ref.watch(rewardsProvider).sessionLogs;
 
     return Scaffold(
-      backgroundColor: AppColors.bgDeep,
+      backgroundColor: colors.bgDeep,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const BackButton(color: AppColors.textSecondary),
+        leading: BackButton(color: colors.textSecondary),
         title: Text(AppLocalizations.of(context)!.progressTitle,
-            style: AppTextStyles.headline3),
+            style: AppTextStyles.headline3(colors)),
         centerTitle: true,
       ),
       body: ListView(
@@ -47,12 +50,13 @@ class ProgressScreen extends ConsumerWidget {
 
 // ── Hero stats row ─────────────────────────────────────────────────────────
 
-class _HeroRow extends StatelessWidget {
+class _HeroRow extends ConsumerWidget {
   final PlayerProfile profile;
   const _HeroRow({required this.profile});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
@@ -61,7 +65,7 @@ class _HeroRow extends StatelessWidget {
             icon: AppConstants.iconStar,
             label: l10n.statStars,
             value: '${profile.stars}',
-            color: AppColors.gold,
+            color: colors.gold,
           ),
         ),
         const SizedBox(width: 10),
@@ -70,7 +74,7 @@ class _HeroRow extends StatelessWidget {
             icon: AppConstants.iconStreak,
             label: l10n.statDayStreak,
             value: '${profile.streakDays}',
-            color: AppColors.accentCoral,
+            color: colors.accentCoral,
           ),
         ),
         const SizedBox(width: 10),
@@ -79,7 +83,7 @@ class _HeroRow extends StatelessWidget {
             icon: AppConstants.iconTrophy,
             label: l10n.statBestScore,
             value: '${profile.bestScore}',
-            color: AppColors.accentYellow,
+            color: colors.accentYellow,
           ),
         ),
       ],
@@ -87,7 +91,7 @@ class _HeroRow extends StatelessWidget {
   }
 }
 
-class _MiniStat extends StatelessWidget {
+class _MiniStat extends ConsumerWidget {
   final String icon;
   final String label;
   final String value;
@@ -99,21 +103,18 @@ class _MiniStat extends StatelessWidget {
       required this.color});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
+    return AppCard(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.bgCardLight),
-      ),
       child: Column(
         children: [
           Text(icon, style: const TextStyle(fontSize: 24)),
           const SizedBox(height: 6),
-          Text(value, style: AppTextStyles.headline3.copyWith(color: color)),
+          Text(value, style: AppTextStyles.headline3(colors).copyWith(color: color)),
           const SizedBox(height: 2),
-          Text(label, style: AppTextStyles.label, textAlign: TextAlign.center),
+          Text(label,
+              style: AppTextStyles.label(colors), textAlign: TextAlign.center),
         ],
       ),
     );
@@ -122,7 +123,7 @@ class _MiniStat extends StatelessWidget {
 
 // ── Tier progress card ─────────────────────────────────────────────────────
 
-class _TierCard extends StatelessWidget {
+class _TierCard extends ConsumerWidget {
   final int stars;
   const _TierCard({required this.stars});
 
@@ -144,7 +145,8 @@ class _TierCard extends StatelessWidget {
       ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final names = _names(l10n);
     int currentIdx = 0;
@@ -162,17 +164,12 @@ class _TierCard extends StatelessWidget {
     final progress =
         isMax ? 1.0 : ((stars - floor) / (ceiling - floor)).clamp(0.0, 1.0);
 
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.bgCardLight),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.tierProgressTitle, style: AppTextStyles.headline3),
+          Text(l10n.tierProgressTitle, style: AppTextStyles.headline3(colors)),
           const SizedBox(height: 16),
           Row(
             children: List.generate(_thresholds.length, (i) {
@@ -187,16 +184,14 @@ class _TierCard extends StatelessWidget {
                         fontSize: isCurrent ? 30 : 18,
                         color: achieved
                             ? null
-                            : AppColors.textMuted.withValues(alpha: 0.4),
+                            : colors.textMuted.withValues(alpha: 0.4),
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       names[i],
-                      style: AppTextStyles.label.copyWith(
-                        color: isCurrent
-                            ? AppColors.accentYellow
-                            : AppColors.textMuted,
+                      style: AppTextStyles.label(colors).copyWith(
+                        color: isCurrent ? colors.accentYellow : colors.textMuted,
                         fontWeight:
                             isCurrent ? FontWeight.bold : FontWeight.normal,
                       ),
@@ -213,21 +208,21 @@ class _TierCard extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 8,
-              backgroundColor: AppColors.bgCardLight,
+              backgroundColor: colors.bgCardLight,
               valueColor: AlwaysStoppedAnimation<Color>(
-                isMax ? AppColors.gem : AppColors.accentYellow,
+                isMax ? colors.gem : colors.accentYellow,
               ),
             ),
           ),
           const SizedBox(height: 8),
           if (isMax)
             Text(l10n.maxTierReached,
-                style: AppTextStyles.label.copyWith(color: AppColors.gem))
+                style: AppTextStyles.label(colors).copyWith(color: colors.gem))
           else
             Text(
               l10n.starsToGo(stars, ceiling, ceiling - stars),
-              style:
-                  AppTextStyles.label.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyles.label(colors)
+                  .copyWith(color: colors.textSecondary),
             ),
         ],
       ),
@@ -237,7 +232,7 @@ class _TierCard extends StatelessWidget {
 
 // ── Topic mastery ──────────────────────────────────────────────────────────
 
-class _TopicMastery extends StatelessWidget {
+class _TopicMastery extends ConsumerWidget {
   final PlayerProfile profile;
   const _TopicMastery({required this.profile});
 
@@ -247,10 +242,10 @@ class _TopicMastery extends StatelessWidget {
     ['add', 'sub', 'mul', 'div'],
   ];
 
-  Color _barColor(double acc) {
-    if (acc >= 0.85) return AppColors.accentGreen;
-    if (acc >= 0.60) return AppColors.accentYellow;
-    return AppColors.accentCoral;
+  Color _barColor(AppPalette colors, double acc) {
+    if (acc >= 0.85) return colors.accentGreen;
+    if (acc >= 0.60) return colors.accentYellow;
+    return colors.accentCoral;
   }
 
   String _statusText(AppLocalizations l10n, double acc) {
@@ -260,7 +255,8 @@ class _TopicMastery extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final topics = _topicsByBand[profile.ageBand];
     final focus = profile.focusTopic;
@@ -268,7 +264,7 @@ class _TopicMastery extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.topicMasteryTitle, style: AppTextStyles.headline3),
+        Text(l10n.topicMasteryTitle, style: AppTextStyles.headline3(colors)),
         const SizedBox(height: 12),
         ...topics.map((topic) {
           final label = TopicStrings.label(context, topic);
@@ -276,44 +272,39 @@ class _TopicMastery extends StatelessWidget {
           final isEnabled = profile.enabledTopics.contains(topic);
           final isFocus = topic == focus;
 
-          return Container(
-            margin: const EdgeInsets.only(bottom: 10),
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: AppCard(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-            decoration: BoxDecoration(
-              color: AppColors.bgCard,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isFocus
-                    ? AppColors.accentCoral.withValues(alpha: 0.5)
-                    : AppColors.bgCardLight,
-              ),
-            ),
+            accentColor: isFocus
+                ? colors.accentCoral.withValues(alpha: 0.5)
+                : colors.bgCardLight,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Text(label, style: AppTextStyles.body),
+                    Text(label, style: AppTextStyles.body(colors)),
                     if (isFocus) ...[
                       const SizedBox(width: 8),
                       _Chip(
                           label: l10n.focusChipLabel,
-                          color: AppColors.accentCoral),
+                          color: colors.accentCoral),
                     ],
                     const Spacer(),
                     if (!isEnabled)
                       Text(l10n.topicOff,
-                          style: AppTextStyles.label
-                              .copyWith(color: AppColors.textMuted))
+                          style: AppTextStyles.label(colors)
+                              .copyWith(color: colors.textMuted))
                     else if (accuracy == null)
                       Text(l10n.topicNotPlayedYet,
-                          style: AppTextStyles.label
-                              .copyWith(color: AppColors.textMuted))
+                          style: AppTextStyles.label(colors)
+                              .copyWith(color: colors.textMuted))
                     else
                       Text(
                         l10n.topicPercent((accuracy * 100).round()),
-                        style: AppTextStyles.headline3
-                            .copyWith(color: _barColor(accuracy)),
+                        style: AppTextStyles.headline3(colors)
+                            .copyWith(color: _barColor(colors, accuracy)),
                       ),
                   ],
                 ),
@@ -324,17 +315,18 @@ class _TopicMastery extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: accuracy.clamp(0.0, 1.0),
                       minHeight: 7,
-                      backgroundColor: AppColors.bgCardLight,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(_barColor(accuracy)),
+                      backgroundColor: colors.bgCardLight,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          _barColor(colors, accuracy)),
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(_statusText(l10n, accuracy),
-                      style: AppTextStyles.label
-                          .copyWith(color: AppColors.textMuted)),
+                      style: AppTextStyles.label(colors)
+                          .copyWith(color: colors.textMuted)),
                 ],
               ],
+            ),
             ),
           );
         }),
@@ -357,24 +349,31 @@ class _Chip extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
-      child: Text(label, style: AppTextStyles.label.copyWith(color: color)),
+      child: Text(label,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+            color: color,
+          )),
     );
   }
 }
 
 // ── Session history ────────────────────────────────────────────────────────
 
-class _SessionHistory extends StatelessWidget {
+class _SessionHistory extends ConsumerWidget {
   final List<SessionLog> logs;
   const _SessionHistory({required this.logs});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.recentSessionsTitle, style: AppTextStyles.headline3),
+        Text(l10n.recentSessionsTitle, style: AppTextStyles.headline3(colors)),
         const SizedBox(height: 12),
         if (logs.isEmpty)
           _EmptyCard(
@@ -388,28 +387,26 @@ class _SessionHistory extends StatelessWidget {
   }
 }
 
-class _SessionRow extends StatelessWidget {
+class _SessionRow extends ConsumerWidget {
   final SessionLog log;
   const _SessionRow({required this.log});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final pct = (log.accuracy * 100).round();
     final pctColor = pct >= 85
-        ? AppColors.accentGreen
+        ? colors.accentGreen
         : pct >= 60
-            ? AppColors.accentYellow
-            : AppColors.accentCoral;
+            ? colors.accentYellow
+            : colors.accentCoral;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: AppCard(
+      radius: 14,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.bgCardLight),
-      ),
       child: Row(
         children: [
           Text(log.isPractice ? '🎯' : '⚡',
@@ -419,12 +416,12 @@ class _SessionRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(log.date, style: AppTextStyles.label),
+                Text(log.date, style: AppTextStyles.label(colors)),
                 const SizedBox(height: 2),
                 Text(
                   l10n.sessionCorrectCount(log.correctCount, log.totalAnswered),
-                  style: AppTextStyles.body
-                      .copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyles.body(colors)
+                      .copyWith(color: colors.textSecondary),
                 ),
               ],
             ),
@@ -433,38 +430,36 @@ class _SessionRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(l10n.topicPercent(pct),
-                  style: AppTextStyles.headline3.copyWith(color: pctColor)),
+                  style: AppTextStyles.headline3(colors)
+                      .copyWith(color: pctColor)),
               Text(l10n.starsEarnedPrefix(log.starsEarned),
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.accentYellow)),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.accentYellow)),
             ],
           ),
         ],
+      ),
       ),
     );
   }
 }
 
-class _EmptyCard extends StatelessWidget {
+class _EmptyCard extends ConsumerWidget {
   final String icon;
   final String message;
   const _EmptyCard({required this.icon, required this.message});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
+    return AppCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.bgCardLight),
-      ),
       child: Column(
         children: [
           Text(icon, style: const TextStyle(fontSize: 36)),
           const SizedBox(height: 12),
           Text(message,
-              style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
+              style: AppTextStyles.body(colors).copyWith(color: colors.textMuted),
               textAlign: TextAlign.center),
         ],
       ),

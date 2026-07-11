@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../shared/widgets/wiggle_animation.dart';
 import '../providers/rewards_provider.dart';
 
 enum PinMode { create, verify }
@@ -18,36 +19,15 @@ class PinScreen extends ConsumerStatefulWidget {
   ConsumerState<PinScreen> createState() => _PinScreenState();
 }
 
-class _PinScreenState extends ConsumerState<PinScreen>
-    with SingleTickerProviderStateMixin {
+class _PinScreenState extends ConsumerState<PinScreen> {
   String _input = '';
   String? _firstPin; // used in create mode to hold first entry before confirm
   bool _isConfirming = false; // create mode: second entry
   String? _error;
-
-  late final AnimationController _shakeCtrl;
-  late final Animation<double> _shakeAnim;
-
-  @override
-  void initState() {
-    super.initState();
-    _shakeCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _shakeAnim = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _shakeCtrl, curve: Curves.elasticIn),
-    );
-  }
-
-  @override
-  void dispose() {
-    _shakeCtrl.dispose();
-    super.dispose();
-  }
+  int _shakeTrigger = 0;
 
   void _shake() {
-    _shakeCtrl.forward(from: 0);
+    setState(() => _shakeTrigger++);
   }
 
   void _onDigit(String d) {
@@ -117,13 +97,14 @@ class _PinScreenState extends ConsumerState<PinScreen>
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.bgDeep,
+      backgroundColor: colors.bgDeep,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const BackButton(color: AppColors.textSecondary),
+        leading: BackButton(color: colors.textSecondary),
       ),
       body: SafeArea(
         child: Column(
@@ -133,21 +114,17 @@ class _PinScreenState extends ConsumerState<PinScreen>
                 style: TextStyle(fontSize: 52), textAlign: TextAlign.center),
             const SizedBox(height: 16),
             Text(_title(l10n),
-                style: AppTextStyles.headline2, textAlign: TextAlign.center),
+                style: AppTextStyles.headline2(colors),
+                textAlign: TextAlign.center),
             const SizedBox(height: 8),
             Text(_subtitle(l10n),
-                style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
+                style: AppTextStyles.body(colors)
+                    .copyWith(color: colors.textMuted),
                 textAlign: TextAlign.center),
             const SizedBox(height: 40),
-            // Dot indicators with shake animation
-            AnimatedBuilder(
-              animation: _shakeAnim,
-              builder: (context, child) {
-                final offset = Offset(
-                    8 * _shakeAnim.value * (_shakeCtrl.value < 0.5 ? 1 : -1),
-                    0);
-                return Transform.translate(offset: offset, child: child);
-              },
+            // Dot indicators with shake animation on a wrong PIN
+            WiggleAnimation(
+              trigger: _shakeTrigger,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(4, (i) {
@@ -158,10 +135,8 @@ class _PinScreenState extends ConsumerState<PinScreen>
                     height: 18,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: filled
-                          ? AppColors.primaryLight
-                          : AppColors.bgCardLight,
-                      border: Border.all(color: AppColors.bgCardLight),
+                      color: filled ? colors.primaryLight : colors.bgCardLight,
+                      border: Border.all(color: colors.bgCardLight),
                     ),
                   );
                 }),
@@ -170,8 +145,8 @@ class _PinScreenState extends ConsumerState<PinScreen>
             if (_error != null) ...[
               const SizedBox(height: 12),
               Text(_error!,
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.accentCoral)),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.accentCoral)),
             ],
             const Spacer(),
             // Number pad
@@ -218,14 +193,15 @@ class _NumPad extends StatelessWidget {
   }
 }
 
-class _PadKey extends StatelessWidget {
+class _PadKey extends ConsumerWidget {
   final String label;
   final VoidCallback onTap;
 
   const _PadKey({required this.label, required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -233,16 +209,17 @@ class _PadKey extends StatelessWidget {
         height: 72,
         margin: const EdgeInsets.symmetric(vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.bgCard,
+          color: colors.bgCard,
           shape: BoxShape.circle,
-          border: Border.all(color: AppColors.bgCardLight),
+          border: Border.all(color: colors.bgCardLight),
         ),
         child: Center(
           child: Text(
             label,
             style: label == '⌫'
-                ? AppTextStyles.headline3.copyWith(color: AppColors.textMuted)
-                : AppTextStyles.headline2,
+                ? AppTextStyles.headline3(colors)
+                    .copyWith(color: colors.textMuted)
+                : AppTextStyles.headline2(colors),
           ),
         ),
       ),

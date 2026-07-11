@@ -8,7 +8,7 @@ import '../../../core/constants/topic_strings.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_profile.dart';
 import '../../../core/persistence/player_provider.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../features/rewards/providers/rewards_provider.dart';
 import '../../../features/rewards/widgets/reward_progress_bar.dart';
@@ -22,13 +22,14 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final profile = ref.watch(playerProfileProvider);
     final rewards = ref.watch(rewardsProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
+        decoration: BoxDecoration(gradient: colors.backgroundGradient),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -85,7 +86,7 @@ class HomeScreen extends ConsumerWidget {
 
 // ── Header ─────────────────────────────────────────────────────────────────
 
-class _Header extends StatelessWidget {
+class _Header extends ConsumerWidget {
   final PlayerProfile profile;
   const _Header({required this.profile});
 
@@ -99,7 +100,8 @@ class _Header extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final name =
         profile.name.isNotEmpty ? profile.name : l10n.defaultPlayerName;
@@ -109,24 +111,24 @@ class _Header extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.homeGreeting(name), style: AppTextStyles.body),
+            Text(l10n.homeGreeting(name), style: AppTextStyles.body(colors)),
             const SizedBox(height: 2),
             Text('${AppConstants.appName} ⚡',
-                style: AppTextStyles.headline2
-                    .copyWith(color: AppColors.accentYellow)),
+                style: AppTextStyles.headline2(colors)
+                    .copyWith(color: colors.accentYellow)),
           ],
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            color: AppColors.bgCard,
+            color: colors.bgCard,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-                color: AppColors.primaryLight.withValues(alpha: 0.4)),
+            border:
+                Border.all(color: colors.primaryLight.withValues(alpha: 0.4)),
           ),
           child: Text(_tier(l10n),
-              style:
-                  AppTextStyles.label.copyWith(color: AppColors.accentYellow)),
+              style: AppTextStyles.label(colors)
+                  .copyWith(color: colors.accentYellow)),
         ),
       ],
     );
@@ -135,25 +137,26 @@ class _Header extends StatelessWidget {
 
 // ── Focus chip ─────────────────────────────────────────────────────────────
 
-class _FocusChip extends StatelessWidget {
+class _FocusChip extends ConsumerWidget {
   final String topic;
   const _FocusChip({required this.topic});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.accentCoral.withValues(alpha: 0.1),
+          color: colors.accentCoral.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
           border:
-              Border.all(color: AppColors.accentCoral.withValues(alpha: 0.4)),
+              Border.all(color: colors.accentCoral.withValues(alpha: 0.4)),
         ),
         child: Text(
           l10n.focusTodayLabel(TopicStrings.label(context, topic)),
-          style: AppTextStyles.label.copyWith(color: AppColors.accentCoral),
+          style: AppTextStyles.label(colors).copyWith(color: colors.accentCoral),
         ),
       ),
     );
@@ -162,7 +165,7 @@ class _FocusChip extends StatelessWidget {
 
 // ── Character carousel ─────────────────────────────────────────────────────
 
-class _CharacterCarousel extends StatelessWidget {
+class _CharacterCarousel extends ConsumerWidget {
   final int selectedIndex;
   final ValueChanged<int> onChanged;
   final VoidCallback onLabelTap;
@@ -185,7 +188,8 @@ class _CharacterCarousel extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return Row(
       children: [
         _ArrowButton(icon: Icons.chevron_left_rounded, onTap: _prev),
@@ -208,7 +212,7 @@ class _CharacterCarousel extends StatelessWidget {
                 // Coco (index 0) is a small puppy-bot — displayed at half the
                 // height of the human-scale Kato/Sona bots.
                 height: selectedIndex == 0 ? 80 : 160,
-                accentColor: AppColors.characterPrimary[selectedIndex],
+                accentColor: colors.characterPrimary[selectedIndex],
               ),
             ),
           ),
@@ -219,13 +223,14 @@ class _CharacterCarousel extends StatelessWidget {
   }
 }
 
-class _ArrowButton extends StatelessWidget {
+class _ArrowButton extends ConsumerWidget {
   final IconData icon;
   final VoidCallback onTap;
   const _ArrowButton({required this.icon, required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -233,11 +238,11 @@ class _ArrowButton extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: AppColors.bgCard,
+          color: colors.bgCard,
           shape: BoxShape.circle,
-          border: Border.all(color: AppColors.bgCardLight),
+          border: Border.all(color: colors.bgCardLight),
         ),
-        child: Icon(icon, color: AppColors.primaryLight, size: 24),
+        child: Icon(icon, color: colors.primaryLight, size: 24),
       ),
     );
   }
@@ -245,12 +250,13 @@ class _ArrowButton extends StatelessWidget {
 
 // ── Stats row ──────────────────────────────────────────────────────────────
 
-class _StatsRow extends StatelessWidget {
+class _StatsRow extends ConsumerWidget {
   final PlayerProfile profile;
   const _StatsRow({required this.profile});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
@@ -259,7 +265,7 @@ class _StatsRow extends StatelessWidget {
             icon: AppConstants.iconStar,
             label: l10n.statStars,
             value: profile.stars.toString(),
-            valueColor: AppColors.gold,
+            valueColor: colors.gold,
           ),
         ),
         const SizedBox(width: 12),
@@ -268,7 +274,7 @@ class _StatsRow extends StatelessWidget {
             icon: AppConstants.iconStreak,
             label: l10n.statStreak,
             value: l10n.daysValue(profile.streakDays),
-            valueColor: AppColors.accentCoral,
+            valueColor: colors.accentCoral,
           ),
         ),
         const SizedBox(width: 12),
@@ -277,7 +283,7 @@ class _StatsRow extends StatelessWidget {
             icon: AppConstants.iconTrophy,
             label: l10n.statBest,
             value: profile.bestScore.toString(),
-            valueColor: AppColors.accentYellow,
+            valueColor: colors.accentYellow,
           ),
         ),
       ],
@@ -316,20 +322,21 @@ class _RewardArea extends StatelessWidget {
   }
 }
 
-class _RewardReadyBadge extends StatelessWidget {
+class _RewardReadyBadge extends ConsumerWidget {
   final int count;
   const _RewardReadyBadge({required this.count});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.accentYellow.withValues(alpha: 0.1),
+        color: colors.accentYellow.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-            color: AppColors.accentYellow.withValues(alpha: 0.5), width: 1.5),
+            color: colors.accentYellow.withValues(alpha: 0.5), width: 1.5),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -337,11 +344,12 @@ class _RewardReadyBadge extends StatelessWidget {
           const Text('🎁', style: TextStyle(fontSize: 22)),
           const SizedBox(width: 10),
           Text(l10n.rewardsReadyBadge(count),
-              style:
-                  AppTextStyles.body.copyWith(color: AppColors.accentYellow)),
+              style: AppTextStyles.body(colors)
+                  .copyWith(color: colors.accentYellow)),
           const SizedBox(width: 8),
           Text(l10n.tellAParent,
-              style: AppTextStyles.label.copyWith(color: AppColors.textMuted)),
+              style: AppTextStyles.label(colors)
+                  .copyWith(color: colors.textMuted)),
         ],
       ),
     );
@@ -377,7 +385,7 @@ class _BottomNav extends StatelessWidget {
   }
 }
 
-class _NavItem extends StatelessWidget {
+class _NavItem extends ConsumerWidget {
   final String icon;
   final String label;
   final VoidCallback onTap;
@@ -385,7 +393,8 @@ class _NavItem extends StatelessWidget {
       {required this.icon, required this.label, required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -396,16 +405,16 @@ class _NavItem extends StatelessWidget {
             width: 58,
             height: 58,
             decoration: BoxDecoration(
-              color: AppColors.bgCard,
+              color: colors.bgCard,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.bgCardLight, width: 1.5),
+              border: Border.all(color: colors.bgCardLight, width: 1.5),
             ),
             child: Center(
               child: Text(icon, style: const TextStyle(fontSize: 26)),
             ),
           ),
           const SizedBox(height: 6),
-          Text(label, style: AppTextStyles.label),
+          Text(label, style: AppTextStyles.label(colors)),
         ],
       ),
     );

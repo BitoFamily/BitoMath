@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/theme_mode_provider.dart';
 
 /// Static dot-array visual aid for multiplication: [rows] rows of [cols]
 /// dots each, so the child can count the total instead of guessing.
-class DotArrayVisualAid extends StatelessWidget {
+class DotArrayVisualAid extends ConsumerWidget {
   final int rows;
   final int cols;
 
   const DotArrayVisualAid({super.key, required this.rows, required this.cols});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(
@@ -26,9 +28,9 @@ class DotArrayVisualAid extends StatelessWidget {
                 child: Container(
                   width: 12,
                   height: 12,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.primaryLight,
+                    color: colors.primaryLight,
                   ),
                 ),
               ),

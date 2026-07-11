@@ -6,7 +6,7 @@ import '../../../core/constants/age_band_strings.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_provider.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
@@ -51,9 +51,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appPaletteProvider);
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
+        decoration: BoxDecoration(gradient: colors.backgroundGradient),
         child: SafeArea(
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 350),
@@ -88,7 +89,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
 // ── Step 1: Name ──────────────────────────────────────────────────────────
 
-class _NamePage extends StatelessWidget {
+class _NamePage extends ConsumerWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final VoidCallback onNext;
@@ -101,7 +102,8 @@ class _NamePage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -114,13 +116,14 @@ class _NamePage extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             l10n.onboardingWelcomeTitle,
-            style: AppTextStyles.headline1,
+            style: AppTextStyles.headline1(colors),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
           Text(
             l10n.onboardingNamePrompt,
-            style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textMuted),
+            style: AppTextStyles.bodyLarge(colors)
+                .copyWith(color: colors.textMuted),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 36),
@@ -131,24 +134,24 @@ class _NamePage extends StatelessWidget {
             textCapitalization: TextCapitalization.words,
             textAlign: TextAlign.center,
             maxLength: 20,
-            style:
-                AppTextStyles.headline2.copyWith(color: AppColors.textPrimary),
+            style: AppTextStyles.headline2(colors)
+                .copyWith(color: colors.textPrimary),
             decoration: InputDecoration(
               counterText: '',
               hintText: l10n.onboardingNameHint,
-              hintStyle: AppTextStyles.headline2.copyWith(
-                color: AppColors.textMuted.withValues(alpha: 0.5),
+              hintStyle: AppTextStyles.headline2(colors).copyWith(
+                color: colors.textMuted.withValues(alpha: 0.5),
               ),
               filled: true,
-              fillColor: AppColors.bgCard,
+              fillColor: colors.bgCard,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(
-                  color: AppColors.primaryLight,
+                borderSide: BorderSide(
+                  color: colors.primaryLight,
                   width: 2,
                 ),
               ),
@@ -170,7 +173,7 @@ class _NamePage extends StatelessWidget {
 
 // ── Step 2: Age band ──────────────────────────────────────────────────────
 
-class _AgePage extends StatelessWidget {
+class _AgePage extends ConsumerWidget {
   final String playerName;
   final Future<void> Function(int ageBand) onSelect;
 
@@ -181,7 +184,8 @@ class _AgePage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final displayName =
         playerName.isNotEmpty ? playerName : l10n.defaultPlayerName;
@@ -194,13 +198,14 @@ class _AgePage extends StatelessWidget {
           const Spacer(),
           Text(
             l10n.onboardingGreeting(displayName),
-            style: AppTextStyles.headline2,
+            style: AppTextStyles.headline2(colors),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
             l10n.pickYourLevel,
-            style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textMuted),
+            style: AppTextStyles.bodyLarge(colors)
+                .copyWith(color: colors.textMuted),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 40),
@@ -220,7 +225,7 @@ class _AgePage extends StatelessWidget {
   }
 }
 
-class _AgeBandCard extends StatelessWidget {
+class _AgeBandCard extends ConsumerWidget {
   final int index;
   final VoidCallback onTap;
 
@@ -229,15 +234,16 @@ class _AgeBandCard extends StatelessWidget {
   const _AgeBandCard({required this.index, required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
         decoration: BoxDecoration(
-          color: AppColors.bgCard,
+          color: colors.bgCard,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.bgCardLight, width: 1.5),
+          border: Border.all(color: colors.bgCardLight, width: 1.5),
         ),
         child: Row(
           children: [
@@ -249,20 +255,20 @@ class _AgeBandCard extends StatelessWidget {
                 children: [
                   Text(
                     AgeBandStrings.name(context, index),
-                    style: AppTextStyles.headline3,
+                    style: AppTextStyles.headline3(colors),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '${AgeBandStrings.description(context, index)} (${AgeBandStrings.ageRange(context, index)})',
-                    style: AppTextStyles.label.copyWith(
-                      color: AppColors.textMuted,
+                    style: AppTextStyles.label(colors).copyWith(
+                      color: colors.textMuted,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right_rounded,
-                color: AppColors.primaryLight, size: 28),
+            Icon(Icons.chevron_right_rounded,
+                color: colors.primaryLight, size: 28),
           ],
         ),
       ),

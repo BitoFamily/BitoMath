@@ -3,73 +3,73 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTextStyles {
-  static TextStyle get display => GoogleFonts.fredoka(
+  static TextStyle display(AppPalette c) => GoogleFonts.fredoka(
         fontSize: 52,
         fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
+        color: c.textPrimary,
         letterSpacing: 1.5,
       );
 
-  static TextStyle get headline1 => GoogleFonts.fredoka(
+  static TextStyle headline1(AppPalette c) => GoogleFonts.fredoka(
         fontSize: 36,
         fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
+        color: c.textPrimary,
       );
 
-  static TextStyle get headline2 => GoogleFonts.fredoka(
+  static TextStyle headline2(AppPalette c) => GoogleFonts.fredoka(
         fontSize: 28,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
+        color: c.textPrimary,
       );
 
-  static TextStyle get headline3 => GoogleFonts.fredoka(
+  static TextStyle headline3(AppPalette c) => GoogleFonts.fredoka(
         fontSize: 22,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
+        color: c.textPrimary,
       );
 
-  static TextStyle get bodyLarge => GoogleFonts.nunito(
+  static TextStyle bodyLarge(AppPalette c) => GoogleFonts.nunito(
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: AppColors.textSecondary,
+        color: c.textSecondary,
       );
 
-  static TextStyle get body => GoogleFonts.nunito(
+  static TextStyle body(AppPalette c) => GoogleFonts.nunito(
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: AppColors.textSecondary,
+        color: c.textSecondary,
       );
 
-  static TextStyle get label => GoogleFonts.nunito(
+  static TextStyle label(AppPalette c) => GoogleFonts.nunito(
         fontSize: 13,
         fontWeight: FontWeight.w700,
-        color: AppColors.textMuted,
+        color: c.textMuted,
         letterSpacing: 0.5,
       );
 
-  static TextStyle get statNumber => GoogleFonts.fredoka(
+  static TextStyle statNumber(AppPalette c) => GoogleFonts.fredoka(
         fontSize: 28,
         fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
+        color: c.textPrimary,
       );
 
-  static TextStyle get buttonText => GoogleFonts.fredoka(
+  static TextStyle buttonText(AppPalette c) => GoogleFonts.fredoka(
         fontSize: 22,
         fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
+        color: c.textPrimary,
         letterSpacing: 1.2,
       );
 
   // Big question numbers shown during gameplay
-  static TextStyle get gameQuestion => GoogleFonts.fredoka(
+  static TextStyle gameQuestion(AppPalette c) => GoogleFonts.fredoka(
         fontSize: 64,
         fontWeight: FontWeight.w700,
-        color: AppColors.textPrimary,
+        color: c.textPrimary,
       );
 
-  static TextStyle get gameAnswer => GoogleFonts.fredoka(
+  static TextStyle gameAnswer(AppPalette c) => GoogleFonts.fredoka(
         fontSize: 36,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
+        color: c.textPrimary,
       );
 }

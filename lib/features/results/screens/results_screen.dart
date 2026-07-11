@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_provider.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../features/companions/models/companion_data.dart';
 import '../../../features/game/models/game_state.dart';
@@ -14,6 +14,7 @@ import '../../../features/rewards/providers/rewards_provider.dart';
 import '../../../core/services/sound_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/app_card.dart';
 
 class ResultsScreen extends ConsumerStatefulWidget {
   final GameState result;
@@ -96,11 +97,12 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
   }
 
   void _showRewardDialog(List<String> names) {
+    final colors = ref.read(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.bgMid,
+        backgroundColor: colors.bgMid,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -108,18 +110,20 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
             const Text('🎉', style: TextStyle(fontSize: 52)),
             const SizedBox(height: 12),
             Text(l10n.rewardUnlockedTitle,
-                style: AppTextStyles.headline2, textAlign: TextAlign.center),
+                style: AppTextStyles.headline2(colors),
+                textAlign: TextAlign.center),
             const SizedBox(height: 8),
             ...names.map((n) => Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(n,
-                      style: AppTextStyles.body
-                          .copyWith(color: AppColors.accentYellow),
+                      style: AppTextStyles.body(colors)
+                          .copyWith(color: colors.accentYellow),
                       textAlign: TextAlign.center),
                 )),
             const SizedBox(height: 16),
             Text(l10n.showParentToClaim,
-                style: AppTextStyles.label.copyWith(color: AppColors.textMuted),
+                style: AppTextStyles.label(colors)
+                    .copyWith(color: colors.textMuted),
                 textAlign: TextAlign.center),
           ],
         ),
@@ -127,8 +131,8 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(l10n.awesomeButton,
-                style:
-                    AppTextStyles.body.copyWith(color: AppColors.primaryLight)),
+                style: AppTextStyles.body(colors)
+                    .copyWith(color: colors.primaryLight)),
           ),
         ],
       ),
@@ -137,6 +141,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appPaletteProvider);
     final result = widget.result;
     final stars = result.starsEarned;
     final accuracyPct = (result.accuracy * 100).round();
@@ -155,7 +160,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
+        decoration: BoxDecoration(gradient: colors.backgroundGradient),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -173,15 +178,15 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                           : stars == 1
                               ? l10n.resultKeepGoing
                               : l10n.resultTryAgain,
-                  style: AppTextStyles.headline1,
+                  style: AppTextStyles.headline1(colors),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 6),
                 // Companion reaction
                 Text(
                   '${companion.emoji}  $companionQuote',
-                  style: AppTextStyles.body.copyWith(
-                      color: AppColors.textSecondary,
+                  style: AppTextStyles.body(colors).copyWith(
+                      color: colors.textSecondary,
                       fontStyle: FontStyle.italic),
                   textAlign: TextAlign.center,
                 ),
@@ -190,14 +195,14 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                   icon: AppConstants.iconStar,
                   label: l10n.statStarsEarned,
                   value: '+${result.correctCount}',
-                  color: AppColors.accentYellow,
+                  color: colors.accentYellow,
                 ),
                 const SizedBox(height: 10),
                 _StatCard(
                   icon: '🎯',
                   label: l10n.statFinalScore,
                   value: '${result.score}',
-                  color: AppColors.primaryLight,
+                  color: colors.primaryLight,
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -207,7 +212,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                         icon: AppConstants.iconCorrect,
                         label: l10n.statCorrect,
                         value: '${result.correctCount}/${result.totalAnswered}',
-                        color: AppColors.accentGreen,
+                        color: colors.accentGreen,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -216,7 +221,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                         icon: '📈',
                         label: l10n.statAccuracy,
                         value: '$accuracyPct%',
-                        color: AppColors.accentBlue,
+                        color: colors.accentBlue,
                       ),
                     ),
                   ],
@@ -226,7 +231,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                   icon: AppConstants.iconStreak,
                   label: l10n.statBestStreak,
                   value: l10n.inARow(result.bestStreak),
-                  color: AppColors.accentCoral,
+                  color: colors.accentCoral,
                 ),
                 const Spacer(),
                 AppButton.play(
@@ -255,12 +260,13 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
 
 // ── Star row ───────────────────────────────────────────────────────────────
 
-class _StarRow extends StatelessWidget {
+class _StarRow extends ConsumerWidget {
   final int stars;
   const _StarRow({required this.stars});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(3, (i) {
@@ -270,8 +276,8 @@ class _StarRow extends StatelessWidget {
               style: TextStyle(
                 fontSize: 44,
                 color: i < stars
-                    ? AppColors.gold
-                    : AppColors.textMuted.withValues(alpha: 0.3),
+                    ? colors.gold
+                    : colors.textMuted.withValues(alpha: 0.3),
               )),
         );
       }),
@@ -281,7 +287,7 @@ class _StarRow extends StatelessWidget {
 
 // ── Stat card ──────────────────────────────────────────────────────────────
 
-class _StatCard extends StatelessWidget {
+class _StatCard extends ConsumerWidget {
   final String icon;
   final String label;
   final String value;
@@ -294,14 +300,10 @@ class _StatCard extends StatelessWidget {
       required this.color});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
+    return AppCard(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.bgCardLight, width: 1.5),
-      ),
       child: Row(
         children: [
           Text(icon, style: const TextStyle(fontSize: 24)),
@@ -309,10 +311,10 @@ class _StatCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: AppTextStyles.label),
+              Text(label, style: AppTextStyles.label(colors)),
               const SizedBox(height: 2),
               Text(value,
-                  style: AppTextStyles.headline3.copyWith(color: color)),
+                  style: AppTextStyles.headline3(colors).copyWith(color: color)),
             ],
           ),
         ],
