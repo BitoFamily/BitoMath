@@ -4,6 +4,7 @@ import '../../../core/constants/age_band_strings.dart';
 import '../../../core/constants/topic_strings.dart';
 import '../../../core/persistence/player_profile.dart';
 import '../../../core/persistence/player_provider.dart';
+import '../../../core/services/visual_aids_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
@@ -67,6 +68,8 @@ class _ParentZone extends ConsumerWidget {
           _RewardsSection(rewards: rewards, profile: profile),
           const SizedBox(height: 20),
           _TopicSection(profile: profile),
+          const SizedBox(height: 20),
+          const _VisualAidsSection(),
           const SizedBox(height: 20),
           _SessionSection(logs: rewards.sessionLogs),
           const SizedBox(height: 32),
@@ -338,6 +341,38 @@ class _TopicSection extends ConsumerWidget {
           );
         }),
       ],
+    );
+  }
+}
+
+// ── Visual aids toggle ──────────────────────────────────────────────────────
+
+class _VisualAidsSection extends ConsumerWidget {
+  const _VisualAidsSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final enabled = ref.watch(visualAidsEnabledProvider);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: AppColors.bgCard,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.bgCardLight),
+      ),
+      child: SwitchListTile(
+        value: enabled,
+        activeThumbColor: AppColors.primaryLight,
+        title: Text(l10n.visualAidsTitle, style: AppTextStyles.body),
+        subtitle: Text(
+          l10n.visualAidsSubtitle,
+          style: AppTextStyles.label.copyWith(color: AppColors.textMuted),
+        ),
+        onChanged: (v) =>
+            ref.read(visualAidsEnabledProvider.notifier).setEnabled(v),
+      ),
     );
   }
 }

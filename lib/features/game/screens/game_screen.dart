@@ -7,6 +7,7 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_provider.dart';
 import '../../../core/services/sound_service.dart';
+import '../../../core/services/visual_aids_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
@@ -16,6 +17,7 @@ import '../providers/game_provider.dart';
 import '../widgets/answer_button.dart';
 import '../widgets/companion_reaction.dart';
 import '../widgets/timer_ring.dart';
+import '../widgets/visual_aid.dart';
 
 class GameScreen extends ConsumerWidget {
   final int ageBand;
@@ -65,6 +67,8 @@ class GameScreen extends ConsumerWidget {
     final state = ref.watch(gameProvider(config));
     final notifier = ref.read(gameProvider(config).notifier);
     final l10n = AppLocalizations.of(context)!;
+    final showVisualAid =
+        ageBand == 0 && ref.watch(visualAidsEnabledProvider);
 
     void confirmExit() {
       showDialog(
@@ -128,7 +132,7 @@ class GameScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 _AgeBandChip(ageBand: ageBand, isPractice: isPractice),
                 const Spacer(),
-                _QuestionDisplay(state: state),
+                _QuestionDisplay(state: state, showVisualAid: showVisualAid),
                 Expanded(child: CompanionReaction(state: state)),
                 _AnswerGrid(
                   state: state,
@@ -245,7 +249,8 @@ class _AgeBandChip extends StatelessWidget {
 
 class _QuestionDisplay extends StatelessWidget {
   final GameState state;
-  const _QuestionDisplay({required this.state});
+  final bool showVisualAid;
+  const _QuestionDisplay({required this.state, required this.showVisualAid});
 
   @override
   Widget build(BuildContext context) {
@@ -271,6 +276,10 @@ class _QuestionDisplay extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
+        if (showVisualAid) ...[
+          const SizedBox(height: 10),
+          VisualAid(key: ValueKey('aid-${q.problem}'), question: q),
+        ],
         const SizedBox(height: 8),
         if (state.streak > 0 &&
             state.streak % AppConstants.bonusStreakThreshold == 0)

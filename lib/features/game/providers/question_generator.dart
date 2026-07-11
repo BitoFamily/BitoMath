@@ -28,6 +28,8 @@ class QuestionGenerator {
       correctAnswer: answer,
       choices: _choices(answer, min: 1, max: max * 2),
       topic: 'add',
+      operandA: a,
+      operandB: b,
     );
   }
 
@@ -52,6 +54,8 @@ class QuestionGenerator {
       correctAnswer: answer,
       choices: _choices(answer, min: 0, max: max * 2 - 1),
       topic: 'sub',
+      operandA: a,
+      operandB: b,
     );
   }
 
@@ -68,6 +72,8 @@ class QuestionGenerator {
       correctAnswer: answer,
       choices: _choices(answer, min: 1, max: maxA * maxB),
       topic: 'mul',
+      operandA: a,
+      operandB: b,
     );
   }
 
@@ -101,6 +107,8 @@ class QuestionGenerator {
       correctAnswer: quotient,
       choices: _choices(quotient, min: 1, max: 12),
       topic: 'div',
+      operandA: dividend,
+      operandB: divisor,
     );
   }
 
