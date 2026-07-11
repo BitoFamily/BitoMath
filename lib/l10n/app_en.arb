@@ -171,6 +171,8 @@
     }
   },
   "redeemButton": "Redeem",
+  "visualAidsTitle": "Visual Aids",
+  "visualAidsSubtitle": "Show a number line or dot array under Level 1 questions",
   "practiceTopicsTitle": "Practice Topics",
   "practiceTopicsSubtitle": "Choose which operations to include in games",
   "noSessionsParent": "No sessions recorded yet.\nPlay a game to see results here!",
@@ -239,5 +241,25 @@
   "cocoCelebrate3": "\"You're on fire — Coco believes in you!\"",
   "cocoEncourage1": "\"Even puppies keep trying!\"",
   "cocoEncourage2": "\"A stumble is just a step forward!\"",
-  "cocoEncourage3": "\"You've got this — Coco is cheering for you!\""
+  "cocoEncourage3": "\"You've got this — Coco is cheering for you!\"",
+
+  "katoNeutral1": "\"Ready to blast off?\"",
+  "katoNeutral2": "\"Let's speed through these numbers!\"",
+  "katoNeutral3": "\"Full throttle — bring it on!\"",
+  "katoCelebrate1": "\"Boom! Nailed it!\"",
+  "katoCelebrate2": "\"Turbo-charged answer — let's go!\"",
+  "katoCelebrate3": "\"You're faster than light, champ!\"",
+  "katoEncourage1": "\"Quick pit stop — try again!\"",
+  "katoEncourage2": "\"Every racer hits a bump. Keep going!\"",
+  "katoEncourage3": "\"Rev up — you've got this!\"",
+
+  "sonaNeutral1": "\"The universe is full of numbers — let's explore!\"",
+  "sonaNeutral2": "\"Ready to unlock a cosmic mystery?\"",
+  "sonaNeutral3": "\"Every problem is a new galaxy to discover!\"",
+  "sonaCelebrate1": "\"Stellar work — you're a math star!\"",
+  "sonaCelebrate2": "\"Brilliant! The cosmos is impressed!\"",
+  "sonaCelebrate3": "\"You just out-shined a supernova!\"",
+  "sonaEncourage1": "\"Even stars need time to shine. Keep trying!\"",
+  "sonaEncourage2": "\"A wise mind grows with every attempt!\"",
+  "sonaEncourage3": "\"Look up — you're closer than you think!\""
 }

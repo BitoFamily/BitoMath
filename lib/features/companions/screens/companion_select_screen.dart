@@ -42,6 +42,7 @@ class CompanionSelectScreen extends ConsumerWidget {
             companion: companion,
             unlocked: unlocked,
             selected: selected,
+            currentStars: profile.stars,
             onTap: unlocked
                 ? () {
                     HapticFeedback.lightImpact();
@@ -81,12 +82,14 @@ class _CompanionCard extends StatelessWidget {
   final CompanionData companion;
   final bool unlocked;
   final bool selected;
+  final int currentStars;
   final VoidCallback onTap;
 
   const _CompanionCard({
     required this.companion,
     required this.unlocked,
     required this.selected,
+    required this.currentStars,
     required this.onTap,
   });
 
@@ -183,15 +186,17 @@ class _CompanionCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  if (!unlocked)
+                  if (!unlocked && companion.unlockStars >= 9999)
                     Text(
-                      companion.unlockStars >= 9999
-                          ? AppLocalizations.of(context)!
-                              .companionComingSoonBadge
-                          : AppLocalizations.of(context)!
-                              .starsCount(companion.unlockStars),
+                      AppLocalizations.of(context)!.companionComingSoonBadge,
                       style: AppTextStyles.label
                           .copyWith(color: AppColors.textMuted),
+                    )
+                  else if (!unlocked)
+                    _UnlockProgress(
+                      currentStars: currentStars,
+                      goalStars: companion.unlockStars,
+                      accent: AppColors.characterPrimary[companion.index],
                     )
                   else if (selected)
                     Container(
@@ -221,6 +226,48 @@ class _CompanionCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _UnlockProgress extends StatelessWidget {
+  final int currentStars;
+  final int goalStars;
+  final Color accent;
+
+  const _UnlockProgress({
+    required this.currentStars,
+    required this.goalStars,
+    required this.accent,
+  });
+
+  double get _progress =>
+      goalStars == 0 ? 0.0 : (currentStars / goalStars).clamp(0.0, 1.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.starsProgress(
+            currentStars.clamp(0, goalStars),
+            goalStars,
+          ),
+          style: AppTextStyles.label.copyWith(color: AppColors.textMuted),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 4),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: _progress,
+            minHeight: 5,
+            backgroundColor: AppColors.bgCardLight,
+            valueColor: AlwaysStoppedAnimation<Color>(accent),
+          ),
+        ),
+      ],
     );
   }
 }
