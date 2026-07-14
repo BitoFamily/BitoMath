@@ -25,6 +25,10 @@ dependencies:
   # Audio
   audioplayers: ^6.0.0
 
+  # Character animation (issue #19) — state-machine driven Rive avatars,
+  # falls back to static PNGs until real .riv assets exist.
+  rive: ^0.13.13
+
   # Localization
   flutter_localizations:
     sdk: flutter
@@ -43,3 +47,4 @@ flutter:
   assets:
     - assets/images/
     - assets/audio/
+    - assets/animations/

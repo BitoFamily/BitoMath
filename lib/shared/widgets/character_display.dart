@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/theme_mode_provider.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../features/companions/widgets/companion_animated_avatar.dart';
 
 class CharacterDisplay extends ConsumerWidget {
-  final String imagePath;
+  final int characterIndex;
   final String name;
   final String quote;
   final double height;
@@ -12,7 +13,7 @@ class CharacterDisplay extends ConsumerWidget {
 
   const CharacterDisplay({
     super.key,
-    required this.imagePath,
+    required this.characterIndex,
     required this.name,
     required this.quote,
     this.height = 160,
@@ -25,8 +26,8 @@ class CharacterDisplay extends ConsumerWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset(
-          imagePath,
+        CompanionAnimatedAvatar(
+          characterIndex: characterIndex,
           height: height,
           fit: BoxFit.contain,
         ),

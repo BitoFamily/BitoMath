@@ -8,6 +8,7 @@ import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../companions/models/companion_data.dart';
+import '../../companions/widgets/companion_animated_avatar.dart';
 import '../models/game_state.dart';
 
 /// Small companion avatar pinned to a corner during gameplay. Pops a speech
@@ -29,6 +30,7 @@ class _CompanionReactionState extends ConsumerState<CompanionReaction>
   late final AnimationController _bounceCtrl;
   late final Animation<double> _bounceAnim;
   String? _bubbleText;
+  CompanionAnimState _animState = CompanionAnimState.idle;
   Timer? _hideTimer;
 
   @override
@@ -60,7 +62,14 @@ class _CompanionReactionState extends ConsumerState<CompanionReaction>
         widget.state.streak % AppConstants.bonusStreakThreshold == 0;
     final mood = correct ? CompanionMood.celebrate : CompanionMood.encourage;
 
-    setState(() => _bubbleText = companion.quote(context, mood));
+    setState(() {
+      _bubbleText = companion.quote(context, mood);
+      _animState = !correct
+          ? CompanionAnimState.wrong
+          : isStreakMilestone
+              ? CompanionAnimState.streak
+              : CompanionAnimState.correct;
+    });
 
     // Bounce pop-in then settle back — completes well within the ~650ms
     // window before the next question appears, so it never delays pacing.
@@ -73,7 +82,12 @@ class _CompanionReactionState extends ConsumerState<CompanionReaction>
 
     _hideTimer?.cancel();
     _hideTimer = Timer(const Duration(milliseconds: 2200), () {
-      if (mounted) setState(() => _bubbleText = null);
+      if (mounted) {
+        setState(() {
+          _bubbleText = null;
+          _animState = CompanionAnimState.idle;
+        });
+      }
     });
   }
 
@@ -130,8 +144,9 @@ class _CompanionReactionState extends ConsumerState<CompanionReaction>
                   border: Border.all(color: accent, width: 2),
                 ),
                 child: ClipOval(
-                  child: Image.asset(
-                    AppConstants.characterImages[index],
+                  child: CompanionAnimatedAvatar(
+                    characterIndex: index,
+                    triggerState: _animState,
                     fit: BoxFit.cover,
                   ),
                 ),

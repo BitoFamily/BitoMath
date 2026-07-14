@@ -206,7 +206,7 @@ class _CharacterCarousel extends ConsumerWidget {
               ),
               child: CharacterDisplay(
                 key: ValueKey(selectedIndex),
-                imagePath: AppConstants.characterImages[selectedIndex],
+                characterIndex: selectedIndex,
                 name: AppConstants.characterNames[selectedIndex],
                 quote: AgeBandStrings.characterQuote(context, selectedIndex),
                 // Coco (index 0) is a small puppy-bot — displayed at half the

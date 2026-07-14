@@ -58,13 +58,13 @@ void main() {
         overrides: [sharedPrefsProvider.overrideWithValue(prefs)],
         child: const MaterialApp(
           home: CharacterDisplay(
-            imagePath: 'assets/images/kato.png',
+            characterIndex: 1,
             name: 'Kato',
             quote: 'test',
           ),
         ),
       ));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       expect(find.byType(Image), findsOneWidget);
     });
@@ -77,13 +77,13 @@ void main() {
         overrides: [sharedPrefsProvider.overrideWithValue(prefs)],
         child: const MaterialApp(
           home: CharacterDisplay(
-            imagePath: 'assets/images/sona.png',
+            characterIndex: 2,
             name: 'Sona',
             quote: 'test',
           ),
         ),
       ));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       expect(find.byType(Image), findsOneWidget);
     });
