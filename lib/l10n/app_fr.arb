@@ -1,0 +1,265 @@
+{
+  "@@locale": "fr",
+
+  "appTagline": "Apprends, gagne, sois récompensé !",
+  "defaultPlayerName": "Champion",
+
+  "onboardingWelcomeTitle": "Bienvenue sur\nBito Math !",
+  "onboardingNamePrompt": "Quel est ton prénom ?",
+  "onboardingNameHint": "Ton prénom ici...",
+  "onboardingLetsGo": "C'est parti ! →",
+  "onboardingGreeting": "Salut, {name} ! 👋",
+  "@onboardingGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "pickYourLevel": "Choisis ton niveau",
+
+  "level1Name": "Niveau 1",
+  "level2Name": "Niveau 2",
+  "level3Name": "Niveau 3",
+  "level1AgeRange": "5-6 ans",
+  "level2AgeRange": "6-7 ans",
+  "level3AgeRange": "7-8 ans",
+  "level1Description": "Compter, additionner et soustraire jusqu'à 10",
+  "level2Description": "Additionner et soustraire jusqu'à 20",
+  "level3Description": "Plus grands nombres, découverte de la multiplication",
+  "practiceSuffix": " · Entraînement",
+
+  "quickPlayTitle": "⚡ Partie rapide",
+  "practiceModeTitle": "🎯 Mode entraînement",
+
+  "homeGreeting": "Salut, {name} ! 👋",
+  "@homeGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "tierBadgeDiamond": "💎 Diamant",
+  "tierBadgeGold": "🥇 Or",
+  "tierBadgeSilver": "🥈 Argent",
+  "tierBadgeBronze": "🥉 Bronze",
+  "tierBadgeStarter": "⭐ Débutant",
+  "focusTodayLabel": "🎯 Objectif du jour : {topic}",
+  "@focusTodayLabel": {
+    "placeholders": { "topic": { "type": "String" } }
+  },
+  "topicAddition": "+ Addition",
+  "topicSubtraction": "− Soustraction",
+  "topicMultiplication": "× Multiplication",
+  "topicDivision": "÷ Division",
+  "playNowButton": "▶   JOUER",
+  "practiceButton": "🎯   S'ENTRAÎNER",
+  "statStars": "Étoiles",
+  "statStreak": "Série",
+  "statBest": "Record",
+  "daysValue": "{days} j",
+  "@daysValue": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "rewardsReadyBadge": "{count, plural, one{1 récompense prête à réclamer !} other{{count} récompenses prêtes à réclamer !}}",
+  "@rewardsReadyBadge": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "tellAParent": "· Préviens un parent !",
+  "navRewards": "Récompenses",
+  "navProgress": "Progrès",
+  "navSettings": "Réglages",
+  "navParent": "Parent",
+
+  "companionsTitle": "Compagnons",
+  "companionComingSoonToast": "Bientôt disponible dans une future mise à jour !",
+  "companionUnlockAt": "Débloqué à {stars} ⭐",
+  "@companionUnlockAt": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+  "companionComingSoonBadge": "Bientôt là",
+  "companionActiveBadge": "Actif",
+  "starsCount": "{count} ⭐",
+  "@starsCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "leaveGameTitle": "Quitter la partie ?",
+  "leaveGameBody": "Ta progression dans cette partie sera perdue.",
+  "keepPlayingButton": "Continuer à jouer",
+  "exitButton": "Quitter",
+  "scoreLabel": "Score",
+  "questionCounter": "Q {number}",
+  "@questionCounter": {
+    "placeholders": { "number": { "type": "int" } }
+  },
+  "streakBonus": "🔥 {streak} d'affilée ! +5 bonus !",
+  "@streakBonus": {
+    "placeholders": { "streak": { "type": "int" } }
+  },
+  "secondsLabel": "sec",
+
+  "resultPerfect": "Parfait ! 🎉",
+  "resultGreat": "Bien joué ! 🙌",
+  "resultKeepGoing": "Continue comme ça ! 💪",
+  "resultTryAgain": "Réessaie ! 🔄",
+  "rewardUnlockedTitle": "Récompense débloquée !",
+  "showParentToClaim": "Montre ça à un parent pour la réclamer !",
+  "awesomeButton": "Génial !",
+  "statStarsEarned": "Étoiles gagnées",
+  "statFinalScore": "Score final",
+  "statCorrect": "Bonnes réponses",
+  "statAccuracy": "Précision",
+  "statBestStreak": "Meilleure série",
+  "inARow": "{count} d'affilée",
+  "@inARow": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "playAgainButton": "▶   REJOUER",
+  "homeButton": "🏠   ACCUEIL",
+
+  "progressTitle": "Progrès",
+  "statDayStreak": "Jours d'affilée",
+  "statBestScore": "Meilleur score",
+  "tierProgressTitle": "Progression du rang",
+  "tierNameStarter": "Débutant",
+  "tierNameBronze": "Bronze",
+  "tierNameSilver": "Argent",
+  "tierNameGold": "Or",
+  "tierNameDiamond": "Diamant",
+  "maxTierReached": "🏆 Rang maximum atteint !",
+  "starsToGo": "{stars} / {ceiling} ⭐  ·  {remaining} restantes",
+  "@starsToGo": {
+    "placeholders": {
+      "stars": { "type": "int" },
+      "ceiling": { "type": "int" },
+      "remaining": { "type": "int" }
+    }
+  },
+  "topicMasteryTitle": "Maîtrise des sujets",
+  "focusChipLabel": "Objectif",
+  "topicOff": "Désactivé",
+  "topicNotPlayedYet": "Pas encore joué",
+  "topicPercent": "{percent} %",
+  "@topicPercent": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+  "statusMastered": "✅ Maîtrisé",
+  "statusGettingThere": "📈 En bonne voie",
+  "statusNeedsPractice": "⚠️ À travailler",
+  "recentSessionsTitle": "Parties récentes",
+  "noSessionsProgress": "Pas encore de partie.\nJoue pour voir ton historique ici !",
+  "sessionCorrectCount": "{correct}/{total} bonnes réponses",
+  "@sessionCorrectCount": {
+    "placeholders": {
+      "correct": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "starsEarnedPrefix": "+{stars} ⭐",
+  "@starsEarnedPrefix": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+
+  "parentZoneTitle": "Espace Parent",
+  "totalEarnedLabel": "Total gagné",
+  "availableStarsLabel": "{count} ⭐ disponibles",
+  "@availableStarsLabel": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "addButton": "+ Ajouter",
+  "noRewardsYet": "Pas encore de récompense.\nAppuie sur « + Ajouter » pour créer la première !",
+  "redeemedCheck": "Réclamée ✓",
+  "starsProgress": "{current}/{cost} ⭐",
+  "@starsProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "cost": { "type": "int" }
+    }
+  },
+  "redeemButton": "Réclamer",
+  "visualAidsTitle": "Aides visuelles",
+  "visualAidsSubtitle": "Afficher une ligne numérique ou un tableau de points pour les questions de Niveau 1",
+  "practiceTopicsTitle": "Sujets d'entraînement",
+  "practiceTopicsSubtitle": "Choisis quelles opérations inclure dans les parties",
+  "noSessionsParent": "Pas encore de partie enregistrée.\nJoue pour voir les résultats ici !",
+  "sessionCorrectAndAccuracy": "{correct}/{total} bonnes réponses · {percent} % de précision",
+  "@sessionCorrectAndAccuracy": {
+    "placeholders": {
+      "correct": { "type": "int" },
+      "total": { "type": "int" },
+      "percent": { "type": "int" }
+    }
+  },
+
+  "pinWrong": "Code incorrect — réessaie",
+  "pinMismatch": "Les codes ne correspondent pas — recommence",
+  "pinTitleVerify": "Code parent",
+  "pinTitleConfirm": "Confirme le code",
+  "pinTitleCreate": "Crée un code parent",
+  "pinSubtitleVerify": "Entre ton code à 4 chiffres",
+  "pinSubtitleConfirm": "Entre à nouveau le même code",
+  "pinSubtitleCreate": "Choisis un code à 4 chiffres pour l'Espace Parent",
+
+  "newRewardTitle": "Nouvelle récompense",
+  "pickAnIconLabel": "Choisis une icône",
+  "rewardNameLabel": "Nom de la récompense",
+  "rewardNameHint": "ex. Soirée cinéma, temps d'écran en plus…",
+  "starCostLabel": "Coût en étoiles",
+  "saveRewardButton": "✅  Enregistrer",
+
+  "rewardReadyBadge": "Prête ! 🎉",
+
+  "settingsTitle": "Réglages",
+  "soundSectionLabel": "Son",
+  "soundToggleLabel": "Effets sonores",
+  "nameSectionLabel": "Prénom",
+  "nameSaveButton": "Enregistrer",
+  "levelSectionLabel": "Niveau",
+  "languageSectionLabel": "Langue",
+  "resetProgressSectionLabel": "Réinitialiser la progression",
+  "resetProgressButton": "Réinitialiser la progression",
+  "resetProgressDescription": "Efface tes étoiles, ta série et tes statistiques de précision. Tes récompenses sont conservées.",
+  "resetConfirmTitle": "Réinitialiser la progression ?",
+  "resetConfirmBody": "Cela efface tes étoiles, ta série et tes statistiques de précision. Tes récompenses seront conservées. Cette action est irréversible.",
+  "resetConfirmButton": "Réinitialiser",
+  "cancelButton": "Annuler",
+
+  "rewardsTitle": "Récompenses",
+  "rewardsReadySectionTitle": "🎁 Prêtes à réclamer",
+  "rewardsUpcomingSectionTitle": "⭐ À venir",
+  "rewardsHistorySectionTitle": "✅ Réclamées",
+  "rewardsNoneConfigured": "Pas encore de récompense.\nDemande à un parent d'en ajouter dans l'Espace Parent !",
+  "rewardsNoneReadyMessage": "Continue à gagner des étoiles — rien n'est encore prêt à réclamer !",
+  "rewardsNoUpcomingMessage": "Tu es à jour !",
+  "rewardsNoHistoryMessage": "Aucune récompense réclamée pour le moment.",
+  "rewardsAskParentToRedeem": "Demande à un parent de réclamer ceci !",
+  "rewardsRedeemedOnLabel": "Réclamée le {date}",
+  "@rewardsRedeemedOnLabel": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "companionComingSoonQuote": "« Bientôt là ! »",
+  "cocoNeutral1": "« Prêt pour un défi ? »",
+  "cocoNeutral2": "« Allons-y — les chiffres, c'est amusant ! »",
+  "cocoNeutral3": "« Chaque question est une nouvelle aventure ! »",
+  "cocoCelebrate1": "« Ouaf ouaf ! Tu es incroyable ! »",
+  "cocoCelebrate2": "« C'était GÉNIAL ! Continue comme ça ! »",
+  "cocoCelebrate3": "« Tu es en feu — Coco croit en toi ! »",
+  "cocoEncourage1": "« Même les chiots continuent d'essayer ! »",
+  "cocoEncourage2": "« Un faux pas n'est qu'un pas en avant ! »",
+  "cocoEncourage3": "« Tu peux le faire — Coco t'encourage ! »",
+
+  "katoNeutral1": "« Prêt pour le décollage ? »",
+  "katoNeutral2": "« Filons à toute vitesse à travers ces nombres ! »",
+  "katoNeutral3": "« Plein gaz — vas-y ! »",
+  "katoCelebrate1": "« Boum ! En plein dans le mille ! »",
+  "katoCelebrate2": "« Réponse turbo-chargée — allons-y ! »",
+  "katoCelebrate3": "« Tu es plus rapide que la lumière, champion ! »",
+  "katoEncourage1": "« Petit arrêt au stand — réessaie ! »",
+  "katoEncourage2": "« Chaque pilote a des ratés. Continue ! »",
+  "katoEncourage3": "« Accélère — tu peux le faire ! »",
+
+  "sonaNeutral1": "« L'univers est plein de nombres — allons explorer ! »",
+  "sonaNeutral2": "« Prêt à percer un mystère cosmique ? »",
+  "sonaNeutral3": "« Chaque problème est une nouvelle galaxie à découvrir ! »",
+  "sonaCelebrate1": "« Travail stellaire — tu es une star des maths ! »",
+  "sonaCelebrate2": "« Brillant ! Le cosmos est impressionné ! »",
+  "sonaCelebrate3": "« Tu viens d'éclipser une supernova ! »",
+  "sonaEncourage1": "« Même les étoiles ont besoin de temps pour briller. Continue ! »",
+  "sonaEncourage2": "« Un esprit sage grandit à chaque tentative ! »",
+  "sonaEncourage3": "« Regarde vers le haut — tu es plus proche que tu ne le penses ! »"
+}

@@ -1,0 +1,265 @@
+{
+  "@@locale": "ar",
+
+  "appTagline": "تعلّم، اكسب، كافئ نفسك!",
+  "defaultPlayerName": "بطل",
+
+  "onboardingWelcomeTitle": "مرحبًا بك في\nBito Math!",
+  "onboardingNamePrompt": "ما اسمك؟",
+  "onboardingNameHint": "اكتب اسمك هنا...",
+  "onboardingLetsGo": "هيا بنا! ←",
+  "onboardingGreeting": "مرحبًا، {name}! 👋",
+  "@onboardingGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "pickYourLevel": "اختر مستواك",
+
+  "level1Name": "المستوى 1",
+  "level2Name": "المستوى 2",
+  "level3Name": "المستوى 3",
+  "level1AgeRange": "العمر 5-6",
+  "level2AgeRange": "العمر 6-7",
+  "level3AgeRange": "العمر 7-8",
+  "level1Description": "العد، الجمع والطرح حتى 10",
+  "level2Description": "الجمع والطرح حتى 20",
+  "level3Description": "أرقام أكبر، مقدمة في الضرب",
+  "practiceSuffix": " · تدريب",
+
+  "quickPlayTitle": "⚡ لعب سريع",
+  "practiceModeTitle": "🎯 وضع التدريب",
+
+  "homeGreeting": "أهلاً، {name}! 👋",
+  "@homeGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "tierBadgeDiamond": "💎 الماس",
+  "tierBadgeGold": "🥇 ذهبي",
+  "tierBadgeSilver": "🥈 فضي",
+  "tierBadgeBronze": "🥉 برونزي",
+  "tierBadgeStarter": "⭐ مبتدئ",
+  "focusTodayLabel": "🎯 تركيز اليوم: {topic}",
+  "@focusTodayLabel": {
+    "placeholders": { "topic": { "type": "String" } }
+  },
+  "topicAddition": "+ الجمع",
+  "topicSubtraction": "− الطرح",
+  "topicMultiplication": "× الضرب",
+  "topicDivision": "÷ القسمة",
+  "playNowButton": "▶   العب الآن",
+  "practiceButton": "🎯   تدرّب",
+  "statStars": "النجوم",
+  "statStreak": "السلسلة",
+  "statBest": "الأفضل",
+  "daysValue": "{days} يوم",
+  "@daysValue": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "rewardsReadyBadge": "{count, plural, one{مكافأة واحدة جاهزة للحصول عليها!} other{{count} مكافآت جاهزة للحصول عليها!}}",
+  "@rewardsReadyBadge": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "tellAParent": "· أخبر أحد والديك!",
+  "navRewards": "المكافآت",
+  "navProgress": "التقدم",
+  "navSettings": "الإعدادات",
+  "navParent": "الوالدين",
+
+  "companionsTitle": "الرفقاء",
+  "companionComingSoonToast": "قريبًا في تحديث قادم!",
+  "companionUnlockAt": "يُفتح عند {stars} ⭐",
+  "@companionUnlockAt": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+  "companionComingSoonBadge": "قريبًا",
+  "companionActiveBadge": "نشط",
+  "starsCount": "{count} ⭐",
+  "@starsCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "leaveGameTitle": "مغادرة اللعبة؟",
+  "leaveGameBody": "سيتم فقدان تقدمك في هذه الجولة.",
+  "keepPlayingButton": "متابعة اللعب",
+  "exitButton": "خروج",
+  "scoreLabel": "النقاط",
+  "questionCounter": "س {number}",
+  "@questionCounter": {
+    "placeholders": { "number": { "type": "int" } }
+  },
+  "streakBonus": "🔥 {streak} متتالية! +5 مكافأة!",
+  "@streakBonus": {
+    "placeholders": { "streak": { "type": "int" } }
+  },
+  "secondsLabel": "ثانية",
+
+  "resultPerfect": "ممتاز! 🎉",
+  "resultGreat": "عمل رائع! 🙌",
+  "resultKeepGoing": "واصل! 💪",
+  "resultTryAgain": "حاول مرة أخرى! 🔄",
+  "rewardUnlockedTitle": "تم فتح مكافأة!",
+  "showParentToClaim": "أرِها لأحد والديك للحصول عليها!",
+  "awesomeButton": "رائع!",
+  "statStarsEarned": "النجوم المكتسبة",
+  "statFinalScore": "النتيجة النهائية",
+  "statCorrect": "إجابات صحيحة",
+  "statAccuracy": "الدقة",
+  "statBestStreak": "أفضل سلسلة",
+  "inARow": "{count} متتالية",
+  "@inARow": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "playAgainButton": "▶   إعادة اللعب",
+  "homeButton": "🏠   الرئيسية",
+
+  "progressTitle": "التقدم",
+  "statDayStreak": "أيام متتالية",
+  "statBestScore": "أفضل نتيجة",
+  "tierProgressTitle": "تقدم المستوى",
+  "tierNameStarter": "مبتدئ",
+  "tierNameBronze": "برونزي",
+  "tierNameSilver": "فضي",
+  "tierNameGold": "ذهبي",
+  "tierNameDiamond": "الماس",
+  "maxTierReached": "🏆 وصلت إلى أعلى مستوى!",
+  "starsToGo": "{stars} / {ceiling} ⭐  ·  {remaining} متبقية",
+  "@starsToGo": {
+    "placeholders": {
+      "stars": { "type": "int" },
+      "ceiling": { "type": "int" },
+      "remaining": { "type": "int" }
+    }
+  },
+  "topicMasteryTitle": "إتقان المواضيع",
+  "focusChipLabel": "التركيز",
+  "topicOff": "متوقف",
+  "topicNotPlayedYet": "لم يُلعب بعد",
+  "topicPercent": "{percent}%",
+  "@topicPercent": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+  "statusMastered": "✅ متقَن",
+  "statusGettingThere": "📈 في تقدم جيد",
+  "statusNeedsPractice": "⚠️ يحتاج إلى تدريب",
+  "recentSessionsTitle": "الجلسات الأخيرة",
+  "noSessionsProgress": "لا توجد جلسات بعد.\nالعب لترى سجلك هنا!",
+  "sessionCorrectCount": "{correct}/{total} صحيحة",
+  "@sessionCorrectCount": {
+    "placeholders": {
+      "correct": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "starsEarnedPrefix": "+{stars} ⭐",
+  "@starsEarnedPrefix": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+
+  "parentZoneTitle": "منطقة الوالدين",
+  "totalEarnedLabel": "الإجمالي المكتسب",
+  "availableStarsLabel": "{count} ⭐ متاحة",
+  "@availableStarsLabel": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "addButton": "+ إضافة",
+  "noRewardsYet": "لا توجد مكافآت بعد.\nاضغط على \"+ إضافة\" لإنشاء أول واحدة!",
+  "redeemedCheck": "تم الحصول عليها ✓",
+  "starsProgress": "{current}/{cost} ⭐",
+  "@starsProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "cost": { "type": "int" }
+    }
+  },
+  "redeemButton": "احصل عليها",
+  "visualAidsTitle": "الوسائل البصرية",
+  "visualAidsSubtitle": "عرض خط أرقام أو مصفوفة نقاط أسفل أسئلة المستوى 1",
+  "practiceTopicsTitle": "مواضيع التدريب",
+  "practiceTopicsSubtitle": "اختر العمليات المراد تضمينها في الألعاب",
+  "noSessionsParent": "لم يتم تسجيل أي جلسة بعد.\nالعب لترى النتائج هنا!",
+  "sessionCorrectAndAccuracy": "{correct}/{total} صحيحة · دقة {percent}%",
+  "@sessionCorrectAndAccuracy": {
+    "placeholders": {
+      "correct": { "type": "int" },
+      "total": { "type": "int" },
+      "percent": { "type": "int" }
+    }
+  },
+
+  "pinWrong": "رمز خاطئ — حاول مرة أخرى",
+  "pinMismatch": "الرمزان غير متطابقين — ابدأ من جديد",
+  "pinTitleVerify": "رمز الوالدين",
+  "pinTitleConfirm": "تأكيد الرمز",
+  "pinTitleCreate": "إنشاء رمز الوالدين",
+  "pinSubtitleVerify": "أدخل رمزك المكوّن من 4 أرقام",
+  "pinSubtitleConfirm": "أدخل نفس الرمز مرة أخرى",
+  "pinSubtitleCreate": "اختر رمزًا من 4 أرقام لمنطقة الوالدين",
+
+  "newRewardTitle": "مكافأة جديدة",
+  "pickAnIconLabel": "اختر أيقونة",
+  "rewardNameLabel": "اسم المكافأة",
+  "rewardNameHint": "مثال: ليلة أفلام، وقت إضافي على الشاشة…",
+  "starCostLabel": "تكلفة النجوم",
+  "saveRewardButton": "✅  حفظ المكافأة",
+
+  "rewardReadyBadge": "جاهزة! 🎉",
+
+  "settingsTitle": "الإعدادات",
+  "soundSectionLabel": "الصوت",
+  "soundToggleLabel": "المؤثرات الصوتية",
+  "nameSectionLabel": "الاسم",
+  "nameSaveButton": "حفظ",
+  "levelSectionLabel": "المستوى",
+  "languageSectionLabel": "اللغة",
+  "resetProgressSectionLabel": "إعادة ضبط التقدم",
+  "resetProgressButton": "إعادة ضبط التقدم",
+  "resetProgressDescription": "يمسح نجومك وسلسلتك وإحصائيات دقتك. تبقى مكافآتك محفوظة.",
+  "resetConfirmTitle": "إعادة ضبط التقدم؟",
+  "resetConfirmBody": "سيؤدي هذا إلى مسح نجومك وسلسلتك وإحصائيات دقتك. ستبقى مكافآتك محفوظة. لا يمكن التراجع عن هذا الإجراء.",
+  "resetConfirmButton": "إعادة ضبط",
+  "cancelButton": "إلغاء",
+
+  "rewardsTitle": "المكافآت",
+  "rewardsReadySectionTitle": "🎁 جاهزة للحصول عليها",
+  "rewardsUpcomingSectionTitle": "⭐ قادمة",
+  "rewardsHistorySectionTitle": "✅ تم الحصول عليها",
+  "rewardsNoneConfigured": "لا توجد مكافآت بعد.\nاطلب من أحد والديك إضافة بعضها في منطقة الوالدين!",
+  "rewardsNoneReadyMessage": "واصل كسب النجوم — لا يوجد شيء جاهز بعد!",
+  "rewardsNoUpcomingMessage": "لقد أنجزت كل شيء!",
+  "rewardsNoHistoryMessage": "لم يتم الحصول على أي مكافأة بعد.",
+  "rewardsAskParentToRedeem": "اطلب من أحد والديك الحصول على هذه!",
+  "rewardsRedeemedOnLabel": "تم الحصول عليها في {date}",
+  "@rewardsRedeemedOnLabel": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "companionComingSoonQuote": "\"قريبًا!\"",
+  "cocoNeutral1": "\"مستعد للتحدي؟\"",
+  "cocoNeutral2": "\"هيا بنا — الأرقام ممتعة!\"",
+  "cocoNeutral3": "\"كل سؤال مغامرة جديدة!\"",
+  "cocoCelebrate1": "\"هاو هاو! أنت رائع!\"",
+  "cocoCelebrate2": "\"كان ذلك مذهلاً! واصل هكذا!\"",
+  "cocoCelebrate3": "\"أنت متألق — Coco يؤمن بك!\"",
+  "cocoEncourage1": "\"حتى الجراء تستمر في المحاولة!\"",
+  "cocoEncourage2": "\"العثرة ما هي إلا خطوة إلى الأمام!\"",
+  "cocoEncourage3": "\"أنت قادر على هذا — Coco يشجعك!\"",
+
+  "katoNeutral1": "\"مستعد للانطلاق؟\"",
+  "katoNeutral2": "\"هيا نسرع عبر هذه الأرقام!\"",
+  "katoNeutral3": "\"بأقصى سرعة — هيا!\"",
+  "katoCelebrate1": "\"بووم! أصبت الهدف!\"",
+  "katoCelebrate2": "\"إجابة فائقة السرعة — هيا بنا!\"",
+  "katoCelebrate3": "\"أنت أسرع من الضوء يا بطل!\"",
+  "katoEncourage1": "\"توقف سريع — حاول مرة أخرى!\"",
+  "katoEncourage2": "\"كل متسابق يواجه عقبة. واصل!\"",
+  "katoEncourage3": "\"شغّل المحرك — أنت قادر على هذا!\"",
+
+  "sonaNeutral1": "\"الكون مليء بالأرقام — هيا نستكشف!\"",
+  "sonaNeutral2": "\"مستعد لكشف لغز كوني؟\"",
+  "sonaNeutral3": "\"كل مسألة مجرة جديدة لاكتشافها!\"",
+  "sonaCelebrate1": "\"عمل نجمي — أنت نجم الرياضيات!\"",
+  "sonaCelebrate2": "\"رائع! الكون معجب بك!\"",
+  "sonaCelebrate3": "\"لقد تألقت أكثر من مستعر أعظم!\"",
+  "sonaEncourage1": "\"حتى النجوم تحتاج وقتًا لتلمع. واصل المحاولة!\"",
+  "sonaEncourage2": "\"العقل الحكيم ينمو مع كل محاولة!\"",
+  "sonaEncourage3": "\"انظر للأعلى — أنت أقرب مما تعتقد!\""
+}

@@ -1,0 +1,265 @@
+{
+  "@@locale": "hi",
+
+  "appTagline": "सीखो, कमाओ, इनाम पाओ!",
+  "defaultPlayerName": "चैंपियन",
+
+  "onboardingWelcomeTitle": "Bito Math में\nस्वागत है!",
+  "onboardingNamePrompt": "तुम्हारा नाम क्या है?",
+  "onboardingNameHint": "यहाँ अपना नाम लिखें...",
+  "onboardingLetsGo": "चलो शुरू करें! →",
+  "onboardingGreeting": "नमस्ते, {name}! 👋",
+  "@onboardingGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "pickYourLevel": "अपना स्तर चुनें",
+
+  "level1Name": "स्तर 1",
+  "level2Name": "स्तर 2",
+  "level3Name": "स्तर 3",
+  "level1AgeRange": "आयु 5-6",
+  "level2AgeRange": "आयु 6-7",
+  "level3AgeRange": "आयु 7-8",
+  "level1Description": "गिनती, 10 तक जोड़ और घटाव",
+  "level2Description": "20 तक जोड़ और घटाव",
+  "level3Description": "बड़ी संख्याएँ, गुणा का परिचय",
+  "practiceSuffix": " · अभ्यास",
+
+  "quickPlayTitle": "⚡ त्वरित खेल",
+  "practiceModeTitle": "🎯 अभ्यास मोड",
+
+  "homeGreeting": "अरे, {name}! 👋",
+  "@homeGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "tierBadgeDiamond": "💎 हीरा",
+  "tierBadgeGold": "🥇 स्वर्ण",
+  "tierBadgeSilver": "🥈 रजत",
+  "tierBadgeBronze": "🥉 कांस्य",
+  "tierBadgeStarter": "⭐ शुरुआती",
+  "focusTodayLabel": "🎯 आज का लक्ष्य: {topic}",
+  "@focusTodayLabel": {
+    "placeholders": { "topic": { "type": "String" } }
+  },
+  "topicAddition": "+ जोड़",
+  "topicSubtraction": "− घटाव",
+  "topicMultiplication": "× गुणा",
+  "topicDivision": "÷ भाग",
+  "playNowButton": "▶   अभी खेलें",
+  "practiceButton": "🎯   अभ्यास करें",
+  "statStars": "सितारे",
+  "statStreak": "श्रृंखला",
+  "statBest": "सर्वश्रेष्ठ",
+  "daysValue": "{days} दिन",
+  "@daysValue": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "rewardsReadyBadge": "{count, plural, one{1 इनाम लेने के लिए तैयार है!} other{{count} इनाम लेने के लिए तैयार हैं!}}",
+  "@rewardsReadyBadge": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "tellAParent": "· माता-पिता को बताएं!",
+  "navRewards": "इनाम",
+  "navProgress": "प्रगति",
+  "navSettings": "सेटिंग्स",
+  "navParent": "अभिभावक",
+
+  "companionsTitle": "साथी",
+  "companionComingSoonToast": "जल्द ही एक नए अपडेट में आएगा!",
+  "companionUnlockAt": "{stars} ⭐ पर अनलॉक होगा",
+  "@companionUnlockAt": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+  "companionComingSoonBadge": "जल्द आ रहा है",
+  "companionActiveBadge": "सक्रिय",
+  "starsCount": "{count} ⭐",
+  "@starsCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "leaveGameTitle": "खेल छोड़ें?",
+  "leaveGameBody": "इस राउंड की प्रगति खो जाएगी।",
+  "keepPlayingButton": "खेलना जारी रखें",
+  "exitButton": "बाहर जाएं",
+  "scoreLabel": "स्कोर",
+  "questionCounter": "प्रश्न {number}",
+  "@questionCounter": {
+    "placeholders": { "number": { "type": "int" } }
+  },
+  "streakBonus": "🔥 {streak} लगातार सही! +5 बोनस!",
+  "@streakBonus": {
+    "placeholders": { "streak": { "type": "int" } }
+  },
+  "secondsLabel": "सेकंड",
+
+  "resultPerfect": "बहुत बढ़िया! 🎉",
+  "resultGreat": "शानदार काम! 🙌",
+  "resultKeepGoing": "जारी रखो! 💪",
+  "resultTryAgain": "फिर से कोशिश करो! 🔄",
+  "rewardUnlockedTitle": "इनाम अनलॉक हुआ!",
+  "showParentToClaim": "इसे पाने के लिए माता-पिता को दिखाएं!",
+  "awesomeButton": "शानदार!",
+  "statStarsEarned": "अर्जित सितारे",
+  "statFinalScore": "अंतिम स्कोर",
+  "statCorrect": "सही जवाब",
+  "statAccuracy": "सटीकता",
+  "statBestStreak": "सर्वश्रेष्ठ श्रृंखला",
+  "inARow": "{count} लगातार",
+  "@inARow": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "playAgainButton": "▶   फिर से खेलें",
+  "homeButton": "🏠   होम",
+
+  "progressTitle": "प्रगति",
+  "statDayStreak": "दैनिक श्रृंखला",
+  "statBestScore": "सर्वश्रेष्ठ स्कोर",
+  "tierProgressTitle": "स्तर प्रगति",
+  "tierNameStarter": "शुरुआती",
+  "tierNameBronze": "कांस्य",
+  "tierNameSilver": "रजत",
+  "tierNameGold": "स्वर्ण",
+  "tierNameDiamond": "हीरा",
+  "maxTierReached": "🏆 अधिकतम स्तर तक पहुँच गए!",
+  "starsToGo": "{stars} / {ceiling} ⭐  ·  {remaining} बाकी",
+  "@starsToGo": {
+    "placeholders": {
+      "stars": { "type": "int" },
+      "ceiling": { "type": "int" },
+      "remaining": { "type": "int" }
+    }
+  },
+  "topicMasteryTitle": "विषय में महारत",
+  "focusChipLabel": "लक्ष्य",
+  "topicOff": "बंद",
+  "topicNotPlayedYet": "अभी तक नहीं खेला",
+  "topicPercent": "{percent}%",
+  "@topicPercent": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+  "statusMastered": "✅ महारत हासिल",
+  "statusGettingThere": "📈 अच्छी प्रगति",
+  "statusNeedsPractice": "⚠️ अभ्यास की जरूरत",
+  "recentSessionsTitle": "हाल की गतिविधियाँ",
+  "noSessionsProgress": "अभी तक कोई सत्र नहीं।\nअपना इतिहास देखने के लिए खेल खेलें!",
+  "sessionCorrectCount": "{correct}/{total} सही",
+  "@sessionCorrectCount": {
+    "placeholders": {
+      "correct": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "starsEarnedPrefix": "+{stars} ⭐",
+  "@starsEarnedPrefix": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+
+  "parentZoneTitle": "अभिभावक क्षेत्र",
+  "totalEarnedLabel": "कुल अर्जित",
+  "availableStarsLabel": "{count} ⭐ उपलब्ध",
+  "@availableStarsLabel": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "addButton": "+ जोड़ें",
+  "noRewardsYet": "अभी तक कोई इनाम नहीं।\nपहला बनाने के लिए \"+ जोड़ें\" दबाएं!",
+  "redeemedCheck": "प्राप्त किया ✓",
+  "starsProgress": "{current}/{cost} ⭐",
+  "@starsProgress": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "cost": { "type": "int" }
+    }
+  },
+  "redeemButton": "प्राप्त करें",
+  "visualAidsTitle": "दृश्य सहायता",
+  "visualAidsSubtitle": "स्तर 1 के प्रश्नों के नीचे संख्या रेखा या बिंदु सारणी दिखाएं",
+  "practiceTopicsTitle": "अभ्यास विषय",
+  "practiceTopicsSubtitle": "चुनें कि खेल में कौन सी गणित क्रियाएँ शामिल करनी हैं",
+  "noSessionsParent": "अभी तक कोई सत्र दर्ज नहीं हुआ।\nयहाँ परिणाम देखने के लिए खेल खेलें!",
+  "sessionCorrectAndAccuracy": "{correct}/{total} सही · {percent}% सटीकता",
+  "@sessionCorrectAndAccuracy": {
+    "placeholders": {
+      "correct": { "type": "int" },
+      "total": { "type": "int" },
+      "percent": { "type": "int" }
+    }
+  },
+
+  "pinWrong": "गलत पिन — फिर से कोशिश करें",
+  "pinMismatch": "पिन मेल नहीं खाया — फिर से शुरू करें",
+  "pinTitleVerify": "अभिभावक पिन",
+  "pinTitleConfirm": "पिन की पुष्टि करें",
+  "pinTitleCreate": "अभिभावक पिन बनाएं",
+  "pinSubtitleVerify": "अपना 4-अंकीय पिन दर्ज करें",
+  "pinSubtitleConfirm": "वही पिन फिर से दर्ज करें",
+  "pinSubtitleCreate": "अभिभावक क्षेत्र के लिए 4-अंकीय पिन चुनें",
+
+  "newRewardTitle": "नया इनाम",
+  "pickAnIconLabel": "एक आइकन चुनें",
+  "rewardNameLabel": "इनाम का नाम",
+  "rewardNameHint": "जैसे, मूवी नाइट, अतिरिक्त स्क्रीन समय…",
+  "starCostLabel": "सितारों की कीमत",
+  "saveRewardButton": "✅  इनाम सहेजें",
+
+  "rewardReadyBadge": "तैयार! 🎉",
+
+  "settingsTitle": "सेटिंग्स",
+  "soundSectionLabel": "ध्वनि",
+  "soundToggleLabel": "ध्वनि प्रभाव",
+  "nameSectionLabel": "नाम",
+  "nameSaveButton": "सहेजें",
+  "levelSectionLabel": "स्तर",
+  "languageSectionLabel": "भाषा",
+  "resetProgressSectionLabel": "प्रगति रीसेट करें",
+  "resetProgressButton": "प्रगति रीसेट करें",
+  "resetProgressDescription": "आपके सितारे, श्रृंखला और सटीकता आँकड़े मिटा देता है। आपके इनाम सुरक्षित रहेंगे।",
+  "resetConfirmTitle": "प्रगति रीसेट करें?",
+  "resetConfirmBody": "यह आपके सितारे, श्रृंखला और सटीकता आँकड़े मिटा देगा। आपके इनाम सुरक्षित रहेंगे। इसे वापस नहीं किया जा सकता।",
+  "resetConfirmButton": "रीसेट करें",
+  "cancelButton": "रद्द करें",
+
+  "rewardsTitle": "इनाम",
+  "rewardsReadySectionTitle": "🎁 प्राप्त करने के लिए तैयार",
+  "rewardsUpcomingSectionTitle": "⭐ आने वाले",
+  "rewardsHistorySectionTitle": "✅ प्राप्त किए गए",
+  "rewardsNoneConfigured": "अभी तक कोई इनाम नहीं।\nअभिभावक क्षेत्र में कुछ जोड़ने के लिए माता-पिता से कहें!",
+  "rewardsNoneReadyMessage": "सितारे कमाते रहें — अभी कुछ भी लेने के लिए तैयार नहीं है!",
+  "rewardsNoUpcomingMessage": "आप पूरी तरह से अप टू डेट हैं!",
+  "rewardsNoHistoryMessage": "अभी तक कोई इनाम प्राप्त नहीं हुआ।",
+  "rewardsAskParentToRedeem": "इसे प्राप्त करने के लिए माता-पिता से कहें!",
+  "rewardsRedeemedOnLabel": "{date} को प्राप्त किया",
+  "@rewardsRedeemedOnLabel": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "companionComingSoonQuote": "\"जल्द आ रहा है!\"",
+  "cocoNeutral1": "\"चुनौती के लिए तैयार हो?\"",
+  "cocoNeutral2": "\"चलो चलें — संख्याएँ मज़ेदार हैं!\"",
+  "cocoNeutral3": "\"हर सवाल एक नया रोमांच है!\"",
+  "cocoCelebrate1": "\"भौं भौं! तुम कमाल हो!\"",
+  "cocoCelebrate2": "\"यह शानदार था! ऐसे ही करते रहो!\"",
+  "cocoCelebrate3": "\"तुम जबरदस्त कर रहे हो — Coco को तुम पर भरोसा है!\"",
+  "cocoEncourage1": "\"पिल्ले भी कोशिश करते रहते हैं!\"",
+  "cocoEncourage2": "\"एक गलती बस आगे बढ़ने का एक कदम है!\"",
+  "cocoEncourage3": "\"तुम कर सकते हो — Coco तुम्हारे लिए जयकार कर रहा है!\"",
+
+  "katoNeutral1": "\"उड़ान भरने के लिए तैयार हो?\"",
+  "katoNeutral2": "\"चलो इन संख्याओं से तेज़ी से गुज़रें!\"",
+  "katoNeutral3": "\"पूरी रफ्तार — लाओ!\"",
+  "katoCelebrate1": "\"धमाका! एकदम सही!\"",
+  "katoCelebrate2": "\"टर्बो जवाब — चलो!\"",
+  "katoCelebrate3": "\"तुम रोशनी से भी तेज़ हो, चैंपियन!\"",
+  "katoEncourage1": "\"छोटा पड़ाव — फिर से कोशिश करो!\"",
+  "katoEncourage2": "\"हर रेसर को रुकावट मिलती है। चलते रहो!\"",
+  "katoEncourage3": "\"जोश भरो — तुम कर सकते हो!\"",
+
+  "sonaNeutral1": "\"ब्रह्मांड संख्याओं से भरा है — चलो खोजबीन करें!\"",
+  "sonaNeutral2": "\"एक ब्रह्मांडीय रहस्य खोलने के लिए तैयार हो?\"",
+  "sonaNeutral3": "\"हर सवाल खोजने के लिए एक नई आकाशगंगा है!\"",
+  "sonaCelebrate1": "\"शानदार काम — तुम गणित के सितारे हो!\"",
+  "sonaCelebrate2": "\"शानदार! ब्रह्मांड प्रभावित है!\"",
+  "sonaCelebrate3": "\"तुमने अभी एक सुपरनोवा को भी मात दे दी!\"",
+  "sonaEncourage1": "\"सितारों को भी चमकने में समय लगता है। कोशिश करते रहो!\"",
+  "sonaEncourage2": "\"एक समझदार दिमाग हर कोशिश के साथ बढ़ता है!\"",
+  "sonaEncourage3": "\"ऊपर देखो — तुम सोचने से कहीं ज़्यादा करीब हो!\""
+}
