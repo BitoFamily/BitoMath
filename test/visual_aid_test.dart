@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bito_math/core/persistence/player_provider.dart';
 import 'package:bito_math/features/game/models/question.dart';
 import 'package:bito_math/features/game/providers/question_generator.dart';
 import 'package:bito_math/features/game/models/question_config.dart';
@@ -8,6 +11,17 @@ import 'package:bito_math/features/game/widgets/number_line_visual_aid.dart';
 import 'package:bito_math/features/game/widgets/visual_aid.dart';
 
 void main() {
+  late SharedPreferences prefs;
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+  });
+
+  ProviderScope wrapWithProviders(Widget child) => ProviderScope(
+        overrides: [sharedPrefsProvider.overrideWithValue(prefs)],
+        child: child,
+      );
+
   group('QuestionGenerator operand plumbing', () {
     test('addition question exposes operandA + operandB summing to the answer', () {
       final config = QuestionConfig(
@@ -56,8 +70,8 @@ void main() {
         operandA: 3,
         operandB: 4,
       );
-      await tester.pumpWidget(
-          const MaterialApp(home: Scaffold(body: VisualAid(question: q))));
+      await tester.pumpWidget(wrapWithProviders(
+          const MaterialApp(home: Scaffold(body: VisualAid(question: q)))));
       expect(find.byType(NumberLineVisualAid), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
@@ -71,8 +85,8 @@ void main() {
         operandA: 9,
         operandB: 4,
       );
-      await tester.pumpWidget(
-          const MaterialApp(home: Scaffold(body: VisualAid(question: q))));
+      await tester.pumpWidget(wrapWithProviders(
+          const MaterialApp(home: Scaffold(body: VisualAid(question: q)))));
       expect(find.byType(NumberLineVisualAid), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
@@ -87,8 +101,8 @@ void main() {
         operandA: 3,
         operandB: 4,
       );
-      await tester.pumpWidget(
-          const MaterialApp(home: Scaffold(body: VisualAid(question: q))));
+      await tester.pumpWidget(wrapWithProviders(
+          const MaterialApp(home: Scaffold(body: VisualAid(question: q)))));
       expect(find.byType(DotArrayVisualAid), findsOneWidget);
       expect(tester.takeException(), isNull);
 
@@ -107,8 +121,8 @@ void main() {
         operandA: 12,
         operandB: 4,
       );
-      await tester.pumpWidget(
-          const MaterialApp(home: Scaffold(body: VisualAid(question: q))));
+      await tester.pumpWidget(wrapWithProviders(
+          const MaterialApp(home: Scaffold(body: VisualAid(question: q)))));
       expect(find.byType(NumberLineVisualAid), findsNothing);
       expect(find.byType(DotArrayVisualAid), findsNothing);
       expect(tester.takeException(), isNull);

@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/age_band_strings.dart';
 import '../../../core/constants/app_constants.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
 
-class AgeBandSheet extends StatelessWidget {
+class AgeBandSheet extends ConsumerWidget {
   final bool isPractice;
 
   const AgeBandSheet({super.key, required this.isPractice});
 
   static Future<void> show(BuildContext context,
       {required bool isPractice}) async {
+    final colors = ProviderScope.containerOf(context).read(appPaletteProvider);
     final route = await showModalBottomSheet<String>(
       context: context,
-      backgroundColor: AppColors.bgMid,
+      backgroundColor: colors.bgMid,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
@@ -29,7 +31,8 @@ class AgeBandSheet extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       top: false,
@@ -45,7 +48,7 @@ class AgeBandSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.textMuted,
+                  color: colors.textMuted,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -53,13 +56,13 @@ class AgeBandSheet extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               isPractice ? l10n.practiceModeTitle : l10n.quickPlayTitle,
-              style: AppTextStyles.headline2,
+              style: AppTextStyles.headline2(colors),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 6),
             Text(
               l10n.pickYourLevel,
-              style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
+              style: AppTextStyles.body(colors).copyWith(color: colors.textMuted),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),

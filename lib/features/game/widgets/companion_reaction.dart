@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/persistence/player_provider.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../companions/models/companion_data.dart';
@@ -85,9 +86,10 @@ class _CompanionReactionState extends ConsumerState<CompanionReaction>
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appPaletteProvider);
     final index = ref.watch(
         playerProfileProvider.select((p) => p.selectedCharacter));
-    final accent = AppColors.characterPrimary[index];
+    final accent = colors.characterPrimary[index];
 
     return Align(
       alignment: Alignment.bottomRight,
@@ -110,6 +112,7 @@ class _CompanionReactionState extends ConsumerState<CompanionReaction>
                       key: ValueKey(_bubbleText),
                       text: _bubbleText!,
                       accent: accent,
+                      colors: colors,
                     ),
             ),
             const SizedBox(height: 6),
@@ -123,7 +126,7 @@ class _CompanionReactionState extends ConsumerState<CompanionReaction>
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.bgCard,
+                  color: colors.bgCard,
                   border: Border.all(color: accent, width: 2),
                 ),
                 child: ClipOval(
@@ -144,7 +147,13 @@ class _CompanionReactionState extends ConsumerState<CompanionReaction>
 class _SpeechBubble extends StatelessWidget {
   final String text;
   final Color accent;
-  const _SpeechBubble({super.key, required this.text, required this.accent});
+  final AppPalette colors;
+  const _SpeechBubble({
+    super.key,
+    required this.text,
+    required this.accent,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -153,13 +162,13 @@ class _SpeechBubble extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.bgCard,
+          color: colors.bgCard,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: accent.withValues(alpha: 0.6)),
         ),
         child: Text(
           text,
-          style: AppTextStyles.label.copyWith(color: AppColors.textPrimary),
+          style: AppTextStyles.label(colors).copyWith(color: colors.textPrimary),
           textAlign: TextAlign.right,
         ),
       ),

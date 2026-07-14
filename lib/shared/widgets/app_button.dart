@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/theme_mode_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 
 enum _ButtonVariant { play, primary, secondary }
 
-class AppButton extends StatefulWidget {
+class AppButton extends ConsumerStatefulWidget {
   final String label;
   final String? subtitle;
   final VoidCallback? onTap;
@@ -44,13 +46,14 @@ class AppButton extends StatefulWidget {
           label: label, onTap: onTap, variant: _ButtonVariant.secondary);
 
   @override
-  State<AppButton> createState() => _AppButtonState();
+  ConsumerState<AppButton> createState() => _AppButtonState();
 }
 
-class _AppButtonState extends State<AppButton>
+class _AppButtonState extends ConsumerState<AppButton>
     with SingleTickerProviderStateMixin {
+  static const double _sinkDistance = 4.0;
+
   late final AnimationController _pressCtrl;
-  late final Animation<double> _scaleAnim;
 
   @override
   void initState() {
@@ -62,9 +65,6 @@ class _AppButtonState extends State<AppButton>
       lowerBound: 0.0,
       upperBound: 1.0,
     );
-    _scaleAnim = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _pressCtrl, curve: Curves.easeInOut),
-    );
   }
 
   @override
@@ -75,22 +75,24 @@ class _AppButtonState extends State<AppButton>
 
   bool get _isOutlined => widget._variant == _ButtonVariant.secondary;
 
-  Gradient? get _gradient => switch (widget._variant) {
-        _ButtonVariant.play => AppColors.playGradient,
-        _ButtonVariant.primary => AppColors.primaryGradient,
+  Gradient? _gradient(AppPalette c) => switch (widget._variant) {
+        _ButtonVariant.play => c.playGradient,
+        _ButtonVariant.primary => c.primaryGradient,
         _ButtonVariant.secondary => null,
       };
 
-  List<BoxShadow> get _shadow => _isOutlined
+  // Flat, non-blurry shadow that fades out as the button sinks on press —
+  // mimics a physical button losing its "lift" while held down.
+  List<BoxShadow> _shadow(AppPalette c, double pressProgress) => _isOutlined
       ? []
       : [
           BoxShadow(
             color: (widget._variant == _ButtonVariant.play
-                    ? const Color(0xFFFF6B35)
-                    : AppColors.primary)
-                .withValues(alpha: 0.45),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+                    ? c.playGradient.colors.first
+                    : c.primary)
+                .withValues(alpha: 0.45 * (1 - pressProgress)),
+            blurRadius: 20 * (1 - pressProgress),
+            offset: Offset(0, 8 * (1 - pressProgress)),
           ),
         ];
 
@@ -106,64 +108,68 @@ class _AppButtonState extends State<AppButton>
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appPaletteProvider);
     return GestureDetector(
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
       onTap: widget.onTap,
-      child: ScaleTransition(
-        scale: _scaleAnim,
-        child: Container(
-          width: double.infinity,
-          height: widget.subtitle == null ? 64 : 72,
-          padding: widget.subtitle == null
-              ? null
-              : const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            gradient: _gradient,
-            color: _isOutlined ? Colors.transparent : null,
-            borderRadius: BorderRadius.circular(20),
-            border: _isOutlined
-                ? Border.all(color: AppColors.primaryLight, width: 2)
-                : null,
-            boxShadow: _shadow,
+      child: AnimatedBuilder(
+        animation: _pressCtrl,
+        builder: (context, child) => Transform.translate(
+          offset: Offset(0, _sinkDistance * _pressCtrl.value),
+          child: Container(
+            width: double.infinity,
+            height: widget.subtitle == null ? 64 : 72,
+            padding: widget.subtitle == null
+                ? null
+                : const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              gradient: _gradient(colors),
+              color: _isOutlined ? Colors.transparent : null,
+              borderRadius: BorderRadius.circular(20),
+              border: _isOutlined
+                  ? Border.all(color: colors.primaryLight, width: 2)
+                  : null,
+              boxShadow: _shadow(colors, _pressCtrl.value),
+            ),
+            child: child,
           ),
-          child: Center(
-            child: widget.subtitle == null
-                ? Text(
-                    widget.label,
-                    style: AppTextStyles.buttonText.copyWith(
-                      color: _isOutlined
-                          ? AppColors.primaryLight
-                          : AppColors.textPrimary,
-                    ),
-                  )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        widget.label,
-                        style: AppTextStyles.buttonText.copyWith(
-                          color: _isOutlined
-                              ? AppColors.primaryLight
-                              : AppColors.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        widget.subtitle!,
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.label.copyWith(
-                          color: _isOutlined
-                              ? AppColors.primaryLight.withValues(alpha: 0.85)
-                              : AppColors.textPrimary.withValues(alpha: 0.85),
-                        ),
-                      ),
-                    ],
+        ),
+        child: Center(
+          child: widget.subtitle == null
+              ? Text(
+                  widget.label,
+                  style: AppTextStyles.buttonText(colors).copyWith(
+                    color:
+                        _isOutlined ? colors.primaryLight : colors.textPrimary,
                   ),
-          ),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      widget.label,
+                      style: AppTextStyles.buttonText(colors).copyWith(
+                        color: _isOutlined
+                            ? colors.primaryLight
+                            : colors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      widget.subtitle!,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.label(colors).copyWith(
+                        color: _isOutlined
+                            ? colors.primaryLight.withValues(alpha: 0.85)
+                            : colors.textPrimary.withValues(alpha: 0.85),
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );

@@ -4,10 +4,11 @@ import '../../../core/constants/age_band_strings.dart';
 import '../../../core/constants/topic_strings.dart';
 import '../../../core/persistence/player_profile.dart';
 import '../../../core/persistence/player_provider.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/services/visual_aids_provider.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../shared/widgets/app_card.dart';
 import '../models/reward.dart';
 import '../models/session_log.dart';
 import '../providers/rewards_provider.dart';
@@ -47,17 +48,18 @@ class _ParentZone extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final rewards = ref.watch(rewardsProvider);
     final profile = ref.watch(playerProfileProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.bgDeep,
+      backgroundColor: colors.bgDeep,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const BackButton(color: AppColors.textSecondary),
+        leading: BackButton(color: colors.textSecondary),
         title: Text(AppLocalizations.of(context)!.parentZoneTitle,
-            style: AppTextStyles.headline3),
+            style: AppTextStyles.headline3(colors)),
         centerTitle: true,
       ),
       body: ListView(
@@ -81,13 +83,14 @@ class _ParentZone extends ConsumerWidget {
 
 // ── Star summary ───────────────────────────────────────────────────────────
 
-class _StarSummary extends StatelessWidget {
+class _StarSummary extends ConsumerWidget {
   final PlayerProfile profile;
   final RewardsState rewards;
   const _StarSummary({required this.profile, required this.rewards});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final total = profile.stars;
     final available = rewards.availableStars(total);
@@ -96,7 +99,7 @@ class _StarSummary extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
+        gradient: colors.primaryGradient,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -108,11 +111,11 @@ class _StarSummary extends StatelessWidget {
                   profile.name.isNotEmpty
                       ? profile.name
                       : l10n.defaultPlayerName,
-                  style: AppTextStyles.headline3),
+                  style: AppTextStyles.headline3(colors)),
               const SizedBox(height: 4),
               Text(AgeBandStrings.name(context, profile.ageBand),
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.textSecondary)),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.textSecondary)),
             ],
           ),
           const Spacer(),
@@ -120,16 +123,16 @@ class _StarSummary extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(l10n.starsCount(total),
-                  style: AppTextStyles.headline2
-                      .copyWith(color: AppColors.accentYellow)),
+                  style: AppTextStyles.headline2(colors)
+                      .copyWith(color: colors.accentYellow)),
               Text(l10n.totalEarnedLabel,
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.textSecondary)),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.textSecondary)),
               if (showSplit) ...[
                 const SizedBox(height: 4),
                 Text(l10n.availableStarsLabel(available),
-                    style: AppTextStyles.label
-                        .copyWith(color: AppColors.textPrimary)),
+                    style: AppTextStyles.label(colors)
+                        .copyWith(color: colors.textPrimary)),
               ],
             ],
           ),
@@ -149,6 +152,7 @@ class _RewardsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -156,7 +160,7 @@ class _RewardsSection extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(l10n.navRewards, style: AppTextStyles.headline3),
+            Text(l10n.navRewards, style: AppTextStyles.headline3(colors)),
             if (rewards.rewards.length < 5)
               GestureDetector(
                 onTap: () => CreateRewardSheet.show(context),
@@ -164,14 +168,14 @@ class _RewardsSection extends ConsumerWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.2),
+                    color: colors.primary.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                        color: AppColors.primaryLight.withValues(alpha: 0.5)),
+                        color: colors.primaryLight.withValues(alpha: 0.5)),
                   ),
                   child: Text(l10n.addButton,
-                      style: AppTextStyles.label
-                          .copyWith(color: AppColors.primaryLight)),
+                      style: AppTextStyles.label(colors)
+                          .copyWith(color: colors.primaryLight)),
                 ),
               ),
           ],
@@ -200,7 +204,7 @@ class _RewardsSection extends ConsumerWidget {
   }
 }
 
-class _RewardRow extends StatelessWidget {
+class _RewardRow extends ConsumerWidget {
   final Reward reward;
   final int availableStars;
   final VoidCallback onRedeem;
@@ -216,19 +220,20 @@ class _RewardRow extends StatelessWidget {
   bool get _achieved => availableStars >= reward.starCost;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
       decoration: BoxDecoration(
         color: reward.isRedeemed
-            ? AppColors.bgCard.withValues(alpha: 0.5)
-            : AppColors.bgCard,
+            ? colors.bgCard.withValues(alpha: 0.5)
+            : colors.bgCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: _achieved && !reward.isRedeemed
-              ? AppColors.accentYellow.withValues(alpha: 0.5)
-              : AppColors.bgCardLight,
+              ? colors.accentYellow.withValues(alpha: 0.5)
+              : colors.bgCardLight,
         ),
       ),
       child: Row(
@@ -241,12 +246,12 @@ class _RewardRow extends StatelessWidget {
               children: [
                 Text(
                   reward.name,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body(colors).copyWith(
                     decoration:
                         reward.isRedeemed ? TextDecoration.lineThrough : null,
                     color: reward.isRedeemed
-                        ? AppColors.textMuted
-                        : AppColors.textPrimary,
+                        ? colors.textMuted
+                        : colors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -254,10 +259,10 @@ class _RewardRow extends StatelessWidget {
                   reward.isRedeemed
                       ? l10n.redeemedCheck
                       : l10n.starsProgress(availableStars, reward.starCost),
-                  style: AppTextStyles.label.copyWith(
+                  style: AppTextStyles.label(colors).copyWith(
                     color: reward.isRedeemed
-                        ? AppColors.accentGreen
-                        : AppColors.textMuted,
+                        ? colors.accentGreen
+                        : colors.textMuted,
                   ),
                 ),
               ],
@@ -267,13 +272,13 @@ class _RewardRow extends StatelessWidget {
             TextButton(
               onPressed: onRedeem,
               child: Text(l10n.redeemButton,
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.accentGreen)),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.accentGreen)),
             )
           else
             IconButton(
-              icon: const Icon(Icons.delete_outline_rounded,
-                  color: AppColors.textMuted, size: 20),
+              icon: Icon(Icons.delete_outline_rounded,
+                  color: colors.textMuted, size: 20),
               onPressed: onDelete,
             ),
         ],
@@ -296,6 +301,7 @@ class _TopicSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final available = _topicsByBand[profile.ageBand];
     final enabled = profile.enabledTopics;
@@ -303,40 +309,40 @@ class _TopicSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.practiceTopicsTitle, style: AppTextStyles.headline3),
+        Text(l10n.practiceTopicsTitle, style: AppTextStyles.headline3(colors)),
         const SizedBox(height: 4),
         Text(
           l10n.practiceTopicsSubtitle,
-          style: AppTextStyles.label.copyWith(color: AppColors.textMuted),
+          style: AppTextStyles.label(colors).copyWith(color: colors.textMuted),
         ),
         const SizedBox(height: 12),
         ...available.map((topic) {
           final isOn = enabled.contains(topic);
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            decoration: BoxDecoration(
-              color: AppColors.bgCard,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.bgCardLight),
-            ),
-            child: SwitchListTile(
-              value: isOn,
-              activeThumbColor: AppColors.primaryLight,
-              title: Text(TopicStrings.label(context, topic),
-                  style: AppTextStyles.body),
-              onChanged: (v) {
-                // Always keep at least one topic enabled
-                final newSet = Set<String>.from(enabled);
-                if (!v && newSet.length == 1) return;
-                if (v) {
-                  newSet.add(topic);
-                } else {
-                  newSet.remove(topic);
-                }
-                ref
-                    .read(playerProfileProvider.notifier)
-                    .setEnabledTopics(newSet);
-              },
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: AppCard(
+              radius: 14,
+              padding: EdgeInsets.zero,
+              child: SwitchListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                value: isOn,
+                activeThumbColor: colors.primaryLight,
+                title: Text(TopicStrings.label(context, topic),
+                    style: AppTextStyles.body(colors)),
+                onChanged: (v) {
+                  // Always keep at least one topic enabled
+                  final newSet = Set<String>.from(enabled);
+                  if (!v && newSet.length == 1) return;
+                  if (v) {
+                    newSet.add(topic);
+                  } else {
+                    newSet.remove(topic);
+                  }
+                  ref
+                      .read(playerProfileProvider.notifier)
+                      .setEnabledTopics(newSet);
+                },
+              ),
             ),
           );
         }),
@@ -352,23 +358,24 @@ class _VisualAidsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final enabled = ref.watch(visualAidsEnabledProvider);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        color: AppColors.bgCard,
+        color: colors.bgCard,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.bgCardLight),
+        border: Border.all(color: colors.bgCardLight),
       ),
       child: SwitchListTile(
         value: enabled,
-        activeThumbColor: AppColors.primaryLight,
-        title: Text(l10n.visualAidsTitle, style: AppTextStyles.body),
+        activeThumbColor: colors.primaryLight,
+        title: Text(l10n.visualAidsTitle, style: AppTextStyles.body(colors)),
         subtitle: Text(
           l10n.visualAidsSubtitle,
-          style: AppTextStyles.label.copyWith(color: AppColors.textMuted),
+          style: AppTextStyles.label(colors).copyWith(color: colors.textMuted),
         ),
         onChanged: (v) =>
             ref.read(visualAidsEnabledProvider.notifier).setEnabled(v),
@@ -379,17 +386,18 @@ class _VisualAidsSection extends ConsumerWidget {
 
 // ── Session log ────────────────────────────────────────────────────────────
 
-class _SessionSection extends StatelessWidget {
+class _SessionSection extends ConsumerWidget {
   final List<SessionLog> logs;
   const _SessionSection({required this.logs});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(l10n.recentSessionsTitle, style: AppTextStyles.headline3),
+        Text(l10n.recentSessionsTitle, style: AppTextStyles.headline3(colors)),
         const SizedBox(height: 12),
         if (logs.isEmpty)
           _EmptyState(
@@ -403,22 +411,20 @@ class _SessionSection extends StatelessWidget {
   }
 }
 
-class _SessionRow extends StatelessWidget {
+class _SessionRow extends ConsumerWidget {
   final SessionLog log;
   const _SessionRow({required this.log});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final pct = (log.accuracy * 100).round();
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: AppCard(
+      radius: 14,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.bgCardLight),
-      ),
       child: Row(
         children: [
           Text(log.isPractice ? '🎯' : '⚡',
@@ -428,46 +434,43 @@ class _SessionRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(log.date, style: AppTextStyles.label),
+                Text(log.date, style: AppTextStyles.label(colors)),
                 const SizedBox(height: 2),
                 Text(
                   l10n.sessionCorrectAndAccuracy(
                       log.correctCount, log.totalAnswered, pct),
-                  style: AppTextStyles.body
-                      .copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyles.body(colors)
+                      .copyWith(color: colors.textSecondary),
                 ),
               ],
             ),
           ),
           Text(l10n.starsEarnedPrefix(log.starsEarned),
-              style:
-                  AppTextStyles.label.copyWith(color: AppColors.accentYellow)),
+              style: AppTextStyles.label(colors)
+                  .copyWith(color: colors.accentYellow)),
         ],
+      ),
       ),
     );
   }
 }
 
-class _EmptyState extends StatelessWidget {
+class _EmptyState extends ConsumerWidget {
   final String icon;
   final String message;
   const _EmptyState({required this.icon, required this.message});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
+    return AppCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.bgCardLight),
-      ),
       child: Column(
         children: [
           Text(icon, style: const TextStyle(fontSize: 36)),
           const SizedBox(height: 12),
           Text(message,
-              style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
+              style: AppTextStyles.body(colors).copyWith(color: colors.textMuted),
               textAlign: TextAlign.center),
         ],
       ),

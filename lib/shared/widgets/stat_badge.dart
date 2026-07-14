@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/services/theme_mode_provider.dart';
 import '../../core/theme/app_text_styles.dart';
+import 'app_card.dart';
 
-class StatBadge extends StatelessWidget {
+class StatBadge extends ConsumerWidget {
   final String icon;
   final String label;
   final String value;
@@ -17,14 +19,10 @@ class StatBadge extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
+    return AppCard(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.bgCardLight, width: 1.5),
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -32,12 +30,12 @@ class StatBadge extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: AppTextStyles.statNumber.copyWith(
-              color: valueColor ?? AppColors.textPrimary,
+            style: AppTextStyles.statNumber(colors).copyWith(
+              color: valueColor ?? colors.textPrimary,
             ),
           ),
           const SizedBox(height: 2),
-          Text(label, style: AppTextStyles.label),
+          Text(label, style: AppTextStyles.label(colors)),
         ],
       ),
     );

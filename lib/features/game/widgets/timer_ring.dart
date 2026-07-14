@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
 
-class TimerRing extends StatelessWidget {
+class TimerRing extends ConsumerWidget {
   final int secondsRemaining;
   final int totalSeconds;
   final double size;
@@ -20,11 +22,13 @@ class TimerRing extends StatelessWidget {
       ? 0.0
       : (secondsRemaining / totalSeconds).clamp(0.0, 1.0);
 
-  Color get _color =>
-      secondsRemaining < 5 ? AppColors.warning : AppColors.timerCool;
+  Color _color(AppPalette c) =>
+      secondsRemaining < 5 ? c.warning : c.timerCool;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
+    final color = _color(colors);
     return SizedBox(
       width: size,
       height: size,
@@ -33,18 +37,22 @@ class TimerRing extends StatelessWidget {
         children: [
           CustomPaint(
             size: Size(size, size),
-            painter: _ArcPainter(progress: _progress, color: _color),
+            painter: _ArcPainter(
+              progress: _progress,
+              color: color,
+              trackColor: colors.bgCardLight,
+            ),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 '$secondsRemaining',
-                style: AppTextStyles.headline3.copyWith(color: _color),
+                style: AppTextStyles.headline3(colors).copyWith(color: color),
               ),
               Text(
                 AppLocalizations.of(context)!.secondsLabel,
-                style: AppTextStyles.label.copyWith(fontSize: 11),
+                style: AppTextStyles.label(colors).copyWith(fontSize: 11),
               ),
             ],
           ),
@@ -57,8 +65,13 @@ class TimerRing extends StatelessWidget {
 class _ArcPainter extends CustomPainter {
   final double progress;
   final Color color;
+  final Color trackColor;
 
-  const _ArcPainter({required this.progress, required this.color});
+  const _ArcPainter({
+    required this.progress,
+    required this.color,
+    required this.trackColor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -66,7 +79,7 @@ class _ArcPainter extends CustomPainter {
     final radius = (size.shortestSide - 10) / 2;
 
     final trackPaint = Paint()
-      ..color = AppColors.bgCardLight
+      ..color = trackColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5;
     canvas.drawCircle(center, radius, trackPaint);
@@ -88,5 +101,7 @@ class _ArcPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_ArcPainter old) =>
-      old.progress != progress || old.color != color;
+      old.progress != progress ||
+      old.color != color ||
+      old.trackColor != trackColor;
 }

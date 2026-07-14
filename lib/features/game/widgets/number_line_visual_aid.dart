@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 
 /// Static number-line visual aid for addition/subtraction, Grade 1 (ageBand
 /// 0) only. Shows tick marks 0..[maxValue], a hop arc from [start] to [end]
 /// (backwards for subtraction), and markers at both ends. Pure CustomPainter
 /// — no animation, per the "static widgets only" constraint.
-class NumberLineVisualAid extends StatelessWidget {
+class NumberLineVisualAid extends ConsumerWidget {
   final int start;
   final int end;
   final int maxValue;
@@ -19,7 +20,8 @@ class NumberLineVisualAid extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return SizedBox(
       width: double.infinity,
       height: 64,
@@ -28,11 +30,11 @@ class NumberLineVisualAid extends StatelessWidget {
           start: start,
           end: end,
           maxValue: maxValue,
-          trackColor: AppColors.bgCardLight,
-          hopColor: AppColors.primaryLight,
-          startColor: AppColors.accentCoral,
-          endColor: AppColors.accentYellow,
-          labelStyle: AppTextStyles.label.copyWith(fontSize: 9),
+          trackColor: colors.bgCardLight,
+          hopColor: colors.primaryLight,
+          startColor: colors.accentCoral,
+          endColor: colors.accentYellow,
+          labelStyle: AppTextStyles.label(colors).copyWith(fontSize: 9),
         ),
       ),
     );

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/persistence/player_provider.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../shared/widgets/app_card.dart';
 import '../models/reward.dart';
 import '../providers/rewards_provider.dart';
 import '../widgets/reward_progress_bar.dart';
@@ -13,6 +14,7 @@ class RewardsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final profile = ref.watch(playerProfileProvider);
     final rewards = ref.watch(rewardsProvider);
@@ -24,12 +26,12 @@ class RewardsScreen extends ConsumerWidget {
     final redeemed = rewards.redeemedRewards;
 
     return Scaffold(
-      backgroundColor: AppColors.bgDeep,
+      backgroundColor: colors.bgDeep,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const BackButton(color: AppColors.textSecondary),
-        title: Text(l10n.rewardsTitle, style: AppTextStyles.headline3),
+        leading: BackButton(color: colors.textSecondary),
+        title: Text(l10n.rewardsTitle, style: AppTextStyles.headline3(colors)),
         centerTitle: true,
       ),
       body: ListView(
@@ -40,7 +42,8 @@ class RewardsScreen extends ConsumerWidget {
           if (rewards.rewards.isEmpty)
             _EmptyState(icon: '🎁', message: l10n.rewardsNoneConfigured)
           else ...[
-            Text(l10n.rewardsReadySectionTitle, style: AppTextStyles.headline3),
+            Text(l10n.rewardsReadySectionTitle,
+                style: AppTextStyles.headline3(colors)),
             const SizedBox(height: 12),
             if (ready.isEmpty)
               _EmptyState(icon: '🎁', message: l10n.rewardsNoneReadyMessage)
@@ -51,7 +54,7 @@ class RewardsScreen extends ConsumerWidget {
                   )),
             const SizedBox(height: 24),
             Text(l10n.rewardsUpcomingSectionTitle,
-                style: AppTextStyles.headline3),
+                style: AppTextStyles.headline3(colors)),
             const SizedBox(height: 12),
             if (upcoming.isEmpty)
               _EmptyState(icon: '⭐', message: l10n.rewardsNoUpcomingMessage)
@@ -62,7 +65,7 @@ class RewardsScreen extends ConsumerWidget {
                   )),
             const SizedBox(height: 24),
             Text(l10n.rewardsHistorySectionTitle,
-                style: AppTextStyles.headline3),
+                style: AppTextStyles.headline3(colors)),
             const SizedBox(height: 12),
             if (redeemed.isEmpty)
               _EmptyState(icon: '✅', message: l10n.rewardsNoHistoryMessage)
@@ -81,20 +84,21 @@ class RewardsScreen extends ConsumerWidget {
 
 // ── Star summary ───────────────────────────────────────────────────────────
 
-class _StarSummaryCard extends StatelessWidget {
+class _StarSummaryCard extends ConsumerWidget {
   final int total;
   final int available;
   const _StarSummaryCard({required this.total, required this.available});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final showSplit = available != total;
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
+        gradient: colors.primaryGradient,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -103,18 +107,18 @@ class _StarSummaryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(l10n.starsCount(total),
-                  style: AppTextStyles.headline2
-                      .copyWith(color: AppColors.accentYellow)),
+                  style: AppTextStyles.headline2(colors)
+                      .copyWith(color: colors.accentYellow)),
               Text(l10n.totalEarnedLabel,
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.textSecondary)),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.textSecondary)),
             ],
           ),
           const Spacer(),
           if (showSplit)
             Text(l10n.availableStarsLabel(available),
-                style: AppTextStyles.body
-                    .copyWith(color: AppColors.textPrimary)),
+                style: AppTextStyles.body(colors)
+                    .copyWith(color: colors.textPrimary)),
         ],
       ),
     );
@@ -123,21 +127,17 @@ class _StarSummaryCard extends StatelessWidget {
 
 // ── Ready to claim ─────────────────────────────────────────────────────────
 
-class _ReadyRewardRow extends StatelessWidget {
+class _ReadyRewardRow extends ConsumerWidget {
   final Reward reward;
   const _ReadyRewardRow({required this.reward});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-            color: AppColors.accentYellow.withValues(alpha: 0.5), width: 1.5),
-      ),
+      accentColor: colors.accentYellow.withValues(alpha: 0.5),
       child: Row(
         children: [
           Text(reward.emoji, style: const TextStyle(fontSize: 28)),
@@ -146,25 +146,25 @@ class _ReadyRewardRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(reward.name, style: AppTextStyles.body),
+                Text(reward.name, style: AppTextStyles.body(colors)),
                 const SizedBox(height: 2),
                 Text(l10n.rewardsAskParentToRedeem,
-                    style: AppTextStyles.label
-                        .copyWith(color: AppColors.textMuted)),
+                    style: AppTextStyles.label(colors)
+                        .copyWith(color: colors.textMuted)),
               ],
             ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
-              color: AppColors.accentYellow.withValues(alpha: 0.15),
+              color: colors.accentYellow.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
-              border:
-                  Border.all(color: AppColors.accentYellow.withValues(alpha: 0.5)),
+              border: Border.all(
+                  color: colors.accentYellow.withValues(alpha: 0.5)),
             ),
             child: Text(l10n.rewardReadyBadge,
-                style:
-                    AppTextStyles.label.copyWith(color: AppColors.accentYellow)),
+                style: AppTextStyles.label(colors)
+                    .copyWith(color: colors.accentYellow)),
           ),
         ],
       ),
@@ -174,19 +174,20 @@ class _ReadyRewardRow extends StatelessWidget {
 
 // ── Redeemed history ────────────────────────────────────────────────────────
 
-class _RedeemedRewardRow extends StatelessWidget {
+class _RedeemedRewardRow extends ConsumerWidget {
   final Reward reward;
   const _RedeemedRewardRow({required this.reward});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       decoration: BoxDecoration(
-        color: AppColors.bgCard.withValues(alpha: 0.5),
+        color: colors.bgCard.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.bgCardLight),
+        border: Border.all(color: colors.bgCardLight),
       ),
       child: Row(
         children: [
@@ -198,9 +199,9 @@ class _RedeemedRewardRow extends StatelessWidget {
               children: [
                 Text(
                   reward.name,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body(colors).copyWith(
                     decoration: TextDecoration.lineThrough,
-                    color: AppColors.textMuted,
+                    color: colors.textMuted,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -208,8 +209,8 @@ class _RedeemedRewardRow extends StatelessWidget {
                   reward.redeemedAt != null
                       ? l10n.rewardsRedeemedOnLabel(reward.redeemedAt!)
                       : l10n.redeemedCheck,
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.accentGreen),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.accentGreen),
                 ),
               ],
             ),
@@ -222,26 +223,22 @@ class _RedeemedRewardRow extends StatelessWidget {
 
 // ── Empty state ─────────────────────────────────────────────────────────────
 
-class _EmptyState extends StatelessWidget {
+class _EmptyState extends ConsumerWidget {
   final String icon;
   final String message;
   const _EmptyState({required this.icon, required this.message});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
+    return AppCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.bgCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.bgCardLight),
-      ),
       child: Column(
         children: [
           Text(icon, style: const TextStyle(fontSize: 36)),
           const SizedBox(height: 12),
           Text(message,
-              style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
+              style: AppTextStyles.body(colors).copyWith(color: colors.textMuted),
               textAlign: TextAlign.center),
         ],
       ),

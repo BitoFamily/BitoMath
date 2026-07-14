@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_provider.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../l10n/app_localizations.dart';
@@ -57,10 +57,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
+        decoration: BoxDecoration(gradient: colors.backgroundGradient),
         child: Center(
           child: FadeTransition(
             opacity: _fadeAnim,
@@ -74,10 +75,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     height: 100,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: AppColors.primaryGradient,
+                      gradient: colors.primaryGradient,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.6),
+                          color: colors.primary.withValues(alpha: 0.6),
                           blurRadius: 40,
                           spreadRadius: 8,
                         ),
@@ -90,11 +91,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   const SizedBox(height: 24),
                   Text(
                     AppConstants.appName,
-                    style: AppTextStyles.display.copyWith(
-                      color: AppColors.accentYellow,
+                    style: AppTextStyles.display(colors).copyWith(
+                      color: colors.accentYellow,
                       shadows: [
                         Shadow(
-                          color: AppColors.primaryLight.withValues(alpha: 0.7),
+                          color: colors.primaryLight.withValues(alpha: 0.7),
                           blurRadius: 24,
                           offset: const Offset(0, 4),
                         ),
@@ -104,8 +105,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   const SizedBox(height: 8),
                   Text(
                     l10n.appTagline,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.textSecondary,
+                    style: AppTextStyles.bodyLarge(colors).copyWith(
+                      color: colors.textSecondary,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -121,14 +122,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 }
 
-class _LoadingDots extends StatefulWidget {
+class _LoadingDots extends ConsumerStatefulWidget {
   const _LoadingDots();
 
   @override
-  State<_LoadingDots> createState() => _LoadingDotsState();
+  ConsumerState<_LoadingDots> createState() => _LoadingDotsState();
 }
 
-class _LoadingDotsState extends State<_LoadingDots>
+class _LoadingDotsState extends ConsumerState<_LoadingDots>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
 
@@ -149,6 +150,7 @@ class _LoadingDotsState extends State<_LoadingDots>
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appPaletteProvider);
     return AnimatedBuilder(
       animation: _ctrl,
       builder: (context, _) {
@@ -165,9 +167,9 @@ class _LoadingDotsState extends State<_LoadingDots>
                 child: Container(
                   width: 8,
                   height: 8,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.primaryLight,
+                    color: colors.primaryLight,
                   ),
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/persistence/player_provider.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
@@ -12,16 +13,17 @@ class CompanionSelectScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final profile = ref.watch(playerProfileProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.bgDeep,
+      backgroundColor: colors.bgDeep,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const BackButton(color: AppColors.textSecondary),
+        leading: BackButton(color: colors.textSecondary),
         title: Text(AppLocalizations.of(context)!.companionsTitle,
-            style: AppTextStyles.headline3),
+            style: AppTextStyles.headline3(colors)),
         centerTitle: true,
       ),
       body: GridView.builder(
@@ -50,7 +52,7 @@ class CompanionSelectScreen extends ConsumerWidget {
                     Navigator.pop(context);
                   }
                 : () {
-                    _showLockedToast(context, companion.unlockStars);
+                    _showLockedToast(context, colors, companion.unlockStars);
                   },
           );
         },
@@ -58,7 +60,8 @@ class CompanionSelectScreen extends ConsumerWidget {
     );
   }
 
-  void _showLockedToast(BuildContext context, int starsNeeded) {
+  void _showLockedToast(
+      BuildContext context, AppPalette colors, int starsNeeded) {
     final l10n = AppLocalizations.of(context)!;
     final message = starsNeeded >= 9999
         ? l10n.companionComingSoonToast
@@ -67,9 +70,9 @@ class CompanionSelectScreen extends ConsumerWidget {
       SnackBar(
         content: Text(
           message,
-          style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+          style: AppTextStyles.body(colors).copyWith(color: colors.textPrimary),
         ),
-        backgroundColor: AppColors.bgMid,
+        backgroundColor: colors.bgMid,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -78,7 +81,7 @@ class CompanionSelectScreen extends ConsumerWidget {
   }
 }
 
-class _CompanionCard extends StatelessWidget {
+class _CompanionCard extends ConsumerWidget {
   final CompanionData companion;
   final bool unlocked;
   final bool selected;
@@ -94,23 +97,23 @@ class _CompanionCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: selected
-              ? AppColors.characterPrimary[companion.index]
-                  .withValues(alpha: 0.2)
-              : AppColors.bgCard,
+              ? colors.characterPrimary[companion.index].withValues(alpha: 0.2)
+              : colors.bgCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: selected
-                ? AppColors.characterPrimary[companion.index]
+                ? colors.characterPrimary[companion.index]
                 : unlocked
-                    ? AppColors.bgCardLight
-                    : AppColors.bgCardLight.withValues(alpha: 0.5),
+                    ? colors.bgCardLight
+                    : colors.bgCardLight.withValues(alpha: 0.5),
             width: selected ? 2 : 1.5,
           ),
         ),
@@ -157,14 +160,12 @@ class _CompanionCard extends StatelessWidget {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  AppColors.characterPrimary[companion.index],
-                                  AppColors.characterSecondary[companion.index],
+                                  colors.characterPrimary[companion.index],
+                                  colors.characterSecondary[companion.index],
                                 ],
                               )
-                            : const LinearGradient(colors: [
-                                AppColors.bgCardLight,
-                                AppColors.bgMid
-                              ]),
+                            : LinearGradient(
+                                colors: [colors.bgCardLight, colors.bgMid]),
                       ),
                       child: Center(
                         child: Text(
@@ -179,49 +180,48 @@ class _CompanionCard extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     companion.name,
-                    style: AppTextStyles.headline3.copyWith(
-                      color: unlocked
-                          ? AppColors.textPrimary
-                          : AppColors.textMuted,
+                    style: AppTextStyles.headline3(colors).copyWith(
+                      color: unlocked ? colors.textPrimary : colors.textMuted,
                     ),
                   ),
                   const SizedBox(height: 4),
                   if (!unlocked && companion.unlockStars >= 9999)
                     Text(
                       AppLocalizations.of(context)!.companionComingSoonBadge,
-                      style: AppTextStyles.label
-                          .copyWith(color: AppColors.textMuted),
+                      style: AppTextStyles.label(colors)
+                          .copyWith(color: colors.textMuted),
                     )
                   else if (!unlocked)
                     _UnlockProgress(
                       currentStars: currentStars,
                       goalStars: companion.unlockStars,
-                      accent: AppColors.characterPrimary[companion.index],
+                      accent: colors.characterPrimary[companion.index],
+                      colors: colors,
                     )
                   else if (selected)
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
-                        color: AppColors.characterPrimary[companion.index]
+                        color: colors.characterPrimary[companion.index]
                             .withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         AppLocalizations.of(context)!.companionActiveBadge,
-                        style: AppTextStyles.label.copyWith(
-                            color: AppColors.characterPrimary[companion.index]),
+                        style: AppTextStyles.label(colors).copyWith(
+                            color: colors.characterPrimary[companion.index]),
                       ),
                     ),
                 ],
               ),
             ),
             if (!unlocked)
-              const Positioned(
+              Positioned(
                 top: 10,
                 right: 10,
-                child: Icon(Icons.lock_rounded,
-                    color: AppColors.textMuted, size: 18),
+                child:
+                    Icon(Icons.lock_rounded, color: colors.textMuted, size: 18),
               ),
           ],
         ),
@@ -234,11 +234,13 @@ class _UnlockProgress extends StatelessWidget {
   final int currentStars;
   final int goalStars;
   final Color accent;
+  final AppPalette colors;
 
   const _UnlockProgress({
     required this.currentStars,
     required this.goalStars,
     required this.accent,
+    required this.colors,
   });
 
   double get _progress =>
@@ -254,7 +256,7 @@ class _UnlockProgress extends StatelessWidget {
             currentStars.clamp(0, goalStars),
             goalStars,
           ),
-          style: AppTextStyles.label.copyWith(color: AppColors.textMuted),
+          style: AppTextStyles.label(colors).copyWith(color: colors.textMuted),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 4),
@@ -263,7 +265,7 @@ class _UnlockProgress extends StatelessWidget {
           child: LinearProgressIndicator(
             value: _progress,
             minHeight: 5,
-            backgroundColor: AppColors.bgCardLight,
+            backgroundColor: colors.bgCardLight,
             valueColor: AlwaysStoppedAnimation<Color>(accent),
           ),
         ),

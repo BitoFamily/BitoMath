@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_button.dart';
@@ -11,9 +11,10 @@ class CreateRewardSheet extends ConsumerStatefulWidget {
   const CreateRewardSheet({super.key});
 
   static Future<void> show(BuildContext context) {
+    final colors = ProviderScope.containerOf(context).read(appPaletteProvider);
     return showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.bgMid,
+      backgroundColor: colors.bgMid,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
@@ -65,6 +66,7 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appPaletteProvider);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final l10n = AppLocalizations.of(context)!;
     return Padding(
@@ -79,18 +81,19 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.textMuted,
+                color: colors.textMuted,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
           ),
           const SizedBox(height: 20),
           Text(l10n.newRewardTitle,
-              style: AppTextStyles.headline2, textAlign: TextAlign.center),
+              style: AppTextStyles.headline2(colors),
+              textAlign: TextAlign.center),
           const SizedBox(height: 20),
 
           // Emoji picker
-          Text(l10n.pickAnIconLabel, style: AppTextStyles.label),
+          Text(l10n.pickAnIconLabel, style: AppTextStyles.label(colors)),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -103,13 +106,11 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
                   height: 44,
                   decoration: BoxDecoration(
                     color: selected
-                        ? AppColors.primary.withValues(alpha: 0.25)
-                        : AppColors.bgCard,
+                        ? colors.primary.withValues(alpha: 0.25)
+                        : colors.bgCard,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: selected
-                          ? AppColors.primaryLight
-                          : AppColors.bgCardLight,
+                      color: selected ? colors.primaryLight : colors.bgCardLight,
                       width: 2,
                     ),
                   ),
@@ -123,27 +124,26 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
           const SizedBox(height: 20),
 
           // Reward name
-          Text(l10n.rewardNameLabel, style: AppTextStyles.label),
+          Text(l10n.rewardNameLabel, style: AppTextStyles.label(colors)),
           const SizedBox(height: 8),
           TextField(
             controller: _nameCtrl,
             textCapitalization: TextCapitalization.sentences,
-            style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+            style: AppTextStyles.body(colors).copyWith(color: colors.textPrimary),
             decoration: InputDecoration(
               hintText: l10n.rewardNameHint,
-              hintStyle: AppTextStyles.body.copyWith(
-                color: AppColors.textMuted.withValues(alpha: 0.5),
+              hintStyle: AppTextStyles.body(colors).copyWith(
+                color: colors.textMuted.withValues(alpha: 0.5),
               ),
               filled: true,
-              fillColor: AppColors.bgCard,
+              fillColor: colors.bgCard,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide:
-                    const BorderSide(color: AppColors.primaryLight, width: 2),
+                borderSide: BorderSide(color: colors.primaryLight, width: 2),
               ),
             ),
           ),
@@ -153,10 +153,10 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.starCostLabel, style: AppTextStyles.label),
+              Text(l10n.starCostLabel, style: AppTextStyles.label(colors)),
               Text(l10n.starsCount(_starCost),
-                  style: AppTextStyles.headline3
-                      .copyWith(color: AppColors.accentYellow)),
+                  style: AppTextStyles.headline3(colors)
+                      .copyWith(color: colors.accentYellow)),
             ],
           ),
           Slider(
@@ -164,16 +164,16 @@ class _CreateRewardSheetState extends ConsumerState<CreateRewardSheet> {
             min: 25,
             max: 500,
             divisions: 19,
-            activeColor: AppColors.primaryLight,
-            inactiveColor: AppColors.bgCardLight,
+            activeColor: colors.primaryLight,
+            inactiveColor: colors.bgCardLight,
             onChanged: (v) => setState(() => _starCost = v.round()),
           ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('25', style: AppTextStyles.label),
-              Text('500', style: AppTextStyles.label),
+              Text('25', style: AppTextStyles.label(colors)),
+              Text('500', style: AppTextStyles.label(colors)),
             ],
           ),
           const SizedBox(height: 24),

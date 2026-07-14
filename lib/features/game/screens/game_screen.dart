@@ -7,6 +7,7 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/navigation/app_router.dart';
 import '../../../core/persistence/player_provider.dart';
 import '../../../core/services/sound_service.dart';
+import '../../../core/services/theme_mode_provider.dart';
 import '../../../core/services/visual_aids_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -16,6 +17,7 @@ import '../models/question_config.dart';
 import '../providers/game_provider.dart';
 import '../widgets/answer_button.dart';
 import '../widgets/companion_reaction.dart';
+import '../widgets/game_background_texture.dart';
 import '../widgets/timer_ring.dart';
 import '../widgets/visual_aid.dart';
 
@@ -31,6 +33,7 @@ class GameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final profile = ref.read(playerProfileProvider);
     final qConfig = QuestionConfig(
       ageBand: ageBand,
@@ -74,26 +77,28 @@ class GameScreen extends ConsumerWidget {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          backgroundColor: AppColors.bgMid,
+          backgroundColor: colors.bgMid,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          title: Text(l10n.leaveGameTitle, style: AppTextStyles.headline3),
+          title:
+              Text(l10n.leaveGameTitle, style: AppTextStyles.headline3(colors)),
           content: Text(
             l10n.leaveGameBody,
-            style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.body(colors)
+                .copyWith(color: colors.textSecondary),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text(l10n.keepPlayingButton,
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.primaryLight)),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.primaryLight)),
             ),
             TextButton(
               onPressed: () => context.go(Routes.home),
               child: Text(l10n.exitButton,
-                  style: AppTextStyles.label
-                      .copyWith(color: AppColors.accentCoral)),
+                  style: AppTextStyles.label(colors)
+                      .copyWith(color: colors.accentCoral)),
             ),
           ],
         ),
@@ -102,58 +107,63 @@ class GameScreen extends ConsumerWidget {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.backgroundGradient),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: confirmExit,
-                    behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.bgCard,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: AppColors.bgCardLight),
+        decoration: BoxDecoration(gradient: colors.backgroundGradient),
+        child: Stack(
+          children: [
+            const Positioned.fill(child: GameBackgroundTexture()),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 12),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: confirmExit,
+                        behavior: HitTestBehavior.opaque,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: colors.bgCard,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: colors.bgCardLight),
+                          ),
+                          child: Icon(Icons.close_rounded,
+                              color: colors.textMuted, size: 20),
+                        ),
                       ),
-                      child: const Icon(Icons.close_rounded,
-                          color: AppColors.textMuted, size: 20),
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                    _HUD(state: state),
+                    const SizedBox(height: 16),
+                    _AgeBandChip(ageBand: ageBand, isPractice: isPractice),
+                    const Spacer(),
+                    _QuestionDisplay(state: state, showVisualAid: showVisualAid),
+                    Expanded(child: CompanionReaction(state: state)),
+                    _AnswerGrid(
+                      state: state,
+                      onTap: (i) {
+                        final q = state.currentQuestion;
+                        if (q != null) {
+                          if (q.choices[i] == q.correctAnswer) {
+                            HapticFeedback.lightImpact();
+                            SoundService.instance.correct();
+                          } else {
+                            HapticFeedback.mediumImpact();
+                            SoundService.instance.wrong();
+                          }
+                        }
+                        notifier.answerQuestion(i);
+                      },
+                    ),
+                    const SizedBox(height: 28),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                _HUD(state: state),
-                const SizedBox(height: 16),
-                _AgeBandChip(ageBand: ageBand, isPractice: isPractice),
-                const Spacer(),
-                _QuestionDisplay(state: state, showVisualAid: showVisualAid),
-                Expanded(child: CompanionReaction(state: state)),
-                _AnswerGrid(
-                  state: state,
-                  onTap: (i) {
-                    final q = state.currentQuestion;
-                    if (q != null) {
-                      if (q.choices[i] == q.correctAnswer) {
-                        HapticFeedback.lightImpact();
-                        SoundService.instance.correct();
-                      } else {
-                        HapticFeedback.mediumImpact();
-                        SoundService.instance.wrong();
-                      }
-                    }
-                    notifier.answerQuestion(i);
-                  },
-                ),
-                const SizedBox(height: 28),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -162,12 +172,13 @@ class GameScreen extends ConsumerWidget {
 
 // ── HUD ────────────────────────────────────────────────────────────────────
 
-class _HUD extends StatelessWidget {
+class _HUD extends ConsumerWidget {
   final GameState state;
   const _HUD({required this.state});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,13 +195,15 @@ class _HUD extends StatelessWidget {
             icon: '⚡',
             label: l10n.scoreLabel,
             value: '${state.score}',
-            color: AppColors.accentYellow),
+            color: colors.accentYellow,
+            colors: colors),
         const SizedBox(width: 20),
         _HUDStat(
             icon: AppConstants.iconStreak,
             label: l10n.statStreak,
             value: '${state.streak}',
-            color: AppColors.accentCoral),
+            color: colors.accentCoral,
+            colors: colors),
       ],
     );
   }
@@ -201,11 +214,13 @@ class _HUDStat extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
+  final AppPalette colors;
   const _HUDStat(
       {required this.icon,
       required this.label,
       required this.value,
-      required this.color});
+      required this.color,
+      required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -214,20 +229,22 @@ class _HUDStat extends StatelessWidget {
       children: [
         Text(icon, style: const TextStyle(fontSize: 20)),
         const SizedBox(height: 2),
-        Text(value, style: AppTextStyles.headline3.copyWith(color: color)),
-        Text(label, style: AppTextStyles.label),
+        Text(value,
+            style: AppTextStyles.headline3(colors).copyWith(color: color)),
+        Text(label, style: AppTextStyles.label(colors)),
       ],
     );
   }
 }
 
-class _AgeBandChip extends StatelessWidget {
+class _AgeBandChip extends ConsumerWidget {
   final int ageBand;
   final bool isPractice;
   const _AgeBandChip({required this.ageBand, required this.isPractice});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final l10n = AppLocalizations.of(context)!;
     final label =
         '${AgeBandStrings.name(context, ageBand)}${isPractice ? l10n.practiceSuffix : ''}';
@@ -235,11 +252,11 @@ class _AgeBandChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.bgCard,
+          color: colors.bgCard,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.bgCardLight),
+          border: Border.all(color: colors.bgCardLight),
         ),
-        child: Text(label, style: AppTextStyles.label),
+        child: Text(label, style: AppTextStyles.label(colors)),
       ),
     );
   }
@@ -247,13 +264,14 @@ class _AgeBandChip extends StatelessWidget {
 
 // ── Question display ───────────────────────────────────────────────────────
 
-class _QuestionDisplay extends StatelessWidget {
+class _QuestionDisplay extends ConsumerWidget {
   final GameState state;
   final bool showVisualAid;
   const _QuestionDisplay({required this.state, required this.showVisualAid});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.watch(appPaletteProvider);
     final q = state.currentQuestion;
     if (q == null) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
@@ -264,7 +282,8 @@ class _QuestionDisplay extends StatelessWidget {
         Text(
           l10n.questionCounter(state.totalAnswered +
               (state.phase == GamePhase.answering ? 0 : 1)),
-          style: AppTextStyles.label.copyWith(color: AppColors.primaryLight),
+          style: AppTextStyles.label(colors)
+              .copyWith(color: colors.primaryLight),
         ),
         const SizedBox(height: 12),
         AnimatedSwitcher(
@@ -272,7 +291,7 @@ class _QuestionDisplay extends StatelessWidget {
           child: Text(
             q.problem,
             key: ValueKey(q.problem),
-            style: AppTextStyles.gameQuestion,
+            style: AppTextStyles.gameQuestion(colors),
             textAlign: TextAlign.center,
           ),
         ),
@@ -286,15 +305,15 @@ class _QuestionDisplay extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.accentYellow.withValues(alpha: 0.15),
+              color: colors.accentYellow.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                  color: AppColors.accentYellow.withValues(alpha: 0.5)),
+                  color: colors.accentYellow.withValues(alpha: 0.5)),
             ),
             child: Text(
               l10n.streakBonus(state.streak),
-              style:
-                  AppTextStyles.label.copyWith(color: AppColors.accentYellow),
+              style: AppTextStyles.label(colors)
+                  .copyWith(color: colors.accentYellow),
             ),
           ),
       ],

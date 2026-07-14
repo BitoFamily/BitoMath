@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bito_math/core/persistence/player_provider.dart';
 import 'package:bito_math/features/home/widgets/age_band_sheet.dart';
 import 'package:bito_math/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('AgeBandSheet shows Level N title with age+description subtext',
       (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: Builder(
-          builder: (context) => ElevatedButton(
-            onPressed: () => AgeBandSheet.show(context, isPractice: true),
-            child: const Text('open'),
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+
+    await tester.pumpWidget(ProviderScope(
+      overrides: [sharedPrefsProvider.overrideWithValue(prefs)],
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () => AgeBandSheet.show(context, isPractice: true),
+              child: const Text('open'),
+            ),
           ),
         ),
       ),
