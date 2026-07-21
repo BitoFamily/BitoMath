@@ -1,11 +1,11 @@
 {
-    "name": "bito_math",
-    "short_name": "bito_math",
+    "name": "Bito Math",
+    "short_name": "Bito Math",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#22D3EE",
+    "theme_color": "#22D3EE",
+    "description": "Bito Math — gamified math learning with a real-world reward system for children in Grades 1–3.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
